@@ -2,6 +2,7 @@ from django.conf import settings
 from django.http import Http404, HttpResponse
 from django.shortcuts import render
 
+from .forms import InquiryForm
 from .models import HomepageContent, PortfolioItem
 
 
@@ -22,9 +23,25 @@ def portfolio(request):
     return render(request, "portfolio.html", {"portfolio_items": portfolio_items})
 
 
+def inquire(request):
+    """Save collaboration inquiries and show them in Django admin."""
+    success = False
+
+    if request.method == "POST":
+        form = InquiryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            form = InquiryForm()
+            success = True
+    else:
+        form = InquiryForm()
+
+    return render(request, "inquire.html", {"form": form, "success": success})
+
+
 def legacy_page(request, filename):
     """Serve the remaining static site pages through Django during conversion."""
-    allowed_pages = {"about.html", "contact.html", "inquire.html"}
+    allowed_pages = {"about.html", "contact.html"}
     if filename not in allowed_pages:
         raise Http404
 
