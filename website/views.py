@@ -2,13 +2,16 @@ from django.conf import settings
 from django.http import Http404, HttpResponse
 from django.shortcuts import render
 
+from .models import HomepageContent
+
 
 GITHUB_PAGES_BASE = "https://pampa12.github.io/Betra-Amare-Website-Redesign"
 
 
 def home(request):
     """Render the Django homepage while keeping all internal links on localhost."""
-    response = render(request, "home.html")
+    home_content = HomepageContent.objects.first()
+    response = render(request, "home.html", {"home_content": home_content})
     html = response.content.decode("utf-8").replace(GITHUB_PAGES_BASE, "")
     return HttpResponse(html)
 
