@@ -27,13 +27,13 @@ class HomepageContent(models.Model):
 
     category_1_title = models.CharField(max_length=80, default="Beauty")
     category_1_subtitle = models.CharField(max_length=120, default="Glow · Detail · Confidence")
-    category_1_image = models.ImageField(upload_to="homepage/categories/", blank=True)
+    category_1_image = models.ImageField(upload_to="homepage/categories/", blank=True, default="")
     category_2_title = models.CharField(max_length=80, default="Fashion")
     category_2_subtitle = models.CharField(max_length=120, default="Style · Editorial · Mood")
-    category_2_image = models.ImageField(upload_to="homepage/categories/", blank=True)
+    category_2_image = models.ImageField(upload_to="homepage/categories/", blank=True, default="")
     category_3_title = models.CharField(max_length=80, default="Lifestyle")
     category_3_subtitle = models.CharField(max_length=120, default="Everyday · Soft · Personal")
-    category_3_image = models.ImageField(upload_to="homepage/categories/", blank=True)
+    category_3_image = models.ImageField(upload_to="homepage/categories/", blank=True, default="")
 
     about_eyebrow = models.CharField(max_length=120, default="Meet Betra")
     about_title_line1 = models.CharField(max_length=120, default="Creator first.")
@@ -70,10 +70,10 @@ class HomepageContent(models.Model):
 
     social_eyebrow = models.CharField(max_length=120, default="Follow along")
     social_title = models.CharField(max_length=120, default="More of the everyday.")
-    social_photo_1 = models.ImageField(upload_to="homepage/social/", blank=True)
-    social_photo_2 = models.ImageField(upload_to="homepage/social/", blank=True)
-    social_photo_3 = models.ImageField(upload_to="homepage/social/", blank=True)
-    social_photo_4 = models.ImageField(upload_to="homepage/social/", blank=True)
+    social_photo_1 = models.ImageField(upload_to="homepage/social/", blank=True, default="")
+    social_photo_2 = models.ImageField(upload_to="homepage/social/", blank=True, default="")
+    social_photo_3 = models.ImageField(upload_to="homepage/social/", blank=True, default="")
+    social_photo_4 = models.ImageField(upload_to="homepage/social/", blank=True, default="")
 
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -254,7 +254,11 @@ class PortfolioItem(models.Model):
     category = models.CharField(max_length=20, choices=Category.choices)
     image = models.ImageField(upload_to="portfolio/")
     alt_text = models.CharField(max_length=180, blank=True)
-    link_url = models.URLField(blank=True, help_text="Optional. Leave blank if the image should not open another page.")
+    link_url = models.URLField(
+        blank=True,
+        default="",
+        help_text="Optional. Leave blank if the image should not open another page.",
+    )
     featured = models.BooleanField(default=False)
     active = models.BooleanField(default=True)
     sort_order = models.PositiveIntegerField(default=0)
