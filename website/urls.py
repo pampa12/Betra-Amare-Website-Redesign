@@ -9,7 +9,7 @@ urlpatterns = [
     path("portfolio.html", views.portfolio, name="portfolio"),
     path("about.html", views.legacy_page, {"filename": "about.html"}, name="about"),
     path("contact.html", views.legacy_page, {"filename": "contact.html"}, name="contact"),
-    path("inquire.html", views.legacy_page, {"filename": "inquire.html"}, name="inquire"),
+    path("inquire.html", views.inquire, name="inquire"),
     path("styles.css", views.legacy_asset, {"filename": "styles.css"}, name="styles"),
     path("script.js", views.legacy_asset, {"filename": "script.js"}, name="script"),
 ]
