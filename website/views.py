@@ -2,7 +2,7 @@ from django.conf import settings
 from django.http import Http404, HttpResponse
 from django.shortcuts import render
 
-from .models import HomepageContent
+from .models import HomepageContent, PortfolioItem
 
 
 GITHUB_PAGES_BASE = "https://pampa12.github.io/Betra-Amare-Website-Redesign"
@@ -16,9 +16,15 @@ def home(request):
     return HttpResponse(html)
 
 
+def portfolio(request):
+    """Render active portfolio items managed through Django admin."""
+    portfolio_items = PortfolioItem.objects.filter(active=True)
+    return render(request, "portfolio.html", {"portfolio_items": portfolio_items})
+
+
 def legacy_page(request, filename):
-    """Serve the existing static site pages through Django during conversion."""
-    allowed_pages = {"portfolio.html", "about.html", "contact.html", "inquire.html"}
+    """Serve the remaining static site pages through Django during conversion."""
+    allowed_pages = {"about.html", "contact.html", "inquire.html"}
     if filename not in allowed_pages:
         raise Http404
 
