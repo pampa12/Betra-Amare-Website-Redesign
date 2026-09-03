@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import HomepageContent, Inquiry, PortfolioItem
+from .models import AboutContent, ContactContent, HomepageContent, Inquiry, PortfolioItem
 
 
 @admin.register(HomepageContent)
@@ -9,6 +9,26 @@ class HomepageContentAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         if HomepageContent.objects.exists():
+            return False
+        return super().has_add_permission(request)
+
+
+@admin.register(AboutContent)
+class AboutContentAdmin(admin.ModelAdmin):
+    list_display = ("__str__", "updated_at")
+
+    def has_add_permission(self, request):
+        if AboutContent.objects.exists():
+            return False
+        return super().has_add_permission(request)
+
+
+@admin.register(ContactContent)
+class ContactContentAdmin(admin.ModelAdmin):
+    list_display = ("__str__", "updated_at")
+
+    def has_add_permission(self, request):
+        if ContactContent.objects.exists():
             return False
         return super().has_add_permission(request)
 
