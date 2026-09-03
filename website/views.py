@@ -1,9 +1,9 @@
 from django.conf import settings
-from django.http import Http404, HttpResponse
+from django.http import HttpResponse
 from django.shortcuts import render
 
 from .forms import InquiryForm
-from .models import HomepageContent, PortfolioItem
+from .models import AboutContent, ContactContent, HomepageContent, PortfolioItem
 
 
 GITHUB_PAGES_BASE = "https://pampa12.github.io/Betra-Amare-Website-Redesign"
@@ -23,6 +23,18 @@ def portfolio(request):
     return render(request, "portfolio.html", {"portfolio_items": portfolio_items})
 
 
+def about(request):
+    """Render editable About page content from Django admin."""
+    about_content = AboutContent.objects.first()
+    return render(request, "about.html", {"about_content": about_content})
+
+
+def contact(request):
+    """Render editable Contact page content from Django admin."""
+    contact_content = ContactContent.objects.first()
+    return render(request, "contact.html", {"contact_content": contact_content})
+
+
 def inquire(request):
     """Save collaboration inquiries and show them in Django admin."""
     success = False
@@ -39,19 +51,6 @@ def inquire(request):
     return render(request, "inquire.html", {"form": form, "success": success})
 
 
-def legacy_page(request, filename):
-    """Serve the remaining static site pages through Django during conversion."""
-    allowed_pages = {"about.html", "contact.html"}
-    if filename not in allowed_pages:
-        raise Http404
-
-    page_path = settings.BASE_DIR / filename
-    if not page_path.exists():
-        raise Http404
-
-    return HttpResponse(page_path.read_text(encoding="utf-8"), content_type="text/html")
-
-
 def legacy_asset(request, filename):
     """Serve the existing CSS and JavaScript locally for the Django preview."""
     content_types = {
@@ -59,11 +58,11 @@ def legacy_asset(request, filename):
         "script.js": "application/javascript",
     }
     if filename not in content_types:
-        raise Http404
+        return HttpResponse(status=404)
 
     asset_path = settings.BASE_DIR / filename
     if not asset_path.exists():
-        raise Http404
+        return HttpResponse(status=404)
 
     return HttpResponse(
         asset_path.read_text(encoding="utf-8"),
