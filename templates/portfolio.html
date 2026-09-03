@@ -25,8 +25,11 @@
   <main>
     <section class="page-hero">
       <div class="shell page-intro reveal">
-        <div><p class="eyebrow">Portfolio</p><h1>A collection of<br><em>moments &amp; moods.</em></h1></div>
-        <p class="body-copy">Beauty, fashion, lifestyle, and brand storytelling — created with a soft editorial eye and a focus on personality.</p>
+        <div>
+          <p class="eyebrow">{% if portfolio_content %}{{ portfolio_content.eyebrow }}{% else %}Portfolio{% endif %}</p>
+          <h1>{% if portfolio_content %}{{ portfolio_content.headline_line1 }}<br><em>{{ portfolio_content.headline_emphasis }}</em>{% else %}A collection of<br><em>moments &amp; moods.</em>{% endif %}</h1>
+        </div>
+        <p class="body-copy">{% if portfolio_content %}{{ portfolio_content.intro_text }}{% else %}Beauty, fashion, lifestyle, and brand storytelling — created with a soft editorial eye and a focus on personality.{% endif %}</p>
       </div>
     </section>
 
@@ -43,23 +46,20 @@
         <div class="portfolio-masonry">
           {% if portfolio_items %}
             {% for item in portfolio_items %}
-            <a class="portfolio-item reveal" data-category="{{ item.category }}" href="https://www.instagram.com/betra_amare" target="_blank" rel="noopener">
-              <img src="{{ item.image.url }}" alt="{% if item.alt_text %}{{ item.alt_text }}{% else %}{{ item.title }}{% endif %}" loading="lazy">
-            </a>
+              {% if item.link_url %}
+              <a class="portfolio-item reveal" data-category="{{ item.category }}" href="{{ item.link_url }}" target="_blank" rel="noopener">
+                <img src="{{ item.image.url }}" alt="{% if item.alt_text %}{{ item.alt_text }}{% else %}{{ item.title }}{% endif %}" loading="lazy">
+              </a>
+              {% else %}
+              <div class="portfolio-item reveal" data-category="{{ item.category }}">
+                <img src="{{ item.image.url }}" alt="{% if item.alt_text %}{{ item.alt_text }}{% else %}{{ item.title }}{% endif %}" loading="lazy">
+              </div>
+              {% endif %}
             {% endfor %}
           {% else %}
-            <a class="portfolio-item reveal" id="beauty" data-category="beauty" href="https://www.instagram.com/betra_amare" target="_blank" rel="noopener"><img src="https://raw.githubusercontent.com/pampa12/Betraamarewebsite/main/assets/photos/betra-01.jpg" alt="Beauty portfolio image" loading="lazy"></a>
-            <a class="portfolio-item reveal" id="fashion" data-category="fashion" href="https://www.instagram.com/betra_amare" target="_blank" rel="noopener"><img src="https://raw.githubusercontent.com/pampa12/Betraamarewebsite/main/assets/photos/betra-06.jpg" alt="Fashion portfolio image" loading="lazy"></a>
-            <a class="portfolio-item reveal" id="lifestyle" data-category="lifestyle" href="https://www.instagram.com/betra_amare" target="_blank" rel="noopener"><img src="https://raw.githubusercontent.com/pampa12/Betraamarewebsite/main/assets/photos/betra-10.jpg" alt="Lifestyle portfolio image" loading="lazy"></a>
-            <a class="portfolio-item reveal" data-category="fashion" href="https://www.instagram.com/betra_amare" target="_blank" rel="noopener"><img src="https://raw.githubusercontent.com/pampa12/Betraamarewebsite/main/assets/photos/betra-05.jpg" alt="Fashion portfolio image" loading="lazy"></a>
-            <a class="portfolio-item reveal" data-category="beauty" href="https://www.instagram.com/betra_amare" target="_blank" rel="noopener"><img src="https://raw.githubusercontent.com/pampa12/Betraamarewebsite/main/assets/photos/betra-02.jpg" alt="Beauty portfolio image" loading="lazy"></a>
-            <a class="portfolio-item reveal" data-category="lifestyle" href="https://www.instagram.com/betra_amare" target="_blank" rel="noopener"><img src="https://raw.githubusercontent.com/pampa12/Betraamarewebsite/main/assets/photos/betra-03.jpg" alt="Lifestyle portfolio image" loading="lazy"></a>
-            <a class="portfolio-item reveal" data-category="fashion" href="https://www.instagram.com/betra_amare" target="_blank" rel="noopener"><img src="https://raw.githubusercontent.com/pampa12/Betraamarewebsite/main/assets/photos/betra-11.jpg" alt="Fashion portfolio image" loading="lazy"></a>
-            <a class="portfolio-item reveal" data-category="beauty" href="https://www.instagram.com/betra_amare" target="_blank" rel="noopener"><img src="https://raw.githubusercontent.com/pampa12/Betraamarewebsite/main/assets/photos/betra-08.jpg" alt="Beauty portfolio image" loading="lazy"></a>
-            <a class="portfolio-item reveal" data-category="lifestyle" href="https://www.instagram.com/betra_amare" target="_blank" rel="noopener"><img src="https://raw.githubusercontent.com/pampa12/Betraamarewebsite/main/assets/photos/betra-04.jpg" alt="Lifestyle portfolio image" loading="lazy"></a>
-            <a class="portfolio-item reveal" data-category="fashion" href="https://www.instagram.com/betra_amare" target="_blank" rel="noopener"><img src="https://raw.githubusercontent.com/pampa12/Betraamarewebsite/main/assets/photos/betra-12.jpg" alt="Fashion portfolio image" loading="lazy"></a>
-            <a class="portfolio-item reveal" data-category="beauty" href="https://www.instagram.com/betra_amare" target="_blank" rel="noopener"><img src="https://raw.githubusercontent.com/pampa12/Betraamarewebsite/main/assets/photos/betra-07.jpg" alt="Beauty portfolio image" loading="lazy"></a>
-            <a class="portfolio-item reveal" data-category="lifestyle" href="https://www.instagram.com/betra_amare" target="_blank" rel="noopener"><img src="https://raw.githubusercontent.com/pampa12/Betraamarewebsite/main/assets/photos/betra-09.jpg" alt="Lifestyle portfolio image" loading="lazy"></a>
+            <div class="portfolio-item reveal" id="beauty" data-category="beauty"><img src="https://raw.githubusercontent.com/pampa12/Betraamarewebsite/main/assets/photos/betra-01.jpg" alt="Beauty portfolio image" loading="lazy"></div>
+            <div class="portfolio-item reveal" id="fashion" data-category="fashion"><img src="https://raw.githubusercontent.com/pampa12/Betraamarewebsite/main/assets/photos/betra-06.jpg" alt="Fashion portfolio image" loading="lazy"></div>
+            <div class="portfolio-item reveal" id="lifestyle" data-category="lifestyle"><img src="https://raw.githubusercontent.com/pampa12/Betraamarewebsite/main/assets/photos/betra-10.jpg" alt="Lifestyle portfolio image" loading="lazy"></div>
           {% endif %}
         </div>
       </div>
@@ -67,15 +67,15 @@
 
     <section class="section collab-section">
       <div class="shell collab-inner reveal">
-        <p class="eyebrow">Have something in mind?</p>
-        <h2 class="display-title huge">Let's make something that feels <em>like you.</em></h2>
-        <div class="cta-row"><a class="dark-button" href="/inquire.html">Start a project</a><a class="plain-email" href="mailto:workwithbetra@gmail.com">workwithbetra@gmail.com</a></div>
+        <p class="eyebrow">{% if portfolio_content %}{{ portfolio_content.collab_eyebrow }}{% else %}Have something in mind?{% endif %}</p>
+        <h2 class="display-title huge">{% if portfolio_content %}{{ portfolio_content.collab_title_prefix }} <em>{{ portfolio_content.collab_title_emphasis }}</em>{% else %}Let's make something that feels <em>like you.</em>{% endif %}</h2>
+        <div class="cta-row"><a class="dark-button" href="/inquire.html">{% if portfolio_content %}{{ portfolio_content.button_text }}{% else %}Start a project{% endif %}</a><a class="plain-email" href="mailto:{% if portfolio_content %}{{ portfolio_content.work_email }}{% else %}workwithbetra@gmail.com{% endif %}">{% if portfolio_content %}{{ portfolio_content.work_email }}{% else %}workwithbetra@gmail.com{% endif %}</a></div>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div class="shell footer-top"><p class="footer-wordmark">Betra Amare</p><div class="footer-nav"><a href="/portfolio.html">Portfolio</a><a href="/about.html">About</a><a href="/contact.html">Contact</a><a href="/inquire.html">Inquire</a><a href="https://www.instagram.com/betra_amare" target="_blank" rel="noopener">Instagram</a><a href="https://www.tiktok.com/@betraamarey" target="_blank" rel="noopener">TikTok</a></div></div>
+    <div class="shell footer-top"><p class="footer-wordmark">Betra Amare</p><div class="footer-nav"><a href="/portfolio.html">Portfolio</a><a href="/about.html">About</a><a href="/contact.html">Contact</a><a href="/inquire.html">Inquire</a><a href="{% if contact_content %}{{ contact_content.instagram_url }}{% else %}https://www.instagram.com/betra_amare{% endif %}" target="_blank" rel="noopener">Instagram</a><a href="{% if contact_content %}{{ contact_content.tiktok_url }}{% else %}https://www.tiktok.com/@betraamarey{% endif %}" target="_blank" rel="noopener">TikTok</a></div></div>
     <div class="shell footer-bottom"><span>© <span data-year></span> Betra Amare. All rights reserved.</span><a href="#">Back to top ↑</a></div>
   </footer>
   <script src="/script.js"></script>
