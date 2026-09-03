@@ -25,19 +25,22 @@
   <main>
     <section class="page-hero">
       <div class="shell page-intro reveal">
-        <div><p class="eyebrow">Work with Betra</p><h1>Let's create something<br><em>worth remembering.</em></h1></div>
-        <p class="body-copy">For paid partnerships, UGC, modeling, events, campaigns, or other creative projects, share the details below and I'll get back to you.</p>
+        <div>
+          <p class="eyebrow">{% if inquiry_content %}{{ inquiry_content.eyebrow }}{% else %}Work with Betra{% endif %}</p>
+          <h1>{% if inquiry_content %}{{ inquiry_content.headline_line1 }}<br><em>{{ inquiry_content.headline_emphasis }}</em>{% else %}Let's create something<br><em>worth remembering.</em>{% endif %}</h1>
+        </div>
+        <p class="body-copy">{% if inquiry_content %}{{ inquiry_content.intro_text }}{% else %}For paid partnerships, UGC, modeling, events, campaigns, or other creative projects, share the details below and I'll get back to you.{% endif %}</p>
       </div>
     </section>
 
     <section class="section contact-section">
       <div class="shell contact-grid">
         <aside class="contact-aside reveal">
-          <p class="eyebrow">Project inquiry</p>
-          <h2 class="display-title">Tell me what<br>you have in mind.</h2>
-          <p class="body-copy">The more detail you can share about your brand, deliverables, timeline, usage, and budget, the easier it is for me to understand the fit.</p>
+          <p class="eyebrow">{% if inquiry_content %}{{ inquiry_content.section_eyebrow }}{% else %}Project inquiry{% endif %}</p>
+          <h2 class="display-title">{% if inquiry_content %}{{ inquiry_content.section_title_line1 }}<br>{{ inquiry_content.section_title_line2 }}{% else %}Tell me what<br>you have in mind.{% endif %}</h2>
+          <p class="body-copy">{% if inquiry_content %}{{ inquiry_content.section_body }}{% else %}The more detail you can share about your brand, deliverables, timeline, usage, and budget, the easier it is for me to understand the fit.{% endif %}</p>
           <div class="contact-list">
-            <a href="mailto:workwithbetra@gmail.com">workwithbetra@gmail.com</a>
+            <a href="mailto:{% if inquiry_content %}{{ inquiry_content.work_email }}{% else %}workwithbetra@gmail.com{% endif %}">{% if inquiry_content %}{{ inquiry_content.work_email }}{% else %}workwithbetra@gmail.com{% endif %}</a>
             <a href="/portfolio.html">View my portfolio</a>
             <a href="/contact.html">Looking for general contact instead?</a>
           </div>
@@ -48,7 +51,7 @@
 
           {% if success %}
           <div class="form-row">
-            <p class="form-note" style="font-size:1rem;">Thank you! Your inquiry was sent successfully. I'll get back to you soon.</p>
+            <p class="form-note" style="font-size:1rem;">{% if inquiry_content %}{{ inquiry_content.success_message }}{% else %}Thank you! Your inquiry was sent successfully. I'll get back to you soon.{% endif %}</p>
           </div>
           {% endif %}
 
@@ -56,45 +59,21 @@
           <div class="form-row">{{ form.non_field_errors }}</div>
           {% endif %}
 
-          <div class="form-row">
-            <label for="{{ form.name.id_for_label }}">Your name</label>
-            {{ form.name }}
-            {{ form.name.errors }}
-          </div>
-          <div class="form-row">
-            <label for="{{ form.email.id_for_label }}">Email</label>
-            {{ form.email }}
-            {{ form.email.errors }}
-          </div>
-          <div class="form-row">
-            <label for="{{ form.company.id_for_label }}">Brand / company</label>
-            {{ form.company }}
-            {{ form.company.errors }}
-          </div>
-          <div class="form-row">
-            <label for="{{ form.project_type.id_for_label }}">Project type</label>
-            {{ form.project_type }}
-            {{ form.project_type.errors }}
-          </div>
-          <div class="form-row">
-            <label for="{{ form.budget.id_for_label }}">Budget</label>
-            {{ form.budget }}
-            {{ form.budget.errors }}
-          </div>
-          <div class="form-row">
-            <label for="{{ form.message.id_for_label }}">Project details</label>
-            {{ form.message }}
-            {{ form.message.errors }}
-          </div>
-          <button class="dark-button" type="submit">Send inquiry</button>
-          <p class="form-note">Your inquiry will be securely saved so Betra can review it in the website admin.</p>
+          <div class="form-row"><label for="{{ form.name.id_for_label }}">Your name</label>{{ form.name }}{{ form.name.errors }}</div>
+          <div class="form-row"><label for="{{ form.email.id_for_label }}">Email</label>{{ form.email }}{{ form.email.errors }}</div>
+          <div class="form-row"><label for="{{ form.company.id_for_label }}">Brand / company</label>{{ form.company }}{{ form.company.errors }}</div>
+          <div class="form-row"><label for="{{ form.project_type.id_for_label }}">Project type</label>{{ form.project_type }}{{ form.project_type.errors }}</div>
+          <div class="form-row"><label for="{{ form.budget.id_for_label }}">Budget</label>{{ form.budget }}{{ form.budget.errors }}</div>
+          <div class="form-row"><label for="{{ form.message.id_for_label }}">Project details</label>{{ form.message }}{{ form.message.errors }}</div>
+          <button class="dark-button" type="submit">{% if inquiry_content %}{{ inquiry_content.button_text }}{% else %}Send inquiry{% endif %}</button>
+          <p class="form-note">{% if inquiry_content %}{{ inquiry_content.form_note }}{% else %}Your inquiry will be securely saved so Betra can review it in the website admin.{% endif %}</p>
         </form>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div class="shell footer-top"><p class="footer-wordmark">Betra Amare</p><div class="footer-nav"><a href="/portfolio.html">Portfolio</a><a href="/about.html">About</a><a href="/contact.html">Contact</a><a href="/inquire.html">Inquire</a><a href="https://www.instagram.com/betra_amare" target="_blank" rel="noopener">Instagram</a><a href="https://www.tiktok.com/@betraamarey" target="_blank" rel="noopener">TikTok</a></div></div>
+    <div class="shell footer-top"><p class="footer-wordmark">Betra Amare</p><div class="footer-nav"><a href="/portfolio.html">Portfolio</a><a href="/about.html">About</a><a href="/contact.html">Contact</a><a href="/inquire.html">Inquire</a><a href="{% if contact_content %}{{ contact_content.instagram_url }}{% else %}https://www.instagram.com/betra_amare{% endif %}" target="_blank" rel="noopener">Instagram</a><a href="{% if contact_content %}{{ contact_content.tiktok_url }}{% else %}https://www.tiktok.com/@betraamarey{% endif %}" target="_blank" rel="noopener">TikTok</a></div></div>
     <div class="shell footer-bottom"><span>© <span data-year></span> Betra Amare. All rights reserved.</span><a href="#">Back to top ↑</a></div>
   </footer>
   <script src="/script.js"></script>
