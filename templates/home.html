@@ -36,13 +36,17 @@
 
   <main>
     <section class="hero hero-home">
+      {% if home_content and home_content.hero_image %}
+      <img class="hero-photo" src="{{ home_content.hero_image.url }}" alt="Betra Amare portrait">
+      {% else %}
       <img class="hero-photo" src="https://raw.githubusercontent.com/pampa12/Betraamarewebsite/main/assets/photos/betra-07.jpg" alt="Betra Amare portrait">
+      {% endif %}
       <div class="hero-shade"></div>
       <div class="shell hero-content reveal">
-        <p class="eyebrow light">Model · Creator · Storyteller</p>
-        <h1>Beauty, style &amp;<br>the moments <em>in between.</em></h1>
-        <p class="hero-copy">I create confident, feminine visuals rooted in beauty, fashion, lifestyle, and authentic storytelling.</p>
-        <a class="arrow-link light-link" href="https://pampa12.github.io/Betra-Amare-Website-Redesign/portfolio.html">Explore my work</a>
+        <p class="eyebrow light">{% if home_content %}{{ home_content.eyebrow }}{% else %}Model · Creator · Storyteller{% endif %}</p>
+        <h1>{% if home_content %}{{ home_content.headline_line1 }}<br>{{ home_content.headline_line2 }} <em>{{ home_content.headline_emphasis }}</em>{% else %}Beauty, style &amp;<br>the moments <em>in between.</em>{% endif %}</h1>
+        <p class="hero-copy">{% if home_content %}{{ home_content.intro_text }}{% else %}I create confident, feminine visuals rooted in beauty, fashion, lifestyle, and authentic storytelling.{% endif %}</p>
+        <a class="arrow-link light-link" href="https://pampa12.github.io/Betra-Amare-Website-Redesign/portfolio.html">{% if home_content %}{{ home_content.cta_text }}{% else %}Explore my work{% endif %}</a>
       </div>
       <a class="scroll-cue" href="#world">Scroll to discover <span>↓</span></a>
     </section>
