@@ -24,6 +24,100 @@ class HomepageContent(models.Model):
         return "Homepage content"
 
 
+class AboutContent(models.Model):
+    eyebrow = models.CharField(max_length=120, default="About Betra")
+    headline_line1 = models.CharField(max_length=160, default="Confidence, creativity")
+    headline_emphasis = models.CharField(max_length=120, default="a little softness.")
+    intro_text = models.TextField(
+        default=(
+            "I care about the kind of content that feels beautiful but still personal — "
+            "the kind that makes someone stop because it feels like a real moment, not just an ad."
+        )
+    )
+    story_eyebrow = models.CharField(max_length=120, default="My story")
+    story_title = models.CharField(max_length=160, default="Hi, I'm Betra.")
+    story_paragraph_1 = models.TextField(
+        default=(
+            "I'm a model and digital content creator with a love for beauty, fashion, lifestyle, "
+            "and self-expression. Creating started as a way for me to share what I love, and it grew "
+            "into a space where I can connect with people, work with brands, and tell stories visually."
+        )
+    )
+    story_paragraph_2 = models.TextField(
+        default=(
+            "My favorite content feels polished without feeling distant. I love clean beauty, feminine "
+            "styling, everyday moments, and visuals that let personality come through. Whether I'm in front "
+            "of a camera for a photoshoot or building a concept for a brand, I want the final piece to feel "
+            "intentional and natural."
+        )
+    )
+    story_paragraph_3 = models.TextField(
+        default=(
+            "What matters most to me is creating from a place that still feels like me. I want my audience "
+            "to trust what I share, and I want brands I work with to feel like their product has been "
+            "introduced in a way that fits naturally into my world."
+        )
+    )
+    story_image = models.ImageField(upload_to="about/", blank=True)
+    value_1_title = models.CharField(max_length=80, default="Authentic")
+    value_1_text = models.CharField(
+        max_length=220,
+        default="Content that keeps my real voice and personality at the center.",
+    )
+    value_2_title = models.CharField(max_length=80, default="Intentional")
+    value_2_text = models.CharField(
+        max_length=220,
+        default="Every detail — styling, framing, mood, and message — has a reason.",
+    )
+    value_3_title = models.CharField(max_length=80, default="Warm")
+    value_3_text = models.CharField(
+        max_length=220,
+        default="Beautiful visuals that still feel approachable, human, and easy to connect with.",
+    )
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "About page content"
+        verbose_name_plural = "About page content"
+
+    def __str__(self):
+        return "About page content"
+
+
+class ContactContent(models.Model):
+    eyebrow = models.CharField(max_length=120, default="Say hello")
+    headline_line1 = models.CharField(max_length=120, default="Let's stay")
+    headline_emphasis = models.CharField(max_length=120, default="connected.")
+    intro_text = models.TextField(
+        default=(
+            "For general questions, social messages, or anything that isn't a project inquiry, "
+            "you can reach me here."
+        )
+    )
+    section_eyebrow = models.CharField(max_length=120, default="Contact")
+    section_title_line1 = models.CharField(max_length=120, default="Find me")
+    section_title_line2 = models.CharField(max_length=120, default="around the internet.")
+    body_text = models.TextField(
+        default=(
+            "The easiest ways to reach me are by email or through my social platforms. For brand work, "
+            "campaigns, UGC, modeling, or paid collaborations, use the dedicated inquiry page instead."
+        )
+    )
+    general_email = models.EmailField(default="betraamare@icloud.com")
+    instagram_url = models.URLField(default="https://www.instagram.com/betra_amare")
+    instagram_handle = models.CharField(max_length=80, default="@betra_amare")
+    tiktok_url = models.URLField(default="https://www.tiktok.com/@betraamarey")
+    tiktok_handle = models.CharField(max_length=80, default="@betraamarey")
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Contact page content"
+        verbose_name_plural = "Contact page content"
+
+    def __str__(self):
+        return "Contact page content"
+
+
 class PortfolioItem(models.Model):
     class Category(models.TextChoices):
         BEAUTY = "beauty", "Beauty"
