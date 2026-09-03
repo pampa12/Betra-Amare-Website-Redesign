@@ -3,7 +3,14 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 from .forms import InquiryForm
-from .models import AboutContent, ContactContent, HomepageContent, PortfolioItem
+from .models import (
+    AboutContent,
+    ContactContent,
+    HomepageContent,
+    InquiryPageContent,
+    PortfolioItem,
+    PortfolioPageContent,
+)
 
 
 GITHUB_PAGES_BASE = "https://pampa12.github.io/Betra-Amare-Website-Redesign"
@@ -33,15 +40,30 @@ def home(request):
 
 
 def portfolio(request):
-    """Render active portfolio items managed through Django admin."""
+    """Render active portfolio items and editable portfolio page copy."""
     portfolio_items = PortfolioItem.objects.filter(active=True)
-    return render(request, "portfolio.html", {"portfolio_items": portfolio_items})
+    portfolio_content = PortfolioPageContent.objects.first()
+    contact_content = ContactContent.objects.first()
+    return render(
+        request,
+        "portfolio.html",
+        {
+            "portfolio_items": portfolio_items,
+            "portfolio_content": portfolio_content,
+            "contact_content": contact_content,
+        },
+    )
 
 
 def about(request):
     """Render editable About page content from Django admin."""
     about_content = AboutContent.objects.first()
-    return render(request, "about.html", {"about_content": about_content})
+    contact_content = ContactContent.objects.first()
+    return render(
+        request,
+        "about.html",
+        {"about_content": about_content, "contact_content": contact_content},
+    )
 
 
 def contact(request):
@@ -51,8 +73,10 @@ def contact(request):
 
 
 def inquire(request):
-    """Save collaboration inquiries and show them in Django admin."""
+    """Save collaboration inquiries and render editable inquiry-page copy."""
     success = False
+    inquiry_content = InquiryPageContent.objects.first()
+    contact_content = ContactContent.objects.first()
 
     if request.method == "POST":
         form = InquiryForm(request.POST)
@@ -63,7 +87,16 @@ def inquire(request):
     else:
         form = InquiryForm()
 
-    return render(request, "inquire.html", {"form": form, "success": success})
+    return render(
+        request,
+        "inquire.html",
+        {
+            "form": form,
+            "success": success,
+            "inquiry_content": inquiry_content,
+            "contact_content": contact_content,
+        },
+    )
 
 
 def legacy_asset(request, filename):
