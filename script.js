@@ -51,6 +51,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  document.querySelectorAll('.social-photo').forEach((photo) => {
+    photo.addEventListener('click', (event) => {
+      event.preventDefault();
+    });
+  });
+
   const contactForm = document.querySelector('#contactForm');
   if (contactForm) {
     contactForm.addEventListener('submit', (event) => {
