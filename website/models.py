@@ -25,6 +25,16 @@ class HomepageContent(models.Model):
         )
     )
 
+    category_1_title = models.CharField(max_length=80, default="Beauty")
+    category_1_subtitle = models.CharField(max_length=120, default="Glow · Detail · Confidence")
+    category_1_image = models.ImageField(upload_to="homepage/categories/", blank=True)
+    category_2_title = models.CharField(max_length=80, default="Fashion")
+    category_2_subtitle = models.CharField(max_length=120, default="Style · Editorial · Mood")
+    category_2_image = models.ImageField(upload_to="homepage/categories/", blank=True)
+    category_3_title = models.CharField(max_length=80, default="Lifestyle")
+    category_3_subtitle = models.CharField(max_length=120, default="Everyday · Soft · Personal")
+    category_3_image = models.ImageField(upload_to="homepage/categories/", blank=True)
+
     about_eyebrow = models.CharField(max_length=120, default="Meet Betra")
     about_title_line1 = models.CharField(max_length=120, default="Creator first.")
     about_title_emphasis = models.CharField(max_length=120, default="Always myself.")
@@ -60,6 +70,10 @@ class HomepageContent(models.Model):
 
     social_eyebrow = models.CharField(max_length=120, default="Follow along")
     social_title = models.CharField(max_length=120, default="More of the everyday.")
+    social_photo_1 = models.ImageField(upload_to="homepage/social/", blank=True)
+    social_photo_2 = models.ImageField(upload_to="homepage/social/", blank=True)
+    social_photo_3 = models.ImageField(upload_to="homepage/social/", blank=True)
+    social_photo_4 = models.ImageField(upload_to="homepage/social/", blank=True)
 
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -165,6 +179,70 @@ class ContactContent(models.Model):
         return "Contact page content"
 
 
+class PortfolioPageContent(models.Model):
+    eyebrow = models.CharField(max_length=120, default="Portfolio")
+    headline_line1 = models.CharField(max_length=160, default="A collection of")
+    headline_emphasis = models.CharField(max_length=160, default="moments & moods.")
+    intro_text = models.TextField(
+        default=(
+            "Beauty, fashion, lifestyle, and brand storytelling — created with a soft editorial eye "
+            "and a focus on personality."
+        )
+    )
+    collab_eyebrow = models.CharField(max_length=120, default="Have something in mind?")
+    collab_title_prefix = models.CharField(max_length=180, default="Let's make something that feels")
+    collab_title_emphasis = models.CharField(max_length=120, default="like you.")
+    button_text = models.CharField(max_length=80, default="Start a project")
+    work_email = models.EmailField(default="workwithbetra@gmail.com")
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Portfolio page content"
+        verbose_name_plural = "Portfolio page content"
+
+    def __str__(self):
+        return "Portfolio page content"
+
+
+class InquiryPageContent(models.Model):
+    eyebrow = models.CharField(max_length=120, default="Work with Betra")
+    headline_line1 = models.CharField(max_length=180, default="Let's create something")
+    headline_emphasis = models.CharField(max_length=160, default="worth remembering.")
+    intro_text = models.TextField(
+        default=(
+            "For paid partnerships, UGC, modeling, events, campaigns, or other creative projects, "
+            "share the details below and I'll get back to you."
+        )
+    )
+    section_eyebrow = models.CharField(max_length=120, default="Project inquiry")
+    section_title_line1 = models.CharField(max_length=160, default="Tell me what")
+    section_title_line2 = models.CharField(max_length=160, default="you have in mind.")
+    section_body = models.TextField(
+        default=(
+            "The more detail you can share about your brand, deliverables, timeline, usage, and budget, "
+            "the easier it is for me to understand the fit."
+        )
+    )
+    work_email = models.EmailField(default="workwithbetra@gmail.com")
+    button_text = models.CharField(max_length=80, default="Send inquiry")
+    success_message = models.CharField(
+        max_length=220,
+        default="Thank you! Your inquiry was sent successfully. I'll get back to you soon.",
+    )
+    form_note = models.CharField(
+        max_length=220,
+        default="Your inquiry will be securely saved so Betra can review it in the website admin.",
+    )
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Inquiry page content"
+        verbose_name_plural = "Inquiry page content"
+
+    def __str__(self):
+        return "Inquiry page content"
+
+
 class PortfolioItem(models.Model):
     class Category(models.TextChoices):
         BEAUTY = "beauty", "Beauty"
@@ -176,6 +254,7 @@ class PortfolioItem(models.Model):
     category = models.CharField(max_length=20, choices=Category.choices)
     image = models.ImageField(upload_to="portfolio/")
     alt_text = models.CharField(max_length=180, blank=True)
+    link_url = models.URLField(blank=True, help_text="Optional. Leave blank if the image should not open another page.")
     featured = models.BooleanField(default=False)
     active = models.BooleanField(default=True)
     sort_order = models.PositiveIntegerField(default=0)
