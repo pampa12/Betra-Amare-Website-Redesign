@@ -14,6 +14,53 @@ class HomepageContent(models.Model):
     )
     hero_image = models.ImageField(upload_to="homepage/", blank=True)
     cta_text = models.CharField(max_length=80, default="Explore my work")
+
+    world_eyebrow = models.CharField(max_length=120, default="A little bit of my world")
+    world_title_line1 = models.CharField(max_length=120, default="Created to feel")
+    world_title_emphasis = models.CharField(max_length=120, default="beautifully real.")
+    world_body = models.TextField(
+        default=(
+            "From polished beauty looks to everyday lifestyle moments, I love creating imagery "
+            "that feels personal, elevated, and easy to connect with."
+        )
+    )
+
+    about_eyebrow = models.CharField(max_length=120, default="Meet Betra")
+    about_title_line1 = models.CharField(max_length=120, default="Creator first.")
+    about_title_emphasis = models.CharField(max_length=120, default="Always myself.")
+    about_text_1 = models.TextField(
+        default=(
+            "I'm Betra Amare, a model and digital creator with a love for beauty, fashion, confidence, "
+            "and authentic storytelling. I create content that feels polished without losing the personality behind it."
+        )
+    )
+    about_text_2 = models.TextField(
+        default=(
+            "Whether I'm creating for a brand or sharing a piece of my everyday life, I want the final result "
+            "to feel warm, intentional, and true to me."
+        )
+    )
+    about_main_image = models.ImageField(upload_to="homepage/about/", blank=True)
+    about_accent_image = models.ImageField(upload_to="homepage/about/", blank=True)
+
+    selected_eyebrow = models.CharField(max_length=120, default="Selected work")
+    selected_title = models.CharField(max_length=120, default="A few favorites.")
+
+    collab_eyebrow = models.CharField(max_length=120, default="Let's create something memorable")
+    collab_title_prefix = models.CharField(max_length=180, default="For brands that want content to")
+    collab_title_emphasis = models.CharField(max_length=120, default="feel human.")
+    collab_body = models.TextField(
+        default=(
+            "I partner with beauty, fashion, lifestyle, and wellness brands to create content that feels natural "
+            "to my audience while giving the product a beautiful, intentional spotlight."
+        )
+    )
+    collab_button_text = models.CharField(max_length=80, default="Work with me")
+    collab_email = models.EmailField(default="workwithbetra@gmail.com")
+
+    social_eyebrow = models.CharField(max_length=120, default="Follow along")
+    social_title = models.CharField(max_length=120, default="More of the everyday.")
+
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
