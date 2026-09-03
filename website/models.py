@@ -3,7 +3,9 @@ from django.db import models
 
 class HomepageContent(models.Model):
     eyebrow = models.CharField(max_length=120, default="Model · Creator · Storyteller")
-    headline = models.CharField(max_length=220, default="Beauty, style & the moments in between.")
+    headline_line1 = models.CharField(max_length=120, default="Beauty, style &")
+    headline_line2 = models.CharField(max_length=120, default="the moments")
+    headline_emphasis = models.CharField(max_length=120, default="in between.")
     intro_text = models.TextField(
         default=(
             "I create confident, feminine visuals rooted in beauty, fashion, "
