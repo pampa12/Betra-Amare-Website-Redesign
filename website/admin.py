@@ -1,36 +1,56 @@
 from django.contrib import admin
 
-from .models import AboutContent, ContactContent, HomepageContent, Inquiry, PortfolioItem
+from .models import (
+    AboutContent,
+    ContactContent,
+    HomepageContent,
+    Inquiry,
+    InquiryPageContent,
+    PortfolioItem,
+    PortfolioPageContent,
+)
+
+
+class SingletonContentAdmin(admin.ModelAdmin):
+    list_display = ("__str__", "updated_at")
+
+    def has_add_permission(self, request):
+        if self.model.objects.exists():
+            return False
+        return super().has_add_permission(request)
 
 
 @admin.register(HomepageContent)
-class HomepageContentAdmin(admin.ModelAdmin):
-    list_display = ("__str__", "updated_at")
-
-    def has_add_permission(self, request):
-        if HomepageContent.objects.exists():
-            return False
-        return super().has_add_permission(request)
+class HomepageContentAdmin(SingletonContentAdmin):
+    fieldsets = (
+        ("Hero", {"fields": ("eyebrow", "headline_line1", "headline_line2", "headline_emphasis", "intro_text", "hero_image", "cta_text")}),
+        ("A little bit of my world", {"fields": ("world_eyebrow", "world_title_line1", "world_title_emphasis", "world_body")}),
+        ("Category cards", {"fields": (("category_1_title", "category_1_subtitle"), "category_1_image", ("category_2_title", "category_2_subtitle"), "category_2_image", ("category_3_title", "category_3_subtitle"), "category_3_image")}),
+        ("Meet Betra", {"fields": ("about_eyebrow", "about_title_line1", "about_title_emphasis", "about_text_1", "about_text_2", "about_main_image", "about_accent_image")}),
+        ("Selected work", {"fields": ("selected_eyebrow", "selected_title")}),
+        ("Collaboration", {"fields": ("collab_eyebrow", "collab_title_prefix", "collab_title_emphasis", "collab_body", "collab_button_text", "collab_email")}),
+        ("Social", {"fields": ("social_eyebrow", "social_title", "social_photo_1", "social_photo_2", "social_photo_3", "social_photo_4")}),
+    )
 
 
 @admin.register(AboutContent)
-class AboutContentAdmin(admin.ModelAdmin):
-    list_display = ("__str__", "updated_at")
-
-    def has_add_permission(self, request):
-        if AboutContent.objects.exists():
-            return False
-        return super().has_add_permission(request)
+class AboutContentAdmin(SingletonContentAdmin):
+    pass
 
 
 @admin.register(ContactContent)
-class ContactContentAdmin(admin.ModelAdmin):
-    list_display = ("__str__", "updated_at")
+class ContactContentAdmin(SingletonContentAdmin):
+    pass
 
-    def has_add_permission(self, request):
-        if ContactContent.objects.exists():
-            return False
-        return super().has_add_permission(request)
+
+@admin.register(PortfolioPageContent)
+class PortfolioPageContentAdmin(SingletonContentAdmin):
+    pass
+
+
+@admin.register(InquiryPageContent)
+class InquiryPageContentAdmin(SingletonContentAdmin):
+    pass
 
 
 @admin.register(PortfolioItem)
