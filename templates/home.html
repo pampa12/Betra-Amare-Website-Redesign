@@ -69,16 +69,22 @@
 
         <div class="category-grid">
           <a class="category-card reveal" href="/portfolio.html#beauty">
-            <div class="media-frame tall"><img src="https://raw.githubusercontent.com/pampa12/Betraamarewebsite/main/assets/photos/betra-01.jpg" alt="Beauty portrait by Betra Amare" loading="lazy"></div>
-            <div class="card-caption"><h3>Beauty</h3><span>Glow · Detail · Confidence</span></div>
+            <div class="media-frame tall">
+              {% if home_content and home_content.category_1_image %}<img src="{{ home_content.category_1_image.url }}" alt="{{ home_content.category_1_title }}" loading="lazy">{% else %}<img src="https://raw.githubusercontent.com/pampa12/Betraamarewebsite/main/assets/photos/betra-01.jpg" alt="Beauty portrait by Betra Amare" loading="lazy">{% endif %}
+            </div>
+            <div class="card-caption"><h3>{% if home_content %}{{ home_content.category_1_title }}{% else %}Beauty{% endif %}</h3><span>{% if home_content %}{{ home_content.category_1_subtitle }}{% else %}Glow · Detail · Confidence{% endif %}</span></div>
           </a>
           <a class="category-card offset reveal" href="/portfolio.html#fashion">
-            <div class="media-frame tallest"><img src="https://raw.githubusercontent.com/pampa12/Betraamarewebsite/main/assets/photos/betra-06.jpg" alt="Fashion portrait by Betra Amare" loading="lazy"></div>
-            <div class="card-caption"><h3>Fashion</h3><span>Style · Editorial · Mood</span></div>
+            <div class="media-frame tallest">
+              {% if home_content and home_content.category_2_image %}<img src="{{ home_content.category_2_image.url }}" alt="{{ home_content.category_2_title }}" loading="lazy">{% else %}<img src="https://raw.githubusercontent.com/pampa12/Betraamarewebsite/main/assets/photos/betra-06.jpg" alt="Fashion portrait by Betra Amare" loading="lazy">{% endif %}
+            </div>
+            <div class="card-caption"><h3>{% if home_content %}{{ home_content.category_2_title }}{% else %}Fashion{% endif %}</h3><span>{% if home_content %}{{ home_content.category_2_subtitle }}{% else %}Style · Editorial · Mood{% endif %}</span></div>
           </a>
           <a class="category-card reveal" href="/portfolio.html#lifestyle">
-            <div class="media-frame medium"><img src="https://raw.githubusercontent.com/pampa12/Betraamarewebsite/main/assets/photos/betra-10.jpg" alt="Lifestyle portrait by Betra Amare" loading="lazy"></div>
-            <div class="card-caption"><h3>Lifestyle</h3><span>Everyday · Soft · Personal</span></div>
+            <div class="media-frame medium">
+              {% if home_content and home_content.category_3_image %}<img src="{{ home_content.category_3_image.url }}" alt="{{ home_content.category_3_title }}" loading="lazy">{% else %}<img src="https://raw.githubusercontent.com/pampa12/Betraamarewebsite/main/assets/photos/betra-10.jpg" alt="Lifestyle portrait by Betra Amare" loading="lazy">{% endif %}
+            </div>
+            <div class="card-caption"><h3>{% if home_content %}{{ home_content.category_3_title }}{% else %}Lifestyle{% endif %}</h3><span>{% if home_content %}{{ home_content.category_3_subtitle }}{% else %}Everyday · Soft · Personal{% endif %}</span></div>
           </a>
         </div>
       </div>
@@ -142,10 +148,10 @@
           <div class="social-links"><a href="{% if contact_content %}{{ contact_content.instagram_url }}{% else %}https://www.instagram.com/betra_amare{% endif %}" target="_blank" rel="noopener">Instagram</a><a href="{% if contact_content %}{{ contact_content.tiktok_url }}{% else %}https://www.tiktok.com/@betraamarey{% endif %}" target="_blank" rel="noopener">TikTok</a></div>
         </div>
         <div class="social-photo-grid">
-          <a class="social-photo reveal" href="{% if contact_content %}{{ contact_content.instagram_url }}{% else %}https://www.instagram.com/betra_amare{% endif %}" target="_blank" rel="noopener"><img src="https://raw.githubusercontent.com/pampa12/Betraamarewebsite/main/assets/photos/betra-04.jpg" alt="Betra social content" loading="lazy"></a>
-          <a class="social-photo reveal" href="{% if contact_content %}{{ contact_content.instagram_url }}{% else %}https://www.instagram.com/betra_amare{% endif %}" target="_blank" rel="noopener"><img src="https://raw.githubusercontent.com/pampa12/Betraamarewebsite/main/assets/photos/betra-09.jpg" alt="Betra social content" loading="lazy"></a>
-          <a class="social-photo reveal" href="{% if contact_content %}{{ contact_content.tiktok_url }}{% else %}https://www.tiktok.com/@betraamarey{% endif %}" target="_blank" rel="noopener"><img src="https://raw.githubusercontent.com/pampa12/Betraamarewebsite/main/assets/photos/betra-01.jpg" alt="Betra social content" loading="lazy"></a>
-          <a class="social-photo reveal" href="{% if contact_content %}{{ contact_content.tiktok_url }}{% else %}https://www.tiktok.com/@betraamarey{% endif %}" target="_blank" rel="noopener"><img src="https://raw.githubusercontent.com/pampa12/Betraamarewebsite/main/assets/photos/betra-07.jpg" alt="Betra social content" loading="lazy"></a>
+          <div class="social-photo reveal">{% if home_content and home_content.social_photo_1 %}<img src="{{ home_content.social_photo_1.url }}" alt="Betra social content" loading="lazy">{% else %}<img src="https://raw.githubusercontent.com/pampa12/Betraamarewebsite/main/assets/photos/betra-04.jpg" alt="Betra social content" loading="lazy">{% endif %}</div>
+          <div class="social-photo reveal">{% if home_content and home_content.social_photo_2 %}<img src="{{ home_content.social_photo_2.url }}" alt="Betra social content" loading="lazy">{% else %}<img src="https://raw.githubusercontent.com/pampa12/Betraamarewebsite/main/assets/photos/betra-09.jpg" alt="Betra social content" loading="lazy">{% endif %}</div>
+          <div class="social-photo reveal">{% if home_content and home_content.social_photo_3 %}<img src="{{ home_content.social_photo_3.url }}" alt="Betra social content" loading="lazy">{% else %}<img src="https://raw.githubusercontent.com/pampa12/Betraamarewebsite/main/assets/photos/betra-01.jpg" alt="Betra social content" loading="lazy">{% endif %}</div>
+          <div class="social-photo reveal">{% if home_content and home_content.social_photo_4 %}<img src="{{ home_content.social_photo_4.url }}" alt="Betra social content" loading="lazy">{% else %}<img src="https://raw.githubusercontent.com/pampa12/Betraamarewebsite/main/assets/photos/betra-07.jpg" alt="Betra social content" loading="lazy">{% endif %}</div>
         </div>
       </div>
     </section>
