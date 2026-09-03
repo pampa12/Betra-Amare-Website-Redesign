@@ -10,9 +10,24 @@ GITHUB_PAGES_BASE = "https://pampa12.github.io/Betra-Amare-Website-Redesign"
 
 
 def home(request):
-    """Render the Django homepage while keeping all internal links on localhost."""
+    """Render the Django homepage with admin-managed content."""
     home_content = HomepageContent.objects.first()
-    response = render(request, "home.html", {"home_content": home_content})
+    contact_content = ContactContent.objects.first()
+
+    featured_items = PortfolioItem.objects.filter(active=True, featured=True)[:4]
+    selected_items = list(featured_items)
+    if not selected_items:
+        selected_items = list(PortfolioItem.objects.filter(active=True)[:4])
+
+    response = render(
+        request,
+        "home.html",
+        {
+            "home_content": home_content,
+            "contact_content": contact_content,
+            "selected_items": selected_items,
+        },
+    )
     html = response.content.decode("utf-8").replace(GITHUB_PAGES_BASE, "")
     return HttpResponse(html)
 
