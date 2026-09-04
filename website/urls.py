@@ -14,6 +14,11 @@ urlpatterns = [
     path("privacy/", views.privacy, name="privacy"),
     path("robots.txt", views.robots_txt, name="robots"),
     path("sitemap.xml", views.sitemap_xml, name="sitemap"),
+    path(
+        "favicon.ico",
+        RedirectView.as_view(url="/static/brand/favicon.svg", permanent=True),
+        name="favicon",
+    ),
 
     # Keep old links working, but permanently redirect them to the clean URLs.
     path("index.html", RedirectView.as_view(pattern_name="website:home", permanent=True)),
