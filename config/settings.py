@@ -36,6 +36,11 @@ USE_CLOUDINARY: bool = config(
     cast=bool,
 )
 
+# python-decouple reads .env values without exporting them. Cloudinary's SDK reads
+# CLOUDINARY_URL from the process environment, so mirror the value inside this process.
+if CLOUDINARY_URL and not os.environ.get("CLOUDINARY_URL"):
+    os.environ["CLOUDINARY_URL"] = CLOUDINARY_URL
+
 if USE_CLOUDINARY and not CLOUDINARY_URL:
     raise ImproperlyConfigured("CLOUDINARY_URL must be set when USE_CLOUDINARY=True.")
 
