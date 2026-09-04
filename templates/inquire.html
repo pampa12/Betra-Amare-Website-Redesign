@@ -48,6 +48,7 @@
 
         <form class="contact-form reveal" method="post" action="/inquire/" novalidate>
           {% csrf_token %}
+          <div class="hp-field" aria-hidden="true">{{ form.website }}</div>
 
           {% if success %}
           <div class="form-row" role="status" aria-live="polite">
@@ -66,7 +67,7 @@
           <div class="form-row"><label for="{{ form.budget.id_for_label }}">Budget</label>{{ form.budget }}{{ form.budget.errors }}</div>
           <div class="form-row"><label for="{{ form.message.id_for_label }}">Project details</label>{{ form.message }}{{ form.message.errors }}</div>
           <button class="dark-button" type="submit">{% if inquiry_content %}{{ inquiry_content.button_text }}{% else %}Send inquiry{% endif %}</button>
-          <p class="form-note">{% if inquiry_content %}{{ inquiry_content.form_note }}{% else %}Your inquiry will be securely saved so Betra can review it in the website admin.{% endif %}</p>
+          <p class="form-note">By submitting, you agree that the information you provide may be used to review and respond to your inquiry. Read the <a href="/privacy/">Privacy Policy</a>.</p>
         </form>
       </div>
     </section>
