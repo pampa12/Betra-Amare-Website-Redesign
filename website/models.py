@@ -3,8 +3,10 @@ from pathlib import Path
 
 from cloudinary_storage.storage import VideoMediaCloudinaryStorage
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from django.core.files.storage import FileSystemStorage
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from PIL import Image, ImageOps, UnidentifiedImageError
 
@@ -328,12 +330,23 @@ class PortfolioItem(models.Model):
 
     title = models.CharField(max_length=140)
     category = models.CharField(max_length=20, choices=Category.choices)
-    image = models.ImageField(upload_to="portfolio/")
+    image = models.ImageField(
+        upload_to="portfolio/",
+        blank=True,
+        help_text="Optional photo. If you also add a video, this photo is used as the video poster.",
+    )
+    video = models.FileField(
+        upload_to="portfolio/videos/",
+        blank=True,
+        storage=portfolio_video_storage,
+        validators=[FileExtensionValidator(["mp4", "mov", "m4v", "webm"])],
+        help_text="Optional video. Supported formats: MP4, MOV, M4V, WEBM.",
+    )
     alt_text = models.CharField(max_length=180, blank=True)
     link_url = models.URLField(
         blank=True,
         default="",
-        help_text="Optional. Leave blank if the image should not open another page.",
+        help_text="Optional. Leave blank if the photo should not open another page.",
     )
     featured = models.BooleanField(default=False)
     active = models.BooleanField(default=True)
@@ -343,6 +356,11 @@ class PortfolioItem(models.Model):
 
     class Meta:
         ordering = ["sort_order", "-created_at"]
+
+    def clean(self):
+        super().clean()
+        if not self.image and not self.video:
+            raise ValidationError("Add at least one photo or video to this portfolio item.")
 
     def save(self, *args, **kwargs):
         _optimize_new_upload(self.image)
