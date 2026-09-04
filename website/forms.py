@@ -4,6 +4,20 @@ from .models import Inquiry
 
 
 class InquiryForm(forms.ModelForm):
+    # Honeypot: real visitors never see or fill this field, but many bots do.
+    website = forms.CharField(
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={
+                "autocomplete": "off",
+                "tabindex": "-1",
+                "aria-hidden": "true",
+                "class": "hp-input",
+            }
+        ),
+    )
+
     class Meta:
         model = Inquiry
         fields = ["name", "email", "company", "project_type", "budget", "message"]
@@ -28,3 +42,9 @@ class InquiryForm(forms.ModelForm):
                 }
             ),
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if cleaned_data.get("website"):
+            raise forms.ValidationError("Unable to submit the form. Please try again.")
+        return cleaned_data
