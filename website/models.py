@@ -1,9 +1,19 @@
 from io import BytesIO
 from pathlib import Path
 
+from cloudinary_storage.storage import VideoMediaCloudinaryStorage
+from django.conf import settings
 from django.core.files.base import ContentFile
+from django.core.files.storage import FileSystemStorage
 from django.db import models
 from PIL import Image, ImageOps, UnidentifiedImageError
+
+
+def portfolio_video_storage():
+    """Use Cloudinary's video storage in production and local media storage in development."""
+    if getattr(settings, "USE_CLOUDINARY", False):
+        return VideoMediaCloudinaryStorage()
+    return FileSystemStorage()
 
 
 def _optimize_new_upload(field_file, *, max_dimension=2200, quality=82):
