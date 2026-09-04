@@ -11,8 +11,14 @@ DEBUG: bool = config("DEBUG", default=True, cast=bool)
 ALLOWED_HOSTS: list[str] = config(
     "ALLOWED_HOSTS",
     default="127.0.0.1,localhost",
-    cast=lambda value: [item.strip() for item in value.split(",")],
+    cast=lambda value: [item.strip() for item in value.split(",") if item.strip()],
 )
+CSRF_TRUSTED_ORIGINS: list[str] = config(
+    "CSRF_TRUSTED_ORIGINS",
+    default="",
+    cast=lambda value: [item.strip() for item in value.split(",") if item.strip()],
+)
+GA_MEASUREMENT_ID: str = config("GA_MEASUREMENT_ID", default="").strip()
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -81,3 +87,16 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Production-only security. These remain off locally so 127.0.0.1 development works normally.
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+    X_FRAME_OPTIONS = "DENY"
