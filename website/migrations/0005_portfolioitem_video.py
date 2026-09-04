@@ -14,7 +14,20 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="portfolioitem",
             name="image",
-            field=models.ImageField(blank=True, upload_to="portfolio/"),
+            field=models.ImageField(
+                blank=True,
+                help_text="Optional photo. If you also add a video, this photo is used as the video poster.",
+                upload_to="portfolio/",
+            ),
+        ),
+        migrations.AlterField(
+            model_name="portfolioitem",
+            name="link_url",
+            field=models.URLField(
+                blank=True,
+                default="",
+                help_text="Optional. Leave blank if the photo should not open another page.",
+            ),
         ),
         migrations.AddField(
             model_name="portfolioitem",
