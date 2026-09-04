@@ -55,10 +55,30 @@ class InquiryPageContentAdmin(SingletonContentAdmin):
 
 @admin.register(PortfolioItem)
 class PortfolioItemAdmin(admin.ModelAdmin):
-    list_display = ("title", "category", "featured", "active", "sort_order", "updated_at")
+    list_display = ("title", "category", "media_type", "featured", "active", "sort_order", "updated_at")
     list_filter = ("category", "featured", "active")
     search_fields = ("title", "alt_text")
     list_editable = ("featured", "active", "sort_order")
+    fieldsets = (
+        (
+            "Portfolio media",
+            {
+                "fields": ("title", "category", "image", "video", "alt_text", "link_url"),
+                "description": (
+                    "Add a photo, a video, or both. If both are added, the photo is used as the video's poster image."
+                ),
+            },
+        ),
+        ("Display", {"fields": ("featured", "active", "sort_order")}),
+    )
+
+    @admin.display(description="Media")
+    def media_type(self, obj):
+        if obj.video and obj.image:
+            return "Video + poster"
+        if obj.video:
+            return "Video"
+        return "Photo"
 
 
 @admin.register(Inquiry)
