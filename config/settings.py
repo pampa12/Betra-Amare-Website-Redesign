@@ -1,13 +1,23 @@
+import os
 from pathlib import Path
+
+import dj_database_url
 from decouple import config
+from django.core.exceptions import ImproperlyConfigured
 
 BASE_DIR: Path = Path(__file__).resolve().parent.parent
+IS_RENDER = bool(os.environ.get("RENDER"))
 
-SECRET_KEY: str = config(
-    "SECRET_KEY",
-    default="django-insecure-local-betra-preview-key-change-before-production",
-)
-DEBUG: bool = config("DEBUG", default=True, cast=bool)
+DEBUG: bool = config("DEBUG", default=not IS_RENDER, cast=bool)
+
+_secret_key = config("SECRET_KEY", default="").strip()
+if _secret_key:
+    SECRET_KEY: str = _secret_key
+elif DEBUG:
+    SECRET_KEY = "django-insecure-local-betra-preview-key-change-before-production"
+else:
+    raise ImproperlyConfigured("SECRET_KEY must be set when DEBUG=False.")
+
 ALLOWED_HOSTS: list[str] = config(
     "ALLOWED_HOSTS",
     default="127.0.0.1,localhost",
@@ -19,6 +29,15 @@ CSRF_TRUSTED_ORIGINS: list[str] = config(
     cast=lambda value: [item.strip() for item in value.split(",") if item.strip()],
 )
 GA_MEASUREMENT_ID: str = config("GA_MEASUREMENT_ID", default="").strip()
+
+# Render automatically exposes its public hostname. Add it without requiring another manual setting.
+RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME", "").strip()
+if RENDER_EXTERNAL_HOSTNAME:
+    if RENDER_EXTERNAL_HOSTNAME not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+    render_origin = f"https://{RENDER_EXTERNAL_HOSTNAME}"
+    if render_origin not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(render_origin)
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -32,6 +51,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.gzip.GZipMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -60,12 +80,22 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+DATABASE_URL = config("DATABASE_URL", default="").strip()
+if DATABASE_URL:
+    DATABASES = {
+        "default": dj_database_url.parse(
+            DATABASE_URL,
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
@@ -82,9 +112,17 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_ROOT = Path(config("MEDIA_ROOT", default=str(BASE_DIR / "media")))
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
