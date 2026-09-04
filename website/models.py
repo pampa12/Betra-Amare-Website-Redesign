@@ -1,4 +1,50 @@
+from io import BytesIO
+from pathlib import Path
+
+from django.core.files.base import ContentFile
 from django.db import models
+from PIL import Image, ImageOps, UnidentifiedImageError
+
+
+def _optimize_new_upload(field_file, *, max_dimension=2200, quality=82):
+    """Resize and convert a newly uploaded photo to an optimized WebP file."""
+    if not field_file or getattr(field_file, "_committed", True):
+        return
+
+    try:
+        field_file.file.seek(0)
+        with Image.open(field_file.file) as source:
+            # Keep animated images untouched rather than flattening them to one frame.
+            if getattr(source, "is_animated", False):
+                return
+
+            image = ImageOps.exif_transpose(source)
+            image.thumbnail(
+                (max_dimension, max_dimension),
+                Image.Resampling.LANCZOS,
+            )
+
+            has_alpha = image.mode in ("RGBA", "LA") or "transparency" in image.info
+            image = image.convert("RGBA" if has_alpha else "RGB")
+
+            output = BytesIO()
+            image.save(output, format="WEBP", quality=quality, method=6)
+            output.seek(0)
+
+            original_name = Path(field_file.name).name
+            optimized_name = f"{Path(original_name).stem}.webp"
+            field_file.save(
+                optimized_name,
+                ContentFile(output.getvalue()),
+                save=False,
+            )
+    except (OSError, UnidentifiedImageError, ValueError):
+        # If Pillow cannot process an upload, keep the original file instead of
+        # blocking the admin save.
+        try:
+            field_file.file.seek(0)
+        except (AttributeError, OSError, ValueError):
+            pass
 
 
 class HomepageContent(models.Model):
@@ -81,6 +127,22 @@ class HomepageContent(models.Model):
         verbose_name = "Homepage content"
         verbose_name_plural = "Homepage content"
 
+    def save(self, *args, **kwargs):
+        for field_name in (
+            "hero_image",
+            "category_1_image",
+            "category_2_image",
+            "category_3_image",
+            "about_main_image",
+            "about_accent_image",
+            "social_photo_1",
+            "social_photo_2",
+            "social_photo_3",
+            "social_photo_4",
+        ):
+            _optimize_new_upload(getattr(self, field_name))
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return "Homepage content"
 
@@ -140,6 +202,10 @@ class AboutContent(models.Model):
     class Meta:
         verbose_name = "About page content"
         verbose_name_plural = "About page content"
+
+    def save(self, *args, **kwargs):
+        _optimize_new_upload(self.story_image)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return "About page content"
@@ -267,6 +333,10 @@ class PortfolioItem(models.Model):
 
     class Meta:
         ordering = ["sort_order", "-created_at"]
+
+    def save(self, *args, **kwargs):
+        _optimize_new_upload(self.image)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title
