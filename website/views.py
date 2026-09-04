@@ -31,13 +31,77 @@ CLEAN_INTERNAL_LINKS = {
     "/inquire.html": "/inquire/",
 }
 
+ACCESSIBILITY_STYLES = """
+  <style id="accessibility-enhancements">
+    .skip-link {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      z-index: 10000;
+      padding: 11px 16px;
+      background: #fff;
+      color: #4a2435;
+      border: 2px solid #4a2435;
+      border-radius: 4px;
+      font: 700 0.78rem/1.2 'DM Sans', Arial, sans-serif;
+      text-decoration: none;
+      transform: translateY(-180%);
+      transition: transform .18s ease;
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible,
+    textarea:focus-visible,
+    select:focus-visible,
+    [tabindex]:focus-visible {
+      outline: 3px solid #a65477;
+      outline-offset: 4px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto !important; }
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+"""
+
 
 def _finish_page(request, response, *, title, description, route_name, contact_content=None):
-    """Normalize internal links and add production-style SEO metadata."""
+    """Normalize links and add SEO plus lightweight accessibility enhancements."""
     html = response.content.decode("utf-8").replace(GITHUB_PAGES_BASE, "")
 
     for old_url, clean_url in CLEAN_INTERNAL_LINKS.items():
         html = html.replace(old_url, clean_url)
+
+    # Give keyboard users a direct route to the page content.
+    if 'id="main-content"' not in html:
+        html = html.replace(
+            "<main>",
+            '<main id="main-content" tabindex="-1">',
+            1,
+        )
+    if 'class="skip-link"' not in html:
+        html = html.replace(
+            "<body>",
+            '<body id="top">\n  <a class="skip-link" href="#main-content">Skip to main content</a>',
+            1,
+        )
+
+    # Make the mobile-menu relationship explicit for assistive technology.
+    html = html.replace(
+        'id="menuToggle" aria-label="Open navigation" aria-expanded="false"',
+        'id="menuToggle" aria-label="Open navigation" aria-expanded="false" aria-controls="mainNav"',
+    )
+
+    # Use a real target for existing back-to-top links.
+    html = html.replace('href="#">Back to top', 'href="#top">Back to top')
 
     canonical_url = request.build_absolute_uri(reverse(route_name))
     home_url = request.build_absolute_uri(reverse("website:home"))
@@ -119,7 +183,7 @@ def _finish_page(request, response, *, title, description, route_name, contact_c
   <meta name="twitter:description" content="{escape(description)}">
   <meta name="twitter:image" content="{DEFAULT_SOCIAL_IMAGE}">
   <script type="application/ld+json">{structured_json}</script>
-"""
+{ACCESSIBILITY_STYLES}"""
 
     html = html.replace("</head>", f"{seo_tags}</head>", 1)
     return HttpResponse(html)
