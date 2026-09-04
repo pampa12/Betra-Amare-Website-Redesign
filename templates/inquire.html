@@ -16,9 +16,9 @@
       <a class="wordmark" href="/">Betra Amare</a>
       <button class="menu-toggle" id="menuToggle" aria-label="Open navigation" aria-expanded="false"><span></span><span></span></button>
       <nav class="main-nav" id="mainNav" aria-label="Main navigation">
-        <a href="/">Home</a><a href="/portfolio.html">Portfolio</a><a href="/about.html">About</a><a href="/contact.html">Contact</a>
+        <a href="/">Home</a><a href="/portfolio/">Portfolio</a><a href="/about/">About</a><a href="/contact/">Contact</a>
       </nav>
-      <a class="nav-cta" href="/inquire.html" aria-current="page">Inquire</a>
+      <a class="nav-cta" href="/inquire/" aria-current="page">Inquire</a>
     </div>
   </header>
 
@@ -41,22 +41,22 @@
           <p class="body-copy">{% if inquiry_content %}{{ inquiry_content.section_body }}{% else %}The more detail you can share about your brand, deliverables, timeline, usage, and budget, the easier it is for me to understand the fit.{% endif %}</p>
           <div class="contact-list">
             <a href="mailto:{% if inquiry_content %}{{ inquiry_content.work_email }}{% else %}workwithbetra@gmail.com{% endif %}">{% if inquiry_content %}{{ inquiry_content.work_email }}{% else %}workwithbetra@gmail.com{% endif %}</a>
-            <a href="/portfolio.html">View my portfolio</a>
-            <a href="/contact.html">Looking for general contact instead?</a>
+            <a href="/portfolio/">View my portfolio</a>
+            <a href="/contact/">Looking for general contact instead?</a>
           </div>
         </aside>
 
-        <form class="contact-form reveal" method="post" action="/inquire.html">
+        <form class="contact-form reveal" method="post" action="/inquire/" novalidate>
           {% csrf_token %}
 
           {% if success %}
-          <div class="form-row">
+          <div class="form-row" role="status" aria-live="polite">
             <p class="form-note" style="font-size:1rem;">{% if inquiry_content %}{{ inquiry_content.success_message }}{% else %}Thank you! Your inquiry was sent successfully. I'll get back to you soon.{% endif %}</p>
           </div>
           {% endif %}
 
           {% if form.non_field_errors %}
-          <div class="form-row">{{ form.non_field_errors }}</div>
+          <div class="form-row" role="alert" aria-live="assertive">{{ form.non_field_errors }}</div>
           {% endif %}
 
           <div class="form-row"><label for="{{ form.name.id_for_label }}">Your name</label>{{ form.name }}{{ form.name.errors }}</div>
@@ -73,8 +73,8 @@
   </main>
 
   <footer class="site-footer">
-    <div class="shell footer-top"><p class="footer-wordmark">Betra Amare</p><div class="footer-nav"><a href="/portfolio.html">Portfolio</a><a href="/about.html">About</a><a href="/contact.html">Contact</a><a href="/inquire.html">Inquire</a><a href="{% if contact_content %}{{ contact_content.instagram_url }}{% else %}https://www.instagram.com/betra_amare{% endif %}" target="_blank" rel="noopener">Instagram</a><a href="{% if contact_content %}{{ contact_content.tiktok_url }}{% else %}https://www.tiktok.com/@betraamarey{% endif %}" target="_blank" rel="noopener">TikTok</a></div></div>
-    <div class="shell footer-bottom"><span>© <span data-year></span> Betra Amare. All rights reserved.</span><a href="#">Back to top ↑</a></div>
+    <div class="shell footer-top"><p class="footer-wordmark">Betra Amare</p><div class="footer-nav"><a href="/portfolio/">Portfolio</a><a href="/about/">About</a><a href="/contact/">Contact</a><a href="/inquire/">Inquire</a><a href="{% if contact_content %}{{ contact_content.instagram_url }}{% else %}https://www.instagram.com/betra_amare{% endif %}" target="_blank" rel="noopener">Instagram</a><a href="{% if contact_content %}{{ contact_content.tiktok_url }}{% else %}https://www.tiktok.com/@betraamarey{% endif %}" target="_blank" rel="noopener">TikTok</a></div></div>
+    <div class="shell footer-bottom"><span>© <span data-year></span> Betra Amare. All rights reserved.</span><a href="#top">Back to top ↑</a></div>
   </footer>
   <script src="/script.js"></script>
 </body>
