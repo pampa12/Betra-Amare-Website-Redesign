@@ -11,10 +11,21 @@ from django.db import models
 from PIL import Image, ImageOps, UnidentifiedImageError
 
 
+class BrowserCompatibleCloudinaryVideoStorage(VideoMediaCloudinaryStorage):
+    """Deliver Cloudinary videos as broadly supported H.264 MP4 assets."""
+
+    def url(self, name):
+        url = super().url(name)
+        marker = "/video/upload/"
+        if marker in url and "f_mp4" not in url:
+            return url.replace(marker, f"{marker}f_mp4,vc_h264,q_auto/")
+        return url
+
+
 def portfolio_video_storage():
-    """Use Cloudinary's video storage in production and local media storage in development."""
+    """Use browser-compatible Cloudinary video delivery in production and local media storage in development."""
     if getattr(settings, "USE_CLOUDINARY", False):
-        return VideoMediaCloudinaryStorage()
+        return BrowserCompatibleCloudinaryVideoStorage()
     return FileSystemStorage()
 
 
@@ -340,7 +351,7 @@ class PortfolioItem(models.Model):
         blank=True,
         storage=portfolio_video_storage,
         validators=[FileExtensionValidator(["mp4", "mov", "m4v", "webm"])],
-        help_text="Optional video. Supported formats: MP4, MOV, M4V, WEBM.",
+        help_text="Optional video. For best browser compatibility, upload MP4 (H.264/AAC). MOV, M4V, and WEBM are also accepted and are normalized for delivery in production.",
     )
     alt_text = models.CharField(max_length=180, blank=True)
     link_url = models.URLField(
