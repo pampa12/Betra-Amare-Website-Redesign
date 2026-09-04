@@ -72,13 +72,47 @@ ACCESSIBILITY_STYLES = """
   </style>
 """
 
+PERFORMANCE_HINTS = """
+  <link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin>
+  <link rel="dns-prefetch" href="//raw.githubusercontent.com">
+"""
+
+
+def _optimize_image_tag(match):
+    """Add browser loading hints without changing template-managed image URLs."""
+    tag = match.group(0)
+    lower_tag = tag.lower()
+    additions = []
+
+    if "decoding=" not in lower_tag:
+        additions.append('decoding="async"')
+
+    if "hero-photo" in lower_tag:
+        if "loading=" not in lower_tag:
+            additions.append('loading="eager"')
+        if "fetchpriority=" not in lower_tag:
+            additions.append('fetchpriority="high"')
+    elif "loading=" not in lower_tag:
+        additions.append('loading="lazy"')
+
+    if not additions:
+        return tag
+
+    return f"{tag[:-1]} {' '.join(additions)}>"
+
 
 def _finish_page(request, response, *, title, description, route_name, contact_content=None):
-    """Normalize links and add SEO plus lightweight accessibility enhancements."""
+    """Normalize links and add SEO, accessibility, and performance enhancements."""
     html = response.content.decode("utf-8").replace(GITHUB_PAGES_BASE, "")
 
     for old_url, clean_url in CLEAN_INTERNAL_LINKS.items():
         html = html.replace(old_url, clean_url)
+
+    # Improve image loading: prioritize the hero and defer below-the-fold imagery.
+    html = re.sub(r"<img\b[^>]*>", _optimize_image_tag, html, flags=re.I)
+
+    # The shared script is non-critical for initial HTML rendering.
+    html = html.replace('<script src="/script.js"></script>', '<script src="/script.js" defer></script>')
 
     # Give keyboard users a direct route to the page content.
     if 'id="main-content"' not in html:
@@ -183,7 +217,7 @@ def _finish_page(request, response, *, title, description, route_name, contact_c
   <meta name="twitter:description" content="{escape(description)}">
   <meta name="twitter:image" content="{DEFAULT_SOCIAL_IMAGE}">
   <script type="application/ld+json">{structured_json}</script>
-{ACCESSIBILITY_STYLES}"""
+{PERFORMANCE_HINTS}{ACCESSIBILITY_STYLES}"""
 
     html = html.replace("</head>", f"{seo_tags}</head>", 1)
     return HttpResponse(html)
@@ -372,7 +406,10 @@ def legacy_asset(request, filename):
     if not asset_path.exists():
         return HttpResponse(status=404)
 
-    return HttpResponse(
+    response = HttpResponse(
         asset_path.read_text(encoding="utf-8"),
         content_type=content_types[filename],
     )
+    if not settings.DEBUG:
+        response["Cache-Control"] = "public, max-age=604800, immutable"
+    return response
