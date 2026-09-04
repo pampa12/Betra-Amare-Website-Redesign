@@ -29,6 +29,15 @@ CSRF_TRUSTED_ORIGINS: list[str] = config(
     cast=lambda value: [item.strip() for item in value.split(",") if item.strip()],
 )
 GA_MEASUREMENT_ID: str = config("GA_MEASUREMENT_ID", default="").strip()
+CLOUDINARY_URL: str = config("CLOUDINARY_URL", default="").strip()
+USE_CLOUDINARY: bool = config(
+    "USE_CLOUDINARY",
+    default=bool(CLOUDINARY_URL) and not DEBUG,
+    cast=bool,
+)
+
+if USE_CLOUDINARY and not CLOUDINARY_URL:
+    raise ImproperlyConfigured("CLOUDINARY_URL must be set when USE_CLOUDINARY=True.")
 
 # Render automatically exposes its public hostname. Add it without requiring another manual setting.
 RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME", "").strip()
@@ -46,6 +55,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "cloudinary_storage",
+    "cloudinary",
     "website",
 ]
 
@@ -114,7 +125,11 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STORAGES = {
     "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "BACKEND": (
+            "cloudinary_storage.storage.MediaCloudinaryStorage"
+            if USE_CLOUDINARY
+            else "django.core.files.storage.FileSystemStorage"
+        ),
     },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
