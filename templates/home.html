@@ -14,6 +14,31 @@
   <link rel="stylesheet" href="/styles.css">
   <style>
     .django-preview-badge{position:fixed;left:18px;bottom:18px;z-index:9999;background:rgba(32,28,26,.92);color:#fff;padding:8px 12px;font:600 11px/1.2 'DM Sans',sans-serif;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,.18)}
+
+    .editorial-grid.two-item-grid {
+      grid-template-columns: .78fr 1.22fr;
+      grid-template-rows: 420px;
+      gap: 18px;
+    }
+    .editorial-grid.two-item-grid .work-tile {
+      grid-column: auto;
+      grid-row: auto;
+      min-height: 0;
+    }
+    .work-tile .portfolio-video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      background: #eadce2;
+    }
+    @media (max-width: 760px) {
+      .editorial-grid.two-item-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: 430px 280px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -114,18 +139,20 @@
           <div><p class="eyebrow">{% if home_content %}{{ home_content.selected_eyebrow }}{% else %}Selected work{% endif %}</p><h2 class="display-title">{% if home_content %}{{ home_content.selected_title }}{% else %}A few favorites.{% endif %}</h2></div>
           <a class="arrow-link" href="/portfolio.html">View full portfolio</a>
         </div>
-        <div class="editorial-grid">
+        <div class="editorial-grid{% if selected_items|length == 2 %} two-item-grid{% endif %}">
           {% if selected_items %}
             {% for item in selected_items %}
               {% if item.video %}
               <div class="work-tile {% if forloop.counter == 1 %}tile-a{% elif forloop.counter == 2 %}tile-b{% elif forloop.counter == 3 %}tile-c{% else %}tile-d{% endif %} reveal">
                 <video
-                  controls
+                  class="portfolio-video"
+                  autoplay
+                  muted
+                  loop
                   playsinline
-                  preload="metadata"
-                  aria-label="{{ item.alt_text|default:item.title }}"
+                  preload="auto"
+                  aria-label="{{ item.alt_text|default:item.title }} video"
                   {% if item.image %}poster="{{ item.image.url }}"{% endif %}
-                  style="display:block;width:100%;height:100%;object-fit:cover;background:#eadce2;"
                 >
                   <source src="{{ item.video.url }}">
                   Your browser does not support HTML5 video.
