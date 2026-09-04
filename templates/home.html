@@ -117,7 +117,23 @@
         <div class="editorial-grid">
           {% if selected_items %}
             {% for item in selected_items %}
-            <a class="work-tile {% if forloop.counter == 1 %}tile-a{% elif forloop.counter == 2 %}tile-b{% elif forloop.counter == 3 %}tile-c{% else %}tile-d{% endif %} reveal" href="/portfolio.html"><img src="{{ item.image.url }}" alt="{{ item.alt_text|default:item.title }}" loading="lazy"></a>
+              {% if item.video %}
+              <div class="work-tile {% if forloop.counter == 1 %}tile-a{% elif forloop.counter == 2 %}tile-b{% elif forloop.counter == 3 %}tile-c{% else %}tile-d{% endif %} reveal">
+                <video
+                  controls
+                  playsinline
+                  preload="metadata"
+                  aria-label="{{ item.alt_text|default:item.title }}"
+                  {% if item.image %}poster="{{ item.image.url }}"{% endif %}
+                  style="display:block;width:100%;height:100%;object-fit:cover;background:#eadce2;"
+                >
+                  <source src="{{ item.video.url }}">
+                  Your browser does not support HTML5 video.
+                </video>
+              </div>
+              {% elif item.image %}
+              <a class="work-tile {% if forloop.counter == 1 %}tile-a{% elif forloop.counter == 2 %}tile-b{% elif forloop.counter == 3 %}tile-c{% else %}tile-d{% endif %} reveal" href="/portfolio.html"><img src="{{ item.image.url }}" alt="{{ item.alt_text|default:item.title }}" loading="lazy"></a>
+              {% endif %}
             {% endfor %}
           {% endif %}
         </div>
