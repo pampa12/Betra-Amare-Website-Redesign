@@ -108,11 +108,18 @@ def _finish_page(request, response, *, title, description, route_name, contact_c
     for old_url, clean_url in CLEAN_INTERNAL_LINKS.items():
         html = html.replace(old_url, clean_url)
 
+    # Route site CSS and JavaScript through Django's staticfiles app.
+    html = html.replace('href="/styles.css"', 'href="/static/css/styles.css"')
+    html = html.replace('src="/script.js"', 'src="/static/js/script.js"')
+
     # Improve image loading: prioritize the hero and defer below-the-fold imagery.
     html = re.sub(r"<img\b[^>]*>", _optimize_image_tag, html, flags=re.I)
 
     # The shared script is non-critical for initial HTML rendering.
-    html = html.replace('<script src="/script.js"></script>', '<script src="/script.js" defer></script>')
+    html = html.replace(
+        '<script src="/static/js/script.js"></script>',
+        '<script src="/static/js/script.js" defer></script>',
+    )
 
     # Give keyboard users a direct route to the page content.
     if 'id="main-content"' not in html:
@@ -394,7 +401,7 @@ def sitemap_xml(request):
 
 
 def legacy_asset(request, filename):
-    """Serve the existing CSS and JavaScript locally for the Django preview."""
+    """Serve the existing CSS and JavaScript locally for older cached links."""
     content_types = {
         "styles.css": "text/css",
         "script.js": "application/javascript",
