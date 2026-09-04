@@ -1,3 +1,5 @@
+import json
+import re
 from xml.sax.saxutils import escape
 
 from django.conf import settings
@@ -17,6 +19,110 @@ from .models import (
 
 
 GITHUB_PAGES_BASE = "https://pampa12.github.io/Betra-Amare-Website-Redesign"
+DEFAULT_SOCIAL_IMAGE = (
+    "https://raw.githubusercontent.com/pampa12/Betraamarewebsite/"
+    "main/assets/photos/betra-07.jpg"
+)
+CLEAN_INTERNAL_LINKS = {
+    "/index.html": "/",
+    "/portfolio.html": "/portfolio/",
+    "/about.html": "/about/",
+    "/contact.html": "/contact/",
+    "/inquire.html": "/inquire/",
+}
+
+
+def _finish_page(request, response, *, title, description, route_name, contact_content=None):
+    """Normalize internal links and add production-style SEO metadata."""
+    html = response.content.decode("utf-8").replace(GITHUB_PAGES_BASE, "")
+
+    for old_url, clean_url in CLEAN_INTERNAL_LINKS.items():
+        html = html.replace(old_url, clean_url)
+
+    canonical_url = request.build_absolute_uri(reverse(route_name))
+    home_url = request.build_absolute_uri(reverse("website:home"))
+
+    instagram_url = (
+        contact_content.instagram_url
+        if contact_content and contact_content.instagram_url
+        else "https://www.instagram.com/betra_amare"
+    )
+    tiktok_url = (
+        contact_content.tiktok_url
+        if contact_content and contact_content.tiktok_url
+        else "https://www.tiktok.com/@betraamarey"
+    )
+
+    # Remove older SEO tags so every page has one clean, authoritative set.
+    html = re.sub(r"\s*<title>.*?</title>", "", html, count=1, flags=re.I | re.S)
+    html = re.sub(
+        r"\s*<meta\s+name=[\"']description[\"'][^>]*>",
+        "",
+        html,
+        flags=re.I,
+    )
+    html = re.sub(
+        r"\s*<meta\s+(?:property|name)=[\"'](?:og:|twitter:)[^\"']+[\"'][^>]*>",
+        "",
+        html,
+        flags=re.I,
+    )
+    html = re.sub(
+        r"\s*<link\s+rel=[\"']canonical[\"'][^>]*>",
+        "",
+        html,
+        flags=re.I,
+    )
+
+    structured_data = {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "Person",
+                "@id": f"{home_url}#person",
+                "name": "Betra Amare",
+                "url": home_url,
+                "jobTitle": "Model and Digital Creator",
+                "sameAs": [instagram_url, tiktok_url],
+            },
+            {
+                "@type": "WebSite",
+                "@id": f"{home_url}#website",
+                "url": home_url,
+                "name": "Betra Amare",
+                "publisher": {"@id": f"{home_url}#person"},
+            },
+            {
+                "@type": "WebPage",
+                "@id": f"{canonical_url}#webpage",
+                "url": canonical_url,
+                "name": title,
+                "description": description,
+                "isPartOf": {"@id": f"{home_url}#website"},
+                "about": {"@id": f"{home_url}#person"},
+            },
+        ],
+    }
+    structured_json = json.dumps(structured_data, ensure_ascii=False).replace("</", "<\\/")
+
+    seo_tags = f"""
+  <title>{escape(title)}</title>
+  <meta name="description" content="{escape(description)}">
+  <link rel="canonical" href="{escape(canonical_url)}">
+  <meta property="og:title" content="{escape(title)}">
+  <meta property="og:description" content="{escape(description)}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{escape(canonical_url)}">
+  <meta property="og:image" content="{DEFAULT_SOCIAL_IMAGE}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{escape(title)}">
+  <meta name="twitter:description" content="{escape(description)}">
+  <meta name="twitter:image" content="{DEFAULT_SOCIAL_IMAGE}">
+  <script type="application/ld+json">{structured_json}</script>
+"""
+
+    html = html.replace("</head>", f"{seo_tags}</head>", 1)
+    return HttpResponse(html)
 
 
 def home(request):
@@ -38,8 +144,17 @@ def home(request):
             "selected_items": selected_items,
         },
     )
-    html = response.content.decode("utf-8").replace(GITHUB_PAGES_BASE, "")
-    return HttpResponse(html)
+    return _finish_page(
+        request,
+        response,
+        title="Betra Amare | Model & Digital Creator",
+        description=(
+            "Betra Amare is a model and digital creator producing polished beauty, "
+            "fashion, lifestyle, and brand content with an authentic editorial feel."
+        ),
+        route_name="website:home",
+        contact_content=contact_content,
+    )
 
 
 def portfolio(request):
@@ -47,7 +162,7 @@ def portfolio(request):
     portfolio_items = PortfolioItem.objects.filter(active=True)
     portfolio_content = PortfolioPageContent.objects.first()
     contact_content = ContactContent.objects.first()
-    return render(
+    response = render(
         request,
         "portfolio.html",
         {
@@ -56,23 +171,56 @@ def portfolio(request):
             "contact_content": contact_content,
         },
     )
+    return _finish_page(
+        request,
+        response,
+        title="Portfolio | Betra Amare — Beauty, Fashion & Lifestyle",
+        description=(
+            "Explore Betra Amare's selected modeling and creator work across beauty, "
+            "fashion, lifestyle, editorial, and brand content."
+        ),
+        route_name="website:portfolio",
+        contact_content=contact_content,
+    )
 
 
 def about(request):
     """Render editable About page content from Django admin."""
     about_content = AboutContent.objects.first()
     contact_content = ContactContent.objects.first()
-    return render(
+    response = render(
         request,
         "about.html",
         {"about_content": about_content, "contact_content": contact_content},
+    )
+    return _finish_page(
+        request,
+        response,
+        title="About Betra Amare | Model & Digital Creator",
+        description=(
+            "Meet Betra Amare, a model and digital creator focused on confident, "
+            "feminine beauty, fashion, lifestyle, and authentic visual storytelling."
+        ),
+        route_name="website:about",
+        contact_content=contact_content,
     )
 
 
 def contact(request):
     """Render editable Contact page content from Django admin."""
     contact_content = ContactContent.objects.first()
-    return render(request, "contact.html", {"contact_content": contact_content})
+    response = render(request, "contact.html", {"contact_content": contact_content})
+    return _finish_page(
+        request,
+        response,
+        title="Contact Betra Amare | Creator & Model",
+        description=(
+            "Contact Betra Amare for general questions and social communication, "
+            "or use the inquiry page for brand collaborations and project work."
+        ),
+        route_name="website:contact",
+        contact_content=contact_content,
+    )
 
 
 def inquire(request):
@@ -90,7 +238,7 @@ def inquire(request):
     else:
         form = InquiryForm()
 
-    return render(
+    response = render(
         request,
         "inquire.html",
         {
@@ -99,6 +247,17 @@ def inquire(request):
             "inquiry_content": inquiry_content,
             "contact_content": contact_content,
         },
+    )
+    return _finish_page(
+        request,
+        response,
+        title="Work With Betra Amare | Brand & Creator Inquiries",
+        description=(
+            "Send a project inquiry to Betra Amare for brand campaigns, UGC, modeling, "
+            "beauty, fashion, lifestyle, and paid creator collaborations."
+        ),
+        route_name="website:inquire",
+        contact_content=contact_content,
     )
 
 
@@ -126,9 +285,7 @@ def sitemap_xml(request):
         "website:inquire",
     ]
     urls = [request.build_absolute_uri(reverse(name)) for name in route_names]
-    entries = "".join(
-        f"<url><loc>{escape(url)}</loc></url>" for url in urls
-    )
+    entries = "".join(f"<url><loc>{escape(url)}</loc></url>" for url in urls)
     xml = (
         '<?xml version="1.0" encoding="UTF-8"?>'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
