@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Betra Amare — model and digital creator creating beauty, fashion, lifestyle, and brand content.">
+  <meta name="description" content="Betra Amare — model and digital creator producing beauty, fashion, lifestyle, and brand visuals.">
   <meta property="og:title" content="Betra Amare | Model & Digital Creator">
-  <meta property="og:description" content="Beauty, style, and stories that feel beautifully real.">
+  <meta property="og:description" content="Beauty, style, and visual work with a polished, personal point of view.">
   <meta property="og:type" content="website">
   <title>Betra Amare | Model & Digital Creator</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -57,13 +57,13 @@
   <main>
     <section class="hero hero-home">
       {% if home_content and home_content.hero_image %}
-      <img class="hero-photo" src="{{ home_content.hero_image.url }}" alt="Betra Amare portrait">
+      <img class="hero-photo" src="{{ home_content.hero_image.url }}" alt="Betra Amare, model and digital creator">
       {% endif %}
       <div class="hero-shade"></div>
       <div class="shell hero-content reveal">
         <p class="eyebrow light">{% if home_content %}{{ home_content.eyebrow }}{% else %}Model · Creator · Storyteller{% endif %}</p>
         <h1>{% if home_content %}{{ home_content.headline_line1 }}<br>{{ home_content.headline_line2 }} <em>{{ home_content.headline_emphasis }}</em>{% else %}Beauty, style &amp;<br>the moments <em>in between.</em>{% endif %}</h1>
-        <p class="hero-copy">{% if home_content %}{{ home_content.intro_text }}{% else %}I create confident, feminine visuals rooted in beauty, fashion, lifestyle, and authentic storytelling.{% endif %}</p>
+        <p class="hero-copy">{% if home_content %}{{ home_content.intro_text }}{% else %}I create confident, feminine visuals across beauty, fashion, and lifestyle — with a polished eye and a personal point of view.{% endif %}</p>
         <a class="arrow-link light-link" href="/portfolio.html">{% if home_content %}{{ home_content.cta_text }}{% else %}Explore my work{% endif %}</a>
       </div>
       <a class="scroll-cue" href="#world">Scroll to discover <span>↓</span></a>
@@ -88,19 +88,19 @@
         <div class="category-grid">
           <a class="category-card reveal" href="/portfolio.html#beauty">
             <div class="media-frame tall">
-              {% if home_content and home_content.category_1_image %}<img src="{{ home_content.category_1_image.url }}" alt="{{ home_content.category_1_title }}" loading="lazy">{% endif %}
+              {% if home_content and home_content.category_1_image %}<img src="{{ home_content.category_1_image.url }}" alt="Beauty content by Betra Amare" loading="lazy">{% endif %}
             </div>
             <div class="card-caption"><h3>{% if home_content %}{{ home_content.category_1_title }}{% else %}Beauty{% endif %}</h3><span>{% if home_content %}{{ home_content.category_1_subtitle }}{% else %}Glow · Detail · Confidence{% endif %}</span></div>
           </a>
           <a class="category-card offset reveal" href="/portfolio.html#fashion">
             <div class="media-frame tallest">
-              {% if home_content and home_content.category_2_image %}<img src="{{ home_content.category_2_image.url }}" alt="{{ home_content.category_2_title }}" loading="lazy">{% endif %}
+              {% if home_content and home_content.category_2_image %}<img src="{{ home_content.category_2_image.url }}" alt="Fashion editorial content by Betra Amare" loading="lazy">{% endif %}
             </div>
             <div class="card-caption"><h3>{% if home_content %}{{ home_content.category_2_title }}{% else %}Fashion{% endif %}</h3><span>{% if home_content %}{{ home_content.category_2_subtitle }}{% else %}Style · Editorial · Mood{% endif %}</span></div>
           </a>
           <a class="category-card reveal" href="/portfolio.html#lifestyle">
             <div class="media-frame medium">
-              {% if home_content and home_content.category_3_image %}<img src="{{ home_content.category_3_image.url }}" alt="{{ home_content.category_3_title }}" loading="lazy">{% endif %}
+              {% if home_content and home_content.category_3_image %}<img src="{{ home_content.category_3_image.url }}" alt="Lifestyle content by Betra Amare" loading="lazy">{% endif %}
             </div>
             <div class="card-caption"><h3>{% if home_content %}{{ home_content.category_3_title }}{% else %}Lifestyle{% endif %}</h3><span>{% if home_content %}{{ home_content.category_3_subtitle }}{% else %}Everyday · Soft · Personal{% endif %}</span></div>
           </a>
@@ -112,16 +112,16 @@
       <div class="shell about-grid">
         <div class="about-visual reveal">
           <div class="about-main-photo">
-            {% if home_content and home_content.about_main_image %}<img src="{{ home_content.about_main_image.url }}" alt="Betra Amare" loading="lazy">{% endif %}
+            {% if home_content and home_content.about_main_image %}<img src="{{ home_content.about_main_image.url }}" alt="Betra Amare creator portrait" loading="lazy">{% endif %}
           </div>
           <div class="about-accent-photo">
-            {% if home_content and home_content.about_accent_image %}<img src="{{ home_content.about_accent_image.url }}" alt="Betra Amare portrait" loading="lazy">{% endif %}
+            {% if home_content and home_content.about_accent_image %}<img src="{{ home_content.about_accent_image.url }}" alt="Editorial portrait of Betra Amare" loading="lazy">{% endif %}
           </div>
         </div>
         <div class="about-copy reveal">
           <p class="eyebrow">{% if home_content %}{{ home_content.about_eyebrow }}{% else %}Meet Betra{% endif %}</p>
           <h2 class="display-title">{% if home_content %}{{ home_content.about_title_line1 }}<br><em>{{ home_content.about_title_emphasis }}</em>{% else %}Creator first.<br><em>Always myself.</em>{% endif %}</h2>
-          <p class="body-copy">{% if home_content %}{{ home_content.about_text_1 }}{% else %}I'm Betra Amare, a model and digital creator with a love for beauty, fashion, confidence, and authentic storytelling. I create content that feels polished without losing the personality behind it.{% endif %}</p>
+          <p class="body-copy">{% if home_content %}{{ home_content.about_text_1 }}{% else %}I'm Betra Amare, a model and digital creator drawn to beauty, fashion, confidence, and expressive visuals. I create content that feels polished without losing the personality behind it.{% endif %}</p>
           <p class="body-copy">{% if home_content %}{{ home_content.about_text_2 }}{% else %}Whether I'm creating for a brand or sharing a piece of my everyday life, I want the final result to feel warm, intentional, and true to me.{% endif %}</p>
           <a class="arrow-link" href="/about.html">More about me</a>
           <p class="signature">Betra ♡</p>
@@ -179,10 +179,10 @@
           <div class="social-links"><a href="{% if contact_content %}{{ contact_content.instagram_url }}{% else %}https://www.instagram.com/betra_amare{% endif %}" target="_blank" rel="noopener">Instagram</a><a href="{% if contact_content %}{{ contact_content.tiktok_url }}{% else %}https://www.tiktok.com/@betraamarey{% endif %}" target="_blank" rel="noopener">TikTok</a></div>
         </div>
         <div class="social-photo-grid">
-          <div class="social-photo reveal">{% if home_content and home_content.social_photo_1 %}<img src="{{ home_content.social_photo_1.url }}" alt="Betra social content" loading="lazy">{% endif %}</div>
-          <div class="social-photo reveal">{% if home_content and home_content.social_photo_2 %}<img src="{{ home_content.social_photo_2.url }}" alt="Betra social content" loading="lazy">{% endif %}</div>
-          <div class="social-photo reveal">{% if home_content and home_content.social_photo_3 %}<img src="{{ home_content.social_photo_3.url }}" alt="Betra social content" loading="lazy">{% endif %}</div>
-          <div class="social-photo reveal">{% if home_content and home_content.social_photo_4 %}<img src="{{ home_content.social_photo_4.url }}" alt="Betra social content" loading="lazy">{% endif %}</div>
+          <div class="social-photo reveal">{% if home_content and home_content.social_photo_1 %}<img src="{{ home_content.social_photo_1.url }}" alt="Betra Amare beauty and lifestyle social content" loading="lazy">{% endif %}</div>
+          <div class="social-photo reveal">{% if home_content and home_content.social_photo_2 %}<img src="{{ home_content.social_photo_2.url }}" alt="Betra Amare fashion and creator social content" loading="lazy">{% endif %}</div>
+          <div class="social-photo reveal">{% if home_content and home_content.social_photo_3 %}<img src="{{ home_content.social_photo_3.url }}" alt="Everyday lifestyle content by Betra Amare" loading="lazy">{% endif %}</div>
+          <div class="social-photo reveal">{% if home_content and home_content.social_photo_4 %}<img src="{{ home_content.social_photo_4.url }}" alt="Editorial social media content by Betra Amare" loading="lazy">{% endif %}</div>
         </div>
       </div>
     </section>
