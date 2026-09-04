@@ -1,6 +1,8 @@
 import json
 import re
-from xml.sax.saxutils import escape
+import time
+from html import escape as html_escape
+from xml.sax.saxutils import escape as xml_escape
 
 from django.conf import settings
 from django.http import HttpResponse
@@ -30,6 +32,7 @@ CLEAN_INTERNAL_LINKS = {
     "/contact.html": "/contact/",
     "/inquire.html": "/inquire/",
 }
+INQUIRY_COOLDOWN_SECONDS = 30
 
 ACCESSIBILITY_STYLES = """
   <style id="accessibility-enhancements">
@@ -60,6 +63,18 @@ ACCESSIBILITY_STYLES = """
       outline-offset: 4px;
     }
 
+    .hp-field {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto !important; }
       *, *::before, *::after {
@@ -75,6 +90,24 @@ ACCESSIBILITY_STYLES = """
 PERFORMANCE_HINTS = """
   <link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin>
   <link rel="dns-prefetch" href="//raw.githubusercontent.com">
+"""
+
+
+def _analytics_tags():
+    """Return Google Analytics markup only when a valid measurement ID is configured."""
+    measurement_id = getattr(settings, "GA_MEASUREMENT_ID", "").strip()
+    if not re.fullmatch(r"G-[A-Z0-9]+", measurement_id, flags=re.I):
+        return ""
+
+    safe_id = measurement_id.upper()
+    return f"""
+  <script async src="https://www.googletagmanager.com/gtag/js?id={safe_id}"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){{dataLayer.push(arguments);}}
+    gtag('js', new Date());
+    gtag('config', '{safe_id}', {{'anonymize_ip': true}});
+  </script>
 """
 
 
@@ -102,7 +135,7 @@ def _optimize_image_tag(match):
 
 
 def _finish_page(request, response, *, title, description, route_name, contact_content=None):
-    """Normalize links and add SEO, accessibility, and performance enhancements."""
+    """Normalize links and add SEO, accessibility, privacy, and performance enhancements."""
     html = response.content.decode("utf-8").replace(GITHUB_PAGES_BASE, "")
 
     for old_url, clean_url in CLEAN_INTERNAL_LINKS.items():
@@ -111,6 +144,14 @@ def _finish_page(request, response, *, title, description, route_name, contact_c
     # Route site CSS and JavaScript through Django's staticfiles app.
     html = html.replace('href="/styles.css"', 'href="/static/css/styles.css"')
     html = html.replace('src="/script.js"', 'src="/static/js/script.js"')
+
+    # Make the privacy policy reachable from every page footer.
+    if 'href="/privacy/"' not in html and '<div class="footer-nav">' in html:
+        html = html.replace(
+            '<div class="footer-nav">',
+            '<div class="footer-nav"><a href="/privacy/">Privacy</a>',
+            1,
+        )
 
     # Improve image loading: prioritize the hero and defer below-the-fold imagery.
     html = re.sub(r"<img\b[^>]*>", _optimize_image_tag, html, flags=re.I)
@@ -210,21 +251,25 @@ def _finish_page(request, response, *, title, description, route_name, contact_c
     }
     structured_json = json.dumps(structured_data, ensure_ascii=False).replace("</", "<\\/")
 
+    safe_title = html_escape(title, quote=True)
+    safe_description = html_escape(description, quote=True)
+    safe_canonical = html_escape(canonical_url, quote=True)
+
     seo_tags = f"""
-  <title>{escape(title)}</title>
-  <meta name="description" content="{escape(description)}">
-  <link rel="canonical" href="{escape(canonical_url)}">
-  <meta property="og:title" content="{escape(title)}">
-  <meta property="og:description" content="{escape(description)}">
+  <title>{safe_title}</title>
+  <meta name="description" content="{safe_description}">
+  <link rel="canonical" href="{safe_canonical}">
+  <meta property="og:title" content="{safe_title}">
+  <meta property="og:description" content="{safe_description}">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="{escape(canonical_url)}">
+  <meta property="og:url" content="{safe_canonical}">
   <meta property="og:image" content="{DEFAULT_SOCIAL_IMAGE}">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="{escape(title)}">
-  <meta name="twitter:description" content="{escape(description)}">
+  <meta name="twitter:title" content="{safe_title}">
+  <meta name="twitter:description" content="{safe_description}">
   <meta name="twitter:image" content="{DEFAULT_SOCIAL_IMAGE}">
   <script type="application/ld+json">{structured_json}</script>
-{PERFORMANCE_HINTS}{ACCESSIBILITY_STYLES}"""
+{PERFORMANCE_HINTS}{ACCESSIBILITY_STYLES}{_analytics_tags()}"""
 
     html = html.replace("</head>", f"{seo_tags}</head>", 1)
     return HttpResponse(html)
@@ -329,7 +374,7 @@ def contact(request):
 
 
 def inquire(request):
-    """Save collaboration inquiries and render editable inquiry-page copy."""
+    """Save collaboration inquiries with lightweight bot and repeat-submit protection."""
     success = False
     inquiry_content = InquiryPageContent.objects.first()
     contact_content = ContactContent.objects.first()
@@ -337,9 +382,18 @@ def inquire(request):
     if request.method == "POST":
         form = InquiryForm(request.POST)
         if form.is_valid():
-            form.save()
-            form = InquiryForm()
-            success = True
+            now = time.time()
+            last_submit = float(request.session.get("last_inquiry_submit_at", 0) or 0)
+            if now - last_submit < INQUIRY_COOLDOWN_SECONDS:
+                form.add_error(
+                    None,
+                    "That was submitted very recently. Please wait a moment before sending another inquiry.",
+                )
+            else:
+                form.save()
+                request.session["last_inquiry_submit_at"] = now
+                form = InquiryForm()
+                success = True
     else:
         form = InquiryForm()
 
@@ -366,6 +420,23 @@ def inquire(request):
     )
 
 
+def privacy(request):
+    """Render the website privacy policy."""
+    contact_content = ContactContent.objects.first()
+    response = render(request, "privacy.html", {"contact_content": contact_content})
+    return _finish_page(
+        request,
+        response,
+        title="Privacy Policy | Betra Amare",
+        description=(
+            "Read how the Betra Amare website handles inquiry information, essential cookies, "
+            "analytics, and privacy requests."
+        ),
+        route_name="website:privacy",
+        contact_content=contact_content,
+    )
+
+
 def robots_txt(request):
     """Tell search engines which parts of the site may be crawled."""
     sitemap_url = request.build_absolute_uri(reverse("website:sitemap"))
@@ -388,9 +459,10 @@ def sitemap_xml(request):
         "website:about",
         "website:contact",
         "website:inquire",
+        "website:privacy",
     ]
     urls = [request.build_absolute_uri(reverse(name)) for name in route_names]
-    entries = "".join(f"<url><loc>{escape(url)}</loc></url>" for url in urls)
+    entries = "".join(f"<url><loc>{xml_escape(url)}</loc></url>" for url in urls)
     xml = (
         '<?xml version="1.0" encoding="UTF-8"?>'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
