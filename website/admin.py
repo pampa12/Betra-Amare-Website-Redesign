@@ -1,4 +1,8 @@
+from pathlib import Path
+from uuid import uuid4
+
 from django.contrib import admin
+from django.utils.text import slugify
 
 from .models import (
     AboutContent,
@@ -9,6 +13,16 @@ from .models import (
     PortfolioItem,
     PortfolioPageContent,
 )
+
+
+def _give_new_upload_clean_name(field_file, title):
+    """Rename a new admin upload before Django sends it to media storage."""
+    if not field_file or getattr(field_file, "_committed", True):
+        return
+
+    extension = Path(field_file.name).suffix.lower()
+    title_slug = slugify(title)[:80] or "portfolio-item"
+    field_file.name = f"{title_slug}-{uuid4().hex[:8]}{extension}"
 
 
 class SingletonContentAdmin(admin.ModelAdmin):
@@ -71,6 +85,13 @@ class PortfolioItemAdmin(admin.ModelAdmin):
         ),
         ("Display", {"fields": ("featured", "active", "sort_order")}),
     )
+
+    def save_model(self, request, obj, form, change):
+        # Use the portfolio title rather than the raw phone/camera filename.
+        # A short unique suffix prevents collisions without exposing messy source names.
+        _give_new_upload_clean_name(obj.image, obj.title)
+        _give_new_upload_clean_name(obj.video, obj.title)
+        super().save_model(request, obj, form, change)
 
     @admin.display(description="Media")
     def media_type(self, obj):
