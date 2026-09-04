@@ -1,6 +1,7 @@
 from pathlib import Path
 from uuid import uuid4
 
+from django import forms
 from django.contrib import admin
 from django.utils.text import slugify
 
@@ -23,6 +24,21 @@ def _give_new_upload_clean_name(field_file, title):
     extension = Path(field_file.name).suffix.lower()
     title_slug = slugify(title)[:80] or "portfolio-item"
     field_file.name = f"{title_slug}-{uuid4().hex[:8]}{extension}"
+
+
+class PortfolioItemAdminForm(forms.ModelForm):
+    alt_text = forms.CharField(
+        max_length=180,
+        required=True,
+        help_text=(
+            "Describe what is visibly happening in this photo or video. "
+            "Example: Betra Amare wearing a cream dress in an outdoor fashion editorial."
+        ),
+    )
+
+    class Meta:
+        model = PortfolioItem
+        fields = "__all__"
 
 
 class SingletonContentAdmin(admin.ModelAdmin):
@@ -69,6 +85,7 @@ class InquiryPageContentAdmin(SingletonContentAdmin):
 
 @admin.register(PortfolioItem)
 class PortfolioItemAdmin(admin.ModelAdmin):
+    form = PortfolioItemAdminForm
     list_display = ("title", "category", "media_type", "featured", "active", "sort_order", "updated_at")
     list_filter = ("category", "featured", "active")
     search_fields = ("title", "alt_text")
@@ -79,7 +96,8 @@ class PortfolioItemAdmin(admin.ModelAdmin):
             {
                 "fields": ("title", "category", "image", "video", "alt_text", "link_url"),
                 "description": (
-                    "Add a photo, a video, or both. If both are added, the photo is used as the video's poster image."
+                    "Add a photo, a video, or both. If both are added, the photo is used as the video's poster image. "
+                    "Alt text is required so every portfolio item is accessible and search-friendly."
                 ),
             },
         ),
@@ -87,8 +105,6 @@ class PortfolioItemAdmin(admin.ModelAdmin):
     )
 
     def save_model(self, request, obj, form, change):
-        # Use the portfolio title rather than the raw phone/camera filename.
-        # A short unique suffix prevents collisions without exposing messy source names.
         _give_new_upload_clean_name(obj.image, obj.title)
         _give_new_upload_clean_name(obj.video, obj.title)
         super().save_model(request, obj, form, change)
