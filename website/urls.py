@@ -11,6 +11,7 @@ urlpatterns = [
     path("about/", views.about, name="about"),
     path("contact/", views.contact, name="contact"),
     path("inquire/", views.inquire, name="inquire"),
+    path("privacy/", views.privacy, name="privacy"),
     path("robots.txt", views.robots_txt, name="robots"),
     path("sitemap.xml", views.sitemap_xml, name="sitemap"),
 
