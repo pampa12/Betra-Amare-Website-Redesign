@@ -46,11 +46,25 @@
         <div class="portfolio-masonry">
           {% if portfolio_items %}
             {% for item in portfolio_items %}
-              {% if item.link_url %}
+              {% if item.video %}
+              <div class="portfolio-item reveal" data-category="{{ item.category }}">
+                <video
+                  controls
+                  playsinline
+                  preload="metadata"
+                  aria-label="{{ item.alt_text|default:item.title }}"
+                  {% if item.image %}poster="{{ item.image.url }}"{% endif %}
+                  style="display:block;width:100%;height:auto;background:#eadce2;"
+                >
+                  <source src="{{ item.video.url }}">
+                  Your browser does not support HTML5 video.
+                </video>
+              </div>
+              {% elif item.link_url and item.image %}
               <a class="portfolio-item reveal" data-category="{{ item.category }}" href="{{ item.link_url }}" target="_blank" rel="noopener">
                 <img src="{{ item.image.url }}" alt="{% if item.alt_text %}{{ item.alt_text }}{% else %}{{ item.title }}{% endif %}" loading="lazy">
               </a>
-              {% else %}
+              {% elif item.image %}
               <div class="portfolio-item reveal" data-category="{{ item.category }}">
                 <img src="{{ item.image.url }}" alt="{% if item.alt_text %}{{ item.alt_text }}{% else %}{{ item.title }}{% endif %}" loading="lazy">
               </div>
