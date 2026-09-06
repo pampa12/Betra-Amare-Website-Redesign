@@ -37,15 +37,11 @@ def _optimize_new_upload(field_file, *, max_dimension=2200, quality=82):
     try:
         field_file.file.seek(0)
         with Image.open(field_file.file) as source:
-            # Keep animated images untouched rather than flattening them to one frame.
             if getattr(source, "is_animated", False):
                 return
 
             image = ImageOps.exif_transpose(source)
-            image.thumbnail(
-                (max_dimension, max_dimension),
-                Image.Resampling.LANCZOS,
-            )
+            image.thumbnail((max_dimension, max_dimension), Image.Resampling.LANCZOS)
 
             has_alpha = image.mode in ("RGBA", "LA") or "transparency" in image.info
             image = image.convert("RGBA" if has_alpha else "RGB")
@@ -56,14 +52,8 @@ def _optimize_new_upload(field_file, *, max_dimension=2200, quality=82):
 
             original_name = Path(field_file.name).name
             optimized_name = f"{Path(original_name).stem}.webp"
-            field_file.save(
-                optimized_name,
-                ContentFile(output.getvalue()),
-                save=False,
-            )
+            field_file.save(optimized_name, ContentFile(output.getvalue()), save=False)
     except (OSError, UnidentifiedImageError, ValueError):
-        # If Pillow cannot process an upload, keep the original file instead of
-        # blocking the admin save.
         try:
             field_file.file.seek(0)
         except (AttributeError, OSError, ValueError):
@@ -330,6 +320,68 @@ class InquiryPageContent(models.Model):
 
     def __str__(self):
         return "Inquiry page content"
+
+
+class MediaKitContent(models.Model):
+    eyebrow = models.CharField(max_length=120, default="Media kit")
+    headline_line1 = models.CharField(max_length=160, default="Partner with")
+    headline_emphasis = models.CharField(max_length=160, default="Betra Amare.")
+    intro_text = models.TextField(
+        default=(
+            "A quick look at my creative focus, audience, services, and partnership options for brands, "
+            "agencies, and collaborators."
+        )
+    )
+    hero_image = models.ImageField(upload_to="media-kit/", blank=True)
+
+    profile_eyebrow = models.CharField(max_length=120, default="Creator profile")
+    profile_title = models.CharField(max_length=160, default="Beauty, fashion & lifestyle")
+    profile_body = models.TextField(
+        default=(
+            "I create polished, personality-led content for beauty, fashion, lifestyle, wellness, and culture-focused brands. "
+            "Projects can include creator-led campaigns, UGC, modeling, photoshoots, events, and social-first storytelling."
+        )
+    )
+
+    instagram_followers = models.CharField(max_length=40, blank=True, default="")
+    tiktok_followers = models.CharField(max_length=40, blank=True, default="")
+    engagement_rate = models.CharField(max_length=40, blank=True, default="")
+    average_views = models.CharField(max_length=40, blank=True, default="")
+    audience_locations = models.CharField(max_length=180, blank=True, default="")
+    audience_age = models.CharField(max_length=120, blank=True, default="")
+    audience_gender = models.CharField(max_length=120, blank=True, default="")
+
+    services = models.TextField(
+        default=(
+            "Sponsored content\nUGC / content creation\nModeling\nCampaigns & photoshoots\nEvents & appearances"
+        )
+    )
+    partnerships = models.TextField(
+        blank=True,
+        default="",
+        help_text="Optional: list past brand partnerships, one per line.",
+    )
+    rate_card_note = models.TextField(
+        default="Rates and deliverables are tailored to project scope, usage, timeline, and creative requirements."
+    )
+    media_kit_pdf_url = models.URLField(
+        blank=True,
+        default="",
+        help_text="Optional public URL for a downloadable PDF media kit.",
+    )
+    contact_email = models.EmailField(default="workwithbetra@gmail.com")
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Media kit content"
+        verbose_name_plural = "Media kit content"
+
+    def save(self, *args, **kwargs):
+        _optimize_new_upload(self.hero_image)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return "Media kit content"
 
 
 class PortfolioItem(models.Model):
