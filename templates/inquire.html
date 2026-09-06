@@ -42,6 +42,7 @@
           <p class="body-copy">{% if inquiry_content %}{{ inquiry_content.section_body }}{% else %}The more detail you can share about your brand, deliverables, timeline, usage, and budget, the easier it is for me to understand the fit.{% endif %}</p>
           <div class="contact-list">
             <a href="mailto:{% if inquiry_content %}{{ inquiry_content.work_email }}{% else %}workwithbetra@gmail.com{% endif %}">{% if inquiry_content %}{{ inquiry_content.work_email }}{% else %}workwithbetra@gmail.com{% endif %}</a>
+            <a href="/media-kit/">View media kit</a>
             <a href="/portfolio/">View my portfolio</a>
             <a href="/contact/">Looking for general contact instead?</a>
           </div>
@@ -75,7 +76,7 @@
   </main>
 
   <footer class="site-footer">
-    <div class="shell footer-top"><p class="footer-wordmark">Betra Amare</p><div class="footer-nav"><a href="/portfolio/">Portfolio</a><a href="/about/">About</a><a href="/contact/">Contact</a><a href="/inquire/">Inquire</a><a href="{% if contact_content %}{{ contact_content.instagram_url }}{% else %}https://www.instagram.com/betra_amare{% endif %}" target="_blank" rel="noopener">Instagram</a><a href="{% if contact_content %}{{ contact_content.tiktok_url }}{% else %}https://www.tiktok.com/@betraamarey{% endif %}" target="_blank" rel="noopener">TikTok</a></div></div>
+    <div class="shell footer-top"><p class="footer-wordmark">Betra Amare</p><div class="footer-nav"><a href="/portfolio/">Portfolio</a><a href="/about/">About</a><a href="/media-kit/">Media Kit</a><a href="/contact/">Contact</a><a href="/inquire/">Inquire</a><a href="{% if contact_content %}{{ contact_content.instagram_url }}{% else %}https://www.instagram.com/betra_amare{% endif %}" target="_blank" rel="noopener">Instagram</a><a href="{% if contact_content %}{{ contact_content.tiktok_url }}{% else %}https://www.tiktok.com/@betraamarey{% endif %}" target="_blank" rel="noopener">TikTok</a></div></div>
     <div class="shell footer-bottom"><span>© <span data-year></span> Betra Amare. All rights reserved.</span><a href="#top">Back to top ↑</a></div>
   </footer>
   <script src="/script.js"></script>
