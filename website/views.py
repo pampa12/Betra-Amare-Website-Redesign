@@ -15,6 +15,7 @@ from .models import (
     ContactContent,
     HomepageContent,
     InquiryPageContent,
+    MediaKitContent,
     PortfolioItem,
     PortfolioPageContent,
 )
@@ -31,6 +32,7 @@ CLEAN_INTERNAL_LINKS = {
     "/about.html": "/about/",
     "/contact.html": "/contact/",
     "/inquire.html": "/inquire/",
+    "/media-kit.html": "/media-kit/",
 }
 INQUIRY_COOLDOWN_SECONDS = 30
 
@@ -141,11 +143,9 @@ def _finish_page(request, response, *, title, description, route_name, contact_c
     for old_url, clean_url in CLEAN_INTERNAL_LINKS.items():
         html = html.replace(old_url, clean_url)
 
-    # Route site CSS and JavaScript through Django's staticfiles app.
     html = html.replace('href="/styles.css"', 'href="/static/css/styles.css"')
     html = html.replace('src="/script.js"', 'src="/static/js/script.js"')
 
-    # Make the privacy policy reachable from every page footer.
     if 'href="/privacy/"' not in html and '<div class="footer-nav">' in html:
         html = html.replace(
             '<div class="footer-nav">',
@@ -153,16 +153,13 @@ def _finish_page(request, response, *, title, description, route_name, contact_c
             1,
         )
 
-    # Improve image loading: prioritize the hero and defer below-the-fold imagery.
     html = re.sub(r"<img\b[^>]*>", _optimize_image_tag, html, flags=re.I)
 
-    # The shared script is non-critical for initial HTML rendering.
     html = html.replace(
         '<script src="/static/js/script.js"></script>',
         '<script src="/static/js/script.js" defer></script>',
     )
 
-    # Give keyboard users a direct route to the page content.
     if 'id="main-content"' not in html:
         html = html.replace(
             "<main>",
@@ -176,13 +173,11 @@ def _finish_page(request, response, *, title, description, route_name, contact_c
             1,
         )
 
-    # Make the mobile-menu relationship explicit for assistive technology.
     html = html.replace(
         'id="menuToggle" aria-label="Open navigation" aria-expanded="false"',
         'id="menuToggle" aria-label="Open navigation" aria-expanded="false" aria-controls="mainNav"',
     )
 
-    # Use a real target for existing back-to-top links.
     html = html.replace('href="#">Back to top', 'href="#top">Back to top')
 
     canonical_url = request.build_absolute_uri(reverse(route_name))
@@ -199,7 +194,6 @@ def _finish_page(request, response, *, title, description, route_name, contact_c
         else "https://www.tiktok.com/@betraamarey"
     )
 
-    # Remove older SEO tags so every page has one clean, authoritative set.
     html = re.sub(r"\s*<title>.*?</title>", "", html, count=1, flags=re.I | re.S)
     html = re.sub(
         r"\s*<meta\s+name=[\"']description[\"'][^>]*>",
@@ -420,6 +414,31 @@ def inquire(request):
     )
 
 
+def media_kit(request):
+    """Render Betra's editable brand-facing media kit."""
+    media_kit_content = MediaKitContent.objects.first()
+    contact_content = ContactContent.objects.first()
+    response = render(
+        request,
+        "media_kit.html",
+        {
+            "media_kit_content": media_kit_content,
+            "contact_content": contact_content,
+        },
+    )
+    return _finish_page(
+        request,
+        response,
+        title="Media Kit | Betra Amare — Model & Digital Creator",
+        description=(
+            "View Betra Amare's creator media kit, including audience information, services, "
+            "partnership options, and contact details for brand collaborations."
+        ),
+        route_name="website:media_kit",
+        contact_content=contact_content,
+    )
+
+
 def privacy(request):
     """Render the website privacy policy."""
     contact_content = ContactContent.objects.first()
@@ -459,6 +478,7 @@ def sitemap_xml(request):
         "website:about",
         "website:contact",
         "website:inquire",
+        "website:media_kit",
         "website:privacy",
     ]
     urls = [request.build_absolute_uri(reverse(name)) for name in route_names]
