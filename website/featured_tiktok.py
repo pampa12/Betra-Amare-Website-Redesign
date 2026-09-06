@@ -38,6 +38,13 @@ class FeaturedTikTok(models.Model):
             "https://www.tiktok.com/@username/video/1234567890"
         )
     )
+    thumbnail = models.ImageField(
+        upload_to="featured-tiktoks/thumbnails/",
+        blank=True,
+        help_text=(
+            "Upload a clean still frame for the homepage card. The Media Kit can still use the live TikTok player."
+        ),
+    )
     description = models.TextField(
         blank=True,
         default="",
@@ -46,7 +53,7 @@ class FeaturedTikTok(models.Model):
     active = models.BooleanField(default=True)
     show_on_homepage = models.BooleanField(
         default=False,
-        help_text="Show this TikTok inside the homepage 'A few favorites' section.",
+        help_text="Show this TikTok as a clean thumbnail card inside the homepage 'A few favorites' section.",
     )
     sort_order = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -59,15 +66,21 @@ class FeaturedTikTok(models.Model):
 
     def clean(self):
         super().clean()
+        errors = {}
+
         if self.tiktok_url and not _tiktok_video_id(self.tiktok_url):
-            raise ValidationError(
-                {
-                    "tiktok_url": (
-                        "Paste the full public TikTok video URL that contains /video/ and the video number. "
-                        "TikTok short share links cannot be embedded automatically."
-                    )
-                }
+            errors["tiktok_url"] = (
+                "Paste the full public TikTok video URL that contains /video/ and the video number. "
+                "TikTok short share links cannot be embedded automatically."
             )
+
+        if self.show_on_homepage and not self.thumbnail:
+            errors["thumbnail"] = (
+                "Upload a thumbnail before showing this TikTok on the homepage."
+            )
+
+        if errors:
+            raise ValidationError(errors)
 
     @property
     def video_id(self):
