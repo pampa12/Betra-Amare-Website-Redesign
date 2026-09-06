@@ -23,7 +23,7 @@ def _tiktok_video_id(url):
 
 
 class FeaturedTikTok(models.Model):
-    """A public TikTok post featured on Betra's brand-facing media kit."""
+    """A public TikTok post featured on Betra's website."""
 
     title = models.CharField(max_length=140)
     brand_name = models.CharField(
@@ -44,6 +44,10 @@ class FeaturedTikTok(models.Model):
         help_text="Optional short note about the concept, product, or deliverable.",
     )
     active = models.BooleanField(default=True)
+    show_on_homepage = models.BooleanField(
+        default=False,
+        help_text="Show this TikTok inside the homepage 'A few favorites' section.",
+    )
     sort_order = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
