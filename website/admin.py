@@ -5,6 +5,7 @@ from django import forms
 from django.contrib import admin
 from django.utils.text import slugify
 
+from .featured_tiktok import FeaturedTikTok
 from .models import (
     AboutContent,
     ContactContent,
@@ -103,6 +104,27 @@ class MediaKitContentAdmin(SingletonContentAdmin):
         ),
         ("Services", {"fields": ("services", "partnerships", "rate_card_note")}),
         ("Downloads & contact", {"fields": ("media_kit_pdf_url", "contact_email")}),
+    )
+
+
+@admin.register(FeaturedTikTok)
+class FeaturedTikTokAdmin(admin.ModelAdmin):
+    list_display = ("title", "brand_name", "active", "sort_order", "updated_at")
+    list_filter = ("active",)
+    search_fields = ("title", "brand_name", "description", "tiktok_url")
+    list_editable = ("active", "sort_order")
+    fieldsets = (
+        (
+            "TikTok post",
+            {
+                "fields": ("title", "brand_name", "tiktok_url", "description"),
+                "description": (
+                    "Paste a full public TikTok URL that contains /video/. "
+                    "The video will play directly on the Media Kit page without uploading the video file again."
+                ),
+            },
+        ),
+        ("Display", {"fields": ("active", "sort_order")}),
     )
 
 
