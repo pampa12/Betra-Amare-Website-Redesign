@@ -117,10 +117,10 @@ class FeaturedTikTokAdmin(admin.ModelAdmin):
         (
             "TikTok post",
             {
-                "fields": ("title", "brand_name", "tiktok_url", "description"),
+                "fields": ("title", "brand_name", "tiktok_url", "thumbnail", "description"),
                 "description": (
-                    "Paste a full public TikTok URL that contains /video/. "
-                    "The video will play directly on the website without uploading the video file again."
+                    "Paste the full TikTok URL. For homepage display, upload a clean still-frame thumbnail; "
+                    "the Media Kit can continue using the live TikTok player."
                 ),
             },
         ),
@@ -129,12 +129,16 @@ class FeaturedTikTokAdmin(admin.ModelAdmin):
             {
                 "fields": ("show_on_homepage", "active", "sort_order"),
                 "description": (
-                    "Check 'Show on homepage' to place this post inside the homepage 'A few favorites' section. "
-                    "The homepage shows up to two checked TikToks."
+                    "Check 'Show on homepage' to use the uploaded thumbnail as a clean clickable card inside "
+                    "'A few favorites'. The homepage shows up to two checked TikToks."
                 ),
             },
         ),
     )
+
+    def save_model(self, request, obj, form, change):
+        _give_new_upload_clean_name(obj.thumbnail, obj.title)
+        super().save_model(request, obj, form, change)
 
 
 @admin.register(PortfolioItem)
