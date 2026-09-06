@@ -11,6 +11,7 @@ urlpatterns = [
     path("about/", views.about, name="about"),
     path("contact/", views.contact, name="contact"),
     path("inquire/", views.inquire, name="inquire"),
+    path("media-kit/", views.media_kit, name="media_kit"),
     path("privacy/", views.privacy, name="privacy"),
     path("robots.txt", views.robots_txt, name="robots"),
     path("sitemap.xml", views.sitemap_xml, name="sitemap"),
@@ -26,6 +27,7 @@ urlpatterns = [
     path("about.html", RedirectView.as_view(pattern_name="website:about", permanent=True)),
     path("contact.html", RedirectView.as_view(pattern_name="website:contact", permanent=True)),
     path("inquire.html", RedirectView.as_view(pattern_name="website:inquire", permanent=True)),
+    path("media-kit.html", RedirectView.as_view(pattern_name="website:media_kit", permanent=True)),
 
     path("styles.css", views.legacy_asset, {"filename": "styles.css"}, name="styles"),
     path("script.js", views.legacy_asset, {"filename": "script.js"}, name="script"),
