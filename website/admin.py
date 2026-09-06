@@ -11,6 +11,7 @@ from .models import (
     HomepageContent,
     Inquiry,
     InquiryPageContent,
+    MediaKitContent,
     PortfolioItem,
     PortfolioPageContent,
 )
@@ -81,6 +82,28 @@ class PortfolioPageContentAdmin(SingletonContentAdmin):
 @admin.register(InquiryPageContent)
 class InquiryPageContentAdmin(SingletonContentAdmin):
     pass
+
+
+@admin.register(MediaKitContent)
+class MediaKitContentAdmin(SingletonContentAdmin):
+    fieldsets = (
+        ("Hero", {"fields": ("eyebrow", "headline_line1", "headline_emphasis", "intro_text", "hero_image")}),
+        ("Creator profile", {"fields": ("profile_eyebrow", "profile_title", "profile_body")}),
+        (
+            "Audience & performance",
+            {
+                "fields": (
+                    ("instagram_followers", "tiktok_followers"),
+                    ("engagement_rate", "average_views"),
+                    "audience_locations",
+                    ("audience_age", "audience_gender"),
+                ),
+                "description": "Leave any stat blank if you do not want it shown publicly.",
+            },
+        ),
+        ("Services", {"fields": ("services", "partnerships", "rate_card_note")}),
+        ("Downloads & contact", {"fields": ("media_kit_pdf_url", "contact_email")}),
+    )
 
 
 @admin.register(PortfolioItem)
