@@ -94,7 +94,7 @@ button, input, textarea, select { font: inherit; }
 .tile-d { grid-column: 3; }
 
 .collab-section { position: relative; overflow: hidden; background: var(--blush-soft); }
-.collab-section::before { content: 'BETRA'; position: absolute; right: -2vw; bottom: -7vw; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 22vw; line-height: .7; color: rgba(255,255,255,.34); pointer-events: none; }
+.collab-section::before { content: 'BETRA'; position: absolute; right: -1vw; bottom: -7vw; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 22vw; line-height: .7; letter-spacing: -.06em; font-kerning: normal; color: rgba(255,255,255,.34); pointer-events: none; }
 .collab-inner { position: relative; z-index: 1; }
 .collab-inner .display-title { margin-bottom: 26px; }
 .collab-inner .body-copy { max-width: 590px; margin: 0 0 28px; color: #74495a; }
