@@ -16,10 +16,10 @@ def featured_tiktok_showcase(limit=4):
 
 @register.inclusion_tag("includes/homepage_tiktok_favorites.html")
 def homepage_tiktok_favorites(limit=2):
-    """Render up to two TikTok posts selected for the homepage favorites area."""
+    """Render up to two thumbnail cards selected for the homepage favorites area."""
     return {
         "homepage_tiktoks": FeaturedTikTok.objects.filter(
             active=True,
             show_on_homepage=True,
-        )[:limit],
+        ).exclude(thumbnail="")[:limit],
     }
