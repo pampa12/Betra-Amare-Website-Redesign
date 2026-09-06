@@ -109,10 +109,10 @@ class MediaKitContentAdmin(SingletonContentAdmin):
 
 @admin.register(FeaturedTikTok)
 class FeaturedTikTokAdmin(admin.ModelAdmin):
-    list_display = ("title", "brand_name", "active", "sort_order", "updated_at")
-    list_filter = ("active",)
+    list_display = ("title", "brand_name", "show_on_homepage", "active", "sort_order", "updated_at")
+    list_filter = ("show_on_homepage", "active")
     search_fields = ("title", "brand_name", "description", "tiktok_url")
-    list_editable = ("active", "sort_order")
+    list_editable = ("show_on_homepage", "active", "sort_order")
     fieldsets = (
         (
             "TikTok post",
@@ -120,11 +120,20 @@ class FeaturedTikTokAdmin(admin.ModelAdmin):
                 "fields": ("title", "brand_name", "tiktok_url", "description"),
                 "description": (
                     "Paste a full public TikTok URL that contains /video/. "
-                    "The video will play directly on the Media Kit page without uploading the video file again."
+                    "The video will play directly on the website without uploading the video file again."
                 ),
             },
         ),
-        ("Display", {"fields": ("active", "sort_order")}),
+        (
+            "Display",
+            {
+                "fields": ("show_on_homepage", "active", "sort_order"),
+                "description": (
+                    "Check 'Show on homepage' to place this post inside the homepage 'A few favorites' section. "
+                    "The homepage shows up to two checked TikToks."
+                ),
+            },
+        ),
     )
 
 
