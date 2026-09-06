@@ -1,0 +1,119 @@
+.tiktok-showcase-section {
+  background: linear-gradient(135deg, #f7eff3 0%, #fffafc 100%);
+  border-block: 1px solid var(--line);
+}
+
+.tiktok-showcase-heading {
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: 56px;
+  align-items: end;
+  margin-bottom: 42px;
+}
+
+.tiktok-showcase-heading .body-copy {
+  max-width: 520px;
+  margin: 0 0 8px;
+}
+
+.tiktok-showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  align-items: start;
+}
+
+.tiktok-showcase-grid.count-1 {
+  grid-template-columns: minmax(260px, 340px);
+  justify-content: center;
+}
+
+.tiktok-showcase-grid.count-2 {
+  grid-template-columns: repeat(2, minmax(260px, 340px));
+  justify-content: center;
+}
+
+.tiktok-showcase-grid.count-3 {
+  grid-template-columns: repeat(3, minmax(240px, 1fr));
+}
+
+.tiktok-showcase-card {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: #fffdfd;
+  box-shadow: 0 18px 50px rgba(69, 48, 58, .08);
+}
+
+.tiktok-showcase-player {
+  aspect-ratio: 9 / 16;
+  overflow: hidden;
+  background: #211a1e;
+}
+
+.tiktok-showcase-player iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #211a1e;
+}
+
+.tiktok-showcase-meta {
+  padding: 19px 19px 22px;
+}
+
+.tiktok-showcase-kicker {
+  margin: 0 0 8px;
+  color: #b36f89;
+  font-size: .58rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.tiktok-showcase-meta h3 {
+  margin: 0 0 10px;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.65rem;
+  font-weight: 500;
+  line-height: 1.05;
+}
+
+.tiktok-showcase-meta > p:not(.tiktok-showcase-kicker) {
+  margin: 0 0 18px;
+  color: var(--muted);
+  font-size: .84rem;
+  line-height: 1.65;
+}
+
+.tiktok-showcase-meta .arrow-link {
+  margin-top: 4px;
+  font-size: .62rem;
+}
+
+@media (max-width: 980px) {
+  .tiktok-showcase-grid,
+  .tiktok-showcase-grid.count-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .tiktok-showcase-heading {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  .tiktok-showcase-grid,
+  .tiktok-showcase-grid.count-1,
+  .tiktok-showcase-grid.count-2,
+  .tiktok-showcase-grid.count-3 {
+    grid-template-columns: minmax(0, 1fr);
+    justify-content: stretch;
+  }
+
+  .tiktok-showcase-card {
+    width: min(100%, 390px);
+    justify-self: center;
+  }
+}
