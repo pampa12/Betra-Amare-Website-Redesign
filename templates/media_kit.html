@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Betra Amare media kit for brand collaborations, creator partnerships, UGC, modeling, and campaigns.">
+  <title>Media Kit | Betra Amare</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@400;500;600;700&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/static/css/refined.css">
+  <link rel="stylesheet" href="/static/css/media-kit.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="shell nav-inner">
+      <a class="wordmark" href="/" aria-label="Betra Amare home">Betra Amare</a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Open navigation" aria-expanded="false"><span></span><span></span></button>
+      <nav class="main-nav" id="mainNav" aria-label="Main navigation">
+        <a href="/">Home</a>
+        <a href="/portfolio/">Portfolio</a>
+        <a href="/about/">About</a>
+        <a href="/contact/">Contact</a>
+      </nav>
+      <a class="nav-cta" href="/inquire/">Inquire</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="media-kit-hero">
+      <div class="shell media-kit-hero-grid">
+        <div class="reveal">
+          <p class="eyebrow">{% if media_kit_content %}{{ media_kit_content.eyebrow }}{% else %}Media kit{% endif %}</p>
+          <h1>{% if media_kit_content %}{{ media_kit_content.headline_line1 }}<br><em>{{ media_kit_content.headline_emphasis }}</em>{% else %}Partner with<br><em>Betra Amare.</em>{% endif %}</h1>
+          <p class="body-copy media-kit-hero-copy">{% if media_kit_content %}{{ media_kit_content.intro_text }}{% else %}A quick look at my creative focus, audience, services, and partnership options for brands, agencies, and collaborators.{% endif %}</p>
+          <div class="cta-row">
+            <a class="dark-button" href="/inquire/">Start a project</a>
+            {% if media_kit_content and media_kit_content.media_kit_pdf_url %}<a class="arrow-link" href="{{ media_kit_content.media_kit_pdf_url }}" target="_blank" rel="noopener">Download PDF</a>{% endif %}
+          </div>
+        </div>
+
+        {% if media_kit_content and media_kit_content.hero_image %}
+        <div class="media-kit-portrait reveal">
+          <img src="{{ media_kit_content.hero_image.url }}" alt="Betra Amare media kit portrait" loading="eager">
+        </div>
+        {% else %}
+        <div class="media-kit-monogram reveal" aria-hidden="true">
+          <div class="media-kit-monogram-inner"><strong>BA</strong><span>Model · Creator</span></div>
+        </div>
+        {% endif %}
+      </div>
+    </section>
+
+    <section class="section media-kit-profile">
+      <div class="shell media-kit-profile-grid">
+        <div class="reveal">
+          <p class="eyebrow">{% if media_kit_content %}{{ media_kit_content.profile_eyebrow }}{% else %}Creator profile{% endif %}</p>
+          <div class="media-kit-social-list">
+            <a href="{% if contact_content %}{{ contact_content.instagram_url }}{% else %}https://www.instagram.com/betra_amare{% endif %}" target="_blank" rel="noopener"><span>Instagram</span><span>{% if contact_content %}{{ contact_content.instagram_handle }}{% else %}@betra_amare{% endif %}</span></a>
+            <a href="{% if contact_content %}{{ contact_content.tiktok_url }}{% else %}https://www.tiktok.com/@betraamarey{% endif %}" target="_blank" rel="noopener"><span>TikTok</span><span>{% if contact_content %}{{ contact_content.tiktok_handle }}{% else %}@betraamarey{% endif %}</span></a>
+          </div>
+        </div>
+        <div class="media-kit-profile-copy reveal">
+          <h2 class="display-title">{% if media_kit_content %}{{ media_kit_content.profile_title }}{% else %}Beauty, fashion &amp; lifestyle{% endif %}</h2>
+          <p class="body-copy">{% if media_kit_content %}{{ media_kit_content.profile_body }}{% else %}I create polished, personality-led content for beauty, fashion, lifestyle, wellness, and culture-focused brands. Projects can include creator-led campaigns, UGC, modeling, photoshoots, events, and social-first storytelling.{% endif %}</p>
+        </div>
+      </div>
+    </section>
+
+    {% if media_kit_content and media_kit_content.instagram_followers or media_kit_content and media_kit_content.tiktok_followers or media_kit_content and media_kit_content.engagement_rate or media_kit_content and media_kit_content.average_views or media_kit_content and media_kit_content.audience_locations or media_kit_content and media_kit_content.audience_age or media_kit_content and media_kit_content.audience_gender %}
+    <section class="media-kit-metrics-section">
+      <div class="shell">
+        <div class="media-kit-section-heading reveal">
+          <div>
+            <p class="eyebrow">Audience &amp; performance</p>
+            <h2 class="display-title">The numbers,<br><em>at a glance.</em></h2>
+          </div>
+          <p class="body-copy">Current platform and audience information for partnership planning.</p>
+        </div>
+
+        {% if media_kit_content.instagram_followers or media_kit_content.tiktok_followers or media_kit_content.engagement_rate or media_kit_content.average_views %}
+        <div class="media-kit-metrics reveal">
+          {% if media_kit_content.instagram_followers %}<div class="media-kit-metric"><span>Instagram</span><strong>{{ media_kit_content.instagram_followers }}</strong></div>{% endif %}
+          {% if media_kit_content.tiktok_followers %}<div class="media-kit-metric"><span>TikTok</span><strong>{{ media_kit_content.tiktok_followers }}</strong></div>{% endif %}
+          {% if media_kit_content.engagement_rate %}<div class="media-kit-metric"><span>Engagement rate</span><strong>{{ media_kit_content.engagement_rate }}</strong></div>{% endif %}
+          {% if media_kit_content.average_views %}<div class="media-kit-metric"><span>Average views</span><strong>{{ media_kit_content.average_views }}</strong></div>{% endif %}
+        </div>
+        {% endif %}
+
+        {% if media_kit_content.audience_locations or media_kit_content.audience_age or media_kit_content.audience_gender %}
+        <div class="media-kit-audience-details reveal">
+          {% if media_kit_content.audience_locations %}<div class="media-kit-detail"><span>Top locations</span><strong>{{ media_kit_content.audience_locations }}</strong></div>{% endif %}
+          {% if media_kit_content.audience_age %}<div class="media-kit-detail"><span>Core age range</span><strong>{{ media_kit_content.audience_age }}</strong></div>{% endif %}
+          {% if media_kit_content.audience_gender %}<div class="media-kit-detail"><span>Audience mix</span><strong>{{ media_kit_content.audience_gender }}</strong></div>{% endif %}
+        </div>
+        {% endif %}
+      </div>
+    </section>
+    {% endif %}
+
+    <section class="section media-kit-services-section">
+      <div class="shell media-kit-services-grid">
+        <div class="reveal">
+          <p class="eyebrow">Ways to work together</p>
+          <h2 class="display-title">Built for<br><em>brand partnerships.</em></h2>
+        </div>
+        <div class="reveal">
+          <div class="media-kit-card">
+            <h3>Services</h3>
+            <div class="media-kit-lines">{% if media_kit_content %}{{ media_kit_content.services|linebreaksbr }}{% else %}Sponsored content<br>UGC / content creation<br>Modeling<br>Campaigns &amp; photoshoots<br>Events &amp; appearances{% endif %}</div>
+          </div>
+
+          {% if media_kit_content and media_kit_content.partnerships %}
+          <div class="media-kit-card">
+            <h3>Selected partnerships</h3>
+            <div class="media-kit-lines">{{ media_kit_content.partnerships|linebreaksbr }}</div>
+          </div>
+          {% endif %}
+
+          <div class="media-kit-card">
+            <h3>Rates &amp; usage</h3>
+            <p class="body-copy">{% if media_kit_content %}{{ media_kit_content.rate_card_note }}{% else %}Rates and deliverables are tailored to project scope, usage, timeline, and creative requirements.{% endif %}</p>
+            <div class="media-kit-download">
+              <a class="dark-button" href="/inquire/">Request availability</a>
+              {% if media_kit_content and media_kit_content.media_kit_pdf_url %}<a class="arrow-link" href="{{ media_kit_content.media_kit_pdf_url }}" target="_blank" rel="noopener">Download media kit</a>{% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section collab-section">
+      <div class="shell media-kit-final reveal">
+        <p class="eyebrow">Have a campaign in mind?</p>
+        <h2 class="display-title huge">Let's make something that <em>fits the brand.</em></h2>
+        <p class="body-copy">Share the project type, deliverables, timeline, usage, and budget through the inquiry form and I'll review the fit.</p>
+        <div class="cta-row">
+          <a class="dark-button" href="/inquire/">Start a project</a>
+          <a class="plain-email" href="mailto:{% if media_kit_content %}{{ media_kit_content.contact_email }}{% else %}workwithbetra@gmail.com{% endif %}">{% if media_kit_content %}{{ media_kit_content.contact_email }}{% else %}workwithbetra@gmail.com{% endif %}</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-top">
+      <p class="footer-wordmark">Betra Amare</p>
+      <div class="footer-nav"><a href="/portfolio/">Portfolio</a><a href="/about/">About</a><a href="/media-kit/">Media Kit</a><a href="/contact/">Contact</a><a href="/inquire/">Inquire</a><a href="{% if contact_content %}{{ contact_content.instagram_url }}{% else %}https://www.instagram.com/betra_amare{% endif %}" target="_blank" rel="noopener">Instagram</a><a href="{% if contact_content %}{{ contact_content.tiktok_url }}{% else %}https://www.tiktok.com/@betraamarey{% endif %}" target="_blank" rel="noopener">TikTok</a></div>
+    </div>
+    <div class="shell footer-bottom"><span>© <span data-year></span> Betra Amare. All rights reserved.</span><a href="#top">Back to top ↑</a></div>
+  </footer>
+
+  <script src="/script.js"></script>
+</body>
+</html>
