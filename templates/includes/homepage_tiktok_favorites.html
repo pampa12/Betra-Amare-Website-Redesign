@@ -2,21 +2,20 @@
 <div class="homepage-tiktok-favorites reveal" aria-label="Featured TikTok favorites">
   {% for tiktok in homepage_tiktoks %}
   <article class="homepage-tiktok-card">
-    <div class="homepage-tiktok-player">
-      <iframe
-        src="{{ tiktok.embed_url }}"
-        title="{{ tiktok.title }} TikTok video"
-        loading="lazy"
-        allow="encrypted-media; fullscreen"
-        allowfullscreen
-      ></iframe>
-    </div>
+    <a
+      class="homepage-tiktok-thumbnail"
+      href="{{ tiktok.tiktok_url }}"
+      target="_blank"
+      rel="noopener"
+      aria-label="Watch {{ tiktok.title }} on TikTok"
+    >
+      <img src="{{ tiktok.thumbnail.url }}" alt="{{ tiktok.title }} TikTok thumbnail" loading="lazy">
+      <span class="homepage-tiktok-badge" aria-hidden="true">TikTok</span>
+      <span class="homepage-tiktok-play" aria-hidden="true"><span></span></span>
+    </a>
     <div class="homepage-tiktok-caption">
-      <div>
-        {% if tiktok.brand_name %}<span>{{ tiktok.brand_name }}</span>{% endif %}
-        <h3>{{ tiktok.title }}</h3>
-      </div>
-      <a href="{{ tiktok.tiktok_url }}" target="_blank" rel="noopener">View on TikTok ↗</a>
+      {% if tiktok.brand_name %}<span>{{ tiktok.brand_name }}</span>{% endif %}
+      <h3>{{ tiktok.title }}</h3>
     </div>
   </article>
   {% endfor %}
