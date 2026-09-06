@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     filterButtons.forEach((button) => {
       const category = button.dataset.filter;
-      if (category !== 'all' && (counts[category] || 0) < 3) {
+      if (category !== 'all' && (counts[category] || 0) < 1) {
         button.hidden = true;
         button.setAttribute('aria-hidden', 'true');
       }
