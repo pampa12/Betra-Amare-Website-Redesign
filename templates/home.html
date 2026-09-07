@@ -55,36 +55,13 @@
 
     <section class="section selected-work" id="selected-work-home">
       <div class="shell">
-        <div class="section-heading reveal">
-          <div><p class="eyebrow">{% if home_content %}{{ home_content.selected_eyebrow }}{% else %}Selected work{% endif %}</p><h2 class="display-title">{% if home_content %}{{ home_content.selected_title }}{% else %}A few favorites.{% endif %}</h2></div>
-          <a class="arrow-link" href="/portfolio.html">View full portfolio</a>
+        <div class="section-heading selected-work-heading reveal">
+          <div>
+            <p class="eyebrow">{% if home_content %}{{ home_content.selected_eyebrow }}{% else %}Selected work{% endif %}</p>
+            <h2 class="display-title">{% if home_content %}{{ home_content.selected_title }}{% else %}A few favorites.{% endif %}</h2>
+          </div>
         </div>
-        <div class="editorial-grid{% if selected_items|length == 2 %} two-item-grid{% endif %}">
-          {% if selected_items %}
-            {% for item in selected_items %}
-              {% if item.video %}
-              <div class="work-tile {% if forloop.counter == 1 %}tile-a{% elif forloop.counter == 2 %}tile-b{% elif forloop.counter == 3 %}tile-c{% else %}tile-d{% endif %} reveal">
-                <video
-                  class="portfolio-video"
-                  autoplay
-                  muted
-                  loop
-                  playsinline
-                  preload="auto"
-                  aria-label="{{ item.alt_text|default:item.title }} video"
-                  {% if item.image %}poster="{{ item.image.url }}"{% endif %}
-                >
-                  <source src="{{ item.video.url }}">
-                  Your browser does not support HTML5 video.
-                </video>
-              </div>
-              {% elif item.image %}
-              <a class="work-tile {% if forloop.counter == 1 %}tile-a{% elif forloop.counter == 2 %}tile-b{% elif forloop.counter == 3 %}tile-c{% else %}tile-d{% endif %} reveal" href="/portfolio.html"><img src="{{ item.image.url }}" alt="{{ item.alt_text|default:item.title }}" loading="lazy"></a>
-              {% endif %}
-            {% endfor %}
-          {% endif %}
-        </div>
-        {% homepage_tiktok_favorites 2 %}
+        {% homepage_selected_work %}
       </div>
     </section>
 
