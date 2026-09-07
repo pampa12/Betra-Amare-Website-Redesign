@@ -37,10 +37,27 @@ class PortfolioItemAdminForm(forms.ModelForm):
             "Example: Betra Amare wearing a cream dress in an outdoor fashion editorial."
         ),
     )
+    featured = forms.BooleanField(
+        required=False,
+        label="Show on homepage",
+        help_text=(
+            "Check this to include the photo or video in the homepage 'A few favorites' section. "
+            "For a video, also upload an image to use as its homepage thumbnail/poster."
+        ),
+    )
 
     class Meta:
         model = PortfolioItem
         fields = "__all__"
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if cleaned_data.get("featured") and cleaned_data.get("video") and not cleaned_data.get("image"):
+            self.add_error(
+                "image",
+                "Add an image/poster before showing this video on the homepage.",
+            )
+        return cleaned_data
 
 
 class SingletonContentAdmin(admin.ModelAdmin):
@@ -139,10 +156,17 @@ class FeaturedTikTokAdmin(admin.ModelAdmin):
 @admin.register(PortfolioItem)
 class PortfolioItemAdmin(admin.ModelAdmin):
     form = PortfolioItemAdminForm
-    list_display = ("title", "category", "media_type", "featured", "active", "sort_order", "updated_at")
+    list_display = (
+        "title",
+        "category",
+        "media_type",
+        "show_on_homepage_status",
+        "active",
+        "sort_order",
+        "updated_at",
+    )
     list_filter = ("category", "featured", "active")
     search_fields = ("title", "alt_text")
-    list_editable = ("featured", "active", "sort_order")
     fieldsets = (
         (
             "Portfolio media",
@@ -154,13 +178,26 @@ class PortfolioItemAdmin(admin.ModelAdmin):
                 ),
             },
         ),
-        ("Display", {"fields": ("featured", "active", "sort_order")}),
+        (
+            "Display",
+            {
+                "fields": ("featured", "active", "sort_order"),
+                "description": (
+                    "Use 'Show on homepage' to choose exactly which portfolio photos/videos can appear in "
+                    "the homepage 'A few favorites' section."
+                ),
+            },
+        ),
     )
 
     def save_model(self, request, obj, form, change):
         _give_new_upload_clean_name(obj.image, obj.title)
         _give_new_upload_clean_name(obj.video, obj.title)
         super().save_model(request, obj, form, change)
+
+    @admin.display(boolean=True, description="Show on homepage")
+    def show_on_homepage_status(self, obj):
+        return obj.featured
 
     @admin.display(description="Media")
     def media_type(self, obj):
