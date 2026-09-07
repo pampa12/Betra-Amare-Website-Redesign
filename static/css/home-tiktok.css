@@ -1,70 +1,138 @@
-.homepage-tiktok-favorites {
+.selected-work-heading {
+  margin-bottom: 34px;
+}
+
+.selected-showcase {
+  width: 100%;
+}
+
+.selected-showcase-top,
+.selected-showcase-bottom {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
-  max-width: 900px;
-  margin: 28px auto 0;
-  padding-top: 28px;
-  border-top: 1px solid var(--line);
 }
 
-.homepage-tiktok-favorites:has(.homepage-tiktok-card:only-child) {
-  grid-template-columns: minmax(0, 420px);
-  justify-content: center;
+.selected-showcase-top.top-count-3 {
+  grid-template-columns: 2fr 1fr 1fr;
 }
 
-.homepage-tiktok-card {
-  min-width: 0;
+.selected-showcase-top.top-count-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.homepage-tiktok-thumbnail {
+.selected-showcase-top.top-count-1 {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 680px;
+}
+
+.selected-card {
   position: relative;
   display: block;
-  aspect-ratio: 4 / 3;
+  min-width: 0;
   overflow: hidden;
+  border-radius: 8px;
   background: #eadce2;
   text-decoration: none;
+  box-shadow: 0 1px 0 rgba(52, 43, 48, .05);
 }
 
-.homepage-tiktok-thumbnail img {
+.selected-card img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform .45s cubic-bezier(.2,.65,.3,1), filter .3s ease;
 }
 
-.homepage-tiktok-thumbnail::after {
+.selected-card::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(31,24,28,.02), rgba(31,24,28,.16));
+  background: linear-gradient(180deg, rgba(28,21,25,0) 56%, rgba(28,21,25,.30) 100%);
   pointer-events: none;
 }
 
-.homepage-tiktok-thumbnail:hover img {
+.selected-card:hover img {
   transform: scale(1.025);
   filter: brightness(.98);
 }
 
-.homepage-tiktok-play {
+.selected-photo-card {
+  aspect-ratio: 4 / 3;
+}
+
+.selected-card-label,
+.selected-card-badge {
+  position: absolute;
+  z-index: 3;
+  font-size: .56rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.selected-card-label {
+  left: 14px;
+  bottom: 13px;
+  color: #fff;
+  text-shadow: 0 1px 12px rgba(0,0,0,.24);
+}
+
+.selected-card-badge {
+  top: 13px;
+  right: 13px;
+  padding: 6px 9px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.92);
+  color: var(--ink);
+  box-shadow: 0 4px 16px rgba(35,27,31,.10);
+}
+
+.selected-showcase-bottom {
+  margin-top: 18px;
+  align-items: start;
+  justify-content: center;
+}
+
+.selected-showcase-bottom.bottom-count-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.selected-showcase-bottom.bottom-count-3 {
+  grid-template-columns: repeat(3, minmax(0, 260px));
+}
+
+.selected-showcase-bottom.bottom-count-2 {
+  grid-template-columns: repeat(2, minmax(0, 280px));
+}
+
+.selected-showcase-bottom.bottom-count-1 {
+  grid-template-columns: minmax(0, 300px);
+}
+
+.selected-vertical-card {
+  aspect-ratio: 9 / 16;
+}
+
+.selected-play {
   position: absolute;
   left: 50%;
   top: 50%;
-  z-index: 2;
-  width: 58px;
-  height: 58px;
+  z-index: 3;
+  width: 56px;
+  height: 56px;
   display: grid;
   place-items: center;
   transform: translate(-50%, -50%);
-  border: 1px solid rgba(255,255,255,.62);
+  border: 1px solid rgba(255,255,255,.68);
   border-radius: 50%;
-  background: rgba(42,33,38,.56);
+  background: rgba(42,33,38,.52);
   backdrop-filter: blur(8px);
-  box-shadow: 0 8px 26px rgba(24,18,21,.18);
+  box-shadow: 0 8px 24px rgba(24,18,21,.16);
   transition: transform .2s ease, background .2s ease;
 }
 
-.homepage-tiktok-play span {
+.selected-play i {
   width: 0;
   height: 0;
   margin-left: 4px;
@@ -73,62 +141,98 @@
   border-left: 13px solid #fff;
 }
 
-.homepage-tiktok-thumbnail:hover .homepage-tiktok-play {
+.selected-video-card:hover .selected-play {
   transform: translate(-50%, -50%) scale(1.06);
-  background: rgba(42,33,38,.68);
+  background: rgba(42,33,38,.66);
 }
 
-.homepage-tiktok-badge {
+.selected-tiktok-mark {
   position: absolute;
-  top: 14px;
-  right: 14px;
-  z-index: 2;
-  padding: 6px 9px;
-  border-radius: 999px;
-  background: rgba(255,255,255,.90);
-  color: var(--ink);
-  font-size: .56rem;
+  left: 50%;
+  top: 50%;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 50px;
+  height: 50px;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255,255,255,.66);
+  border-radius: 50%;
+  background: rgba(42,33,38,.50);
+  color: #fff;
+  font-family: 'DM Sans', Arial, sans-serif;
+  font-size: 1.35rem;
   font-weight: 700;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  box-shadow: 0 4px 16px rgba(35,27,31,.10);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 24px rgba(24,18,21,.16);
+  transition: transform .2s ease, background .2s ease;
 }
 
-.homepage-tiktok-caption {
-  padding: 12px 1px 0;
+.selected-tiktok-card:hover .selected-tiktok-mark {
+  transform: translate(-50%, -50%) scale(1.06);
+  background: rgba(42,33,38,.66);
 }
 
-.homepage-tiktok-caption span {
-  display: block;
-  margin-bottom: 3px;
-  color: #a16d82;
-  font-size: .55rem;
-  font-weight: 700;
-  letter-spacing: .14em;
-  text-transform: uppercase;
+.selected-showcase-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 34px;
 }
 
-.homepage-tiktok-caption h3 {
+.selected-showcase-footer .arrow-link {
   margin: 0;
-  color: var(--ink);
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: 1.25rem;
-  font-weight: 500;
-  line-height: 1.08;
 }
 
-@media (max-width: 760px) {
-  .homepage-tiktok-favorites,
-  .homepage-tiktok-favorites:has(.homepage-tiktok-card:only-child) {
-    grid-template-columns: 1fr;
-    max-width: 430px;
-    gap: 26px;
-    margin-top: 24px;
-    padding-top: 24px;
+@media (max-width: 980px) {
+  .selected-showcase-top.top-count-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .homepage-tiktok-play {
-    width: 52px;
-    height: 52px;
+  .selected-showcase-top.top-count-3 .selected-photo-card:first-child {
+    grid-column: 1 / -1;
+    aspect-ratio: 16 / 9;
+  }
+
+  .selected-showcase-bottom.bottom-count-4 {
+    grid-template-columns: repeat(2, minmax(0, 280px));
+  }
+}
+
+@media (max-width: 700px) {
+  .selected-work-heading {
+    margin-bottom: 26px;
+  }
+
+  .selected-showcase-top,
+  .selected-showcase-top.top-count-1,
+  .selected-showcase-top.top-count-2,
+  .selected-showcase-top.top-count-3,
+  .selected-showcase-bottom.bottom-count-1,
+  .selected-showcase-bottom.bottom-count-2,
+  .selected-showcase-bottom.bottom-count-3,
+  .selected-showcase-bottom.bottom-count-4 {
+    grid-template-columns: 1fr;
+    max-width: 430px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .selected-showcase-top.top-count-3 .selected-photo-card:first-child {
+    grid-column: auto;
+    aspect-ratio: 4 / 3;
+  }
+
+  .selected-showcase-bottom {
+    margin-top: 18px;
+  }
+
+  .selected-vertical-card {
+    max-width: 320px;
+    justify-self: center;
+    width: 100%;
+  }
+
+  .selected-showcase-footer {
+    margin-top: 28px;
   }
 }
