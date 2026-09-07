@@ -17,18 +17,12 @@ def featured_tiktok_showcase(limit=4):
 
 @register.inclusion_tag("includes/homepage_selected_work.html")
 def homepage_selected_work():
-    """Render a balanced homepage preview with landscape photos and vertical video/social cards."""
-    featured = list(
+    """Render only the portfolio media explicitly selected for the homepage."""
+    items = list(
         PortfolioItem.objects.filter(active=True, featured=True).order_by(
             "sort_order", "-created_at"
         )
     )
-    remaining = list(
-        PortfolioItem.objects.filter(active=True, featured=False).order_by(
-            "sort_order", "-created_at"
-        )
-    )
-    items = featured + remaining
 
     video_item = next(
         (item for item in items if item.video and item.image),
@@ -38,7 +32,7 @@ def homepage_selected_work():
     photo_items = [
         item
         for item in items
-        if item.image and (video_item is None or item.pk != video_item.pk)
+        if item.image and not item.video
     ][:4]
 
     top_photos = photo_items[:3]
