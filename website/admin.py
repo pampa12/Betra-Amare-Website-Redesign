@@ -112,7 +112,6 @@ class FeaturedTikTokAdmin(admin.ModelAdmin):
     list_display = ("title", "brand_name", "show_on_homepage", "active", "sort_order", "updated_at")
     list_filter = ("show_on_homepage", "active")
     search_fields = ("title", "brand_name", "description", "tiktok_url")
-    list_editable = ("show_on_homepage", "active", "sort_order")
     fieldsets = (
         (
             "TikTok post",
@@ -135,10 +134,6 @@ class FeaturedTikTokAdmin(admin.ModelAdmin):
             },
         ),
     )
-
-    def save_model(self, request, obj, form, change):
-        _give_new_upload_clean_name(obj.thumbnail, obj.title)
-        super().save_model(request, obj, form, change)
 
 
 @admin.register(PortfolioItem)
