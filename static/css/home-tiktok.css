@@ -1,15 +1,16 @@
 .selected-work-heading {
-  margin-bottom: 34px;
+  margin-bottom: 30px;
 }
 
 .selected-showcase {
-  width: 100%;
+  width: min(100%, 900px);
+  margin: 0 auto;
 }
 
 .selected-showcase-top,
 .selected-showcase-bottom {
   display: grid;
-  gap: 18px;
+  gap: 14px;
 }
 
 .selected-showcase-top.top-count-3 {
@@ -22,7 +23,7 @@
 
 .selected-showcase-top.top-count-1 {
   grid-template-columns: minmax(0, 1fr);
-  max-width: 680px;
+  max-width: 560px;
 }
 
 .selected-card {
@@ -30,7 +31,7 @@
   display: block;
   min-width: 0;
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: 7px;
   background: #eadce2;
   text-decoration: none;
   box-shadow: 0 1px 0 rgba(52, 43, 48, .05);
@@ -65,23 +66,23 @@
 .selected-card-badge {
   position: absolute;
   z-index: 3;
-  font-size: .56rem;
+  font-size: .53rem;
   font-weight: 700;
   letter-spacing: .12em;
   text-transform: uppercase;
 }
 
 .selected-card-label {
-  left: 14px;
-  bottom: 13px;
+  left: 12px;
+  bottom: 11px;
   color: #fff;
   text-shadow: 0 1px 12px rgba(0,0,0,.24);
 }
 
 .selected-card-badge {
-  top: 13px;
-  right: 13px;
-  padding: 6px 9px;
+  top: 11px;
+  right: 11px;
+  padding: 5px 8px;
   border-radius: 999px;
   background: rgba(255,255,255,.92);
   color: var(--ink);
@@ -89,25 +90,25 @@
 }
 
 .selected-showcase-bottom {
-  margin-top: 18px;
+  margin-top: 14px;
   align-items: start;
   justify-content: center;
 }
 
 .selected-showcase-bottom.bottom-count-4 {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 190px));
 }
 
 .selected-showcase-bottom.bottom-count-3 {
-  grid-template-columns: repeat(3, minmax(0, 260px));
+  grid-template-columns: repeat(3, minmax(0, 190px));
 }
 
 .selected-showcase-bottom.bottom-count-2 {
-  grid-template-columns: repeat(2, minmax(0, 280px));
+  grid-template-columns: repeat(2, minmax(0, 200px));
 }
 
 .selected-showcase-bottom.bottom-count-1 {
-  grid-template-columns: minmax(0, 300px);
+  grid-template-columns: minmax(0, 210px);
 }
 
 .selected-vertical-card {
@@ -119,8 +120,8 @@
   left: 50%;
   top: 50%;
   z-index: 3;
-  width: 56px;
-  height: 56px;
+  width: 48px;
+  height: 48px;
   display: grid;
   place-items: center;
   transform: translate(-50%, -50%);
@@ -136,9 +137,9 @@
   width: 0;
   height: 0;
   margin-left: 4px;
-  border-top: 8px solid transparent;
-  border-bottom: 8px solid transparent;
-  border-left: 13px solid #fff;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+  border-left: 11px solid #fff;
 }
 
 .selected-video-card:hover .selected-play {
@@ -153,15 +154,15 @@
   z-index: 3;
   display: grid;
   place-items: center;
-  width: 50px;
-  height: 50px;
+  width: 44px;
+  height: 44px;
   transform: translate(-50%, -50%);
   border: 1px solid rgba(255,255,255,.66);
   border-radius: 50%;
   background: rgba(42,33,38,.50);
   color: #fff;
   font-family: 'DM Sans', Arial, sans-serif;
-  font-size: 1.35rem;
+  font-size: 1.15rem;
   font-weight: 700;
   backdrop-filter: blur(8px);
   box-shadow: 0 8px 24px rgba(24,18,21,.16);
@@ -176,7 +177,7 @@
 .selected-showcase-footer {
   display: flex;
   justify-content: center;
-  margin-top: 34px;
+  margin-top: 28px;
 }
 
 .selected-showcase-footer .arrow-link {
@@ -184,6 +185,10 @@
 }
 
 @media (max-width: 980px) {
+  .selected-showcase {
+    width: min(100%, 820px);
+  }
+
   .selected-showcase-top.top-count-3 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -194,13 +199,13 @@
   }
 
   .selected-showcase-bottom.bottom-count-4 {
-    grid-template-columns: repeat(2, minmax(0, 280px));
+    grid-template-columns: repeat(4, minmax(0, 165px));
   }
 }
 
 @media (max-width: 700px) {
   .selected-work-heading {
-    margin-bottom: 26px;
+    margin-bottom: 24px;
   }
 
   .selected-showcase-top,
@@ -212,7 +217,7 @@
   .selected-showcase-bottom.bottom-count-3,
   .selected-showcase-bottom.bottom-count-4 {
     grid-template-columns: 1fr;
-    max-width: 430px;
+    max-width: 390px;
     margin-left: auto;
     margin-right: auto;
   }
@@ -223,16 +228,16 @@
   }
 
   .selected-showcase-bottom {
-    margin-top: 18px;
+    margin-top: 14px;
   }
 
   .selected-vertical-card {
-    max-width: 320px;
+    max-width: 245px;
     justify-self: center;
     width: 100%;
   }
 
   .selected-showcase-footer {
-    margin-top: 28px;
+    margin-top: 24px;
   }
 }
