@@ -1,0 +1,47 @@
+{% if top_photos or video_item or homepage_tiktoks or bottom_photo %}
+<div class="selected-showcase">
+  {% if top_photos %}
+  <div class="selected-showcase-top top-count-{{ top_photos|length }}">
+    {% for item in top_photos %}
+    <a class="selected-card selected-photo-card reveal" href="/portfolio/" aria-label="View {{ item.title }} in the portfolio">
+      <img src="{{ item.image.url }}" alt="{{ item.alt_text|default:item.title }}" loading="lazy">
+      <span class="selected-card-label">{{ item.get_category_display }}</span>
+    </a>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if bottom_count %}
+  <div class="selected-showcase-bottom bottom-count-{{ bottom_count }}">
+    {% if video_item %}
+    <a class="selected-card selected-vertical-card selected-video-card reveal" href="/portfolio/" aria-label="View {{ video_item.title }} video in the portfolio">
+      <img src="{{ video_item.image.url }}" alt="{{ video_item.alt_text|default:video_item.title }}" loading="lazy">
+      <span class="selected-play" aria-hidden="true"><i></i></span>
+      <span class="selected-card-badge">Video</span>
+      <span class="selected-card-label">{{ video_item.get_category_display }}</span>
+    </a>
+    {% endif %}
+
+    {% for tiktok in homepage_tiktoks %}
+    <a class="selected-card selected-vertical-card selected-tiktok-card reveal" href="{{ tiktok.tiktok_url }}" target="_blank" rel="noopener" aria-label="Open {{ tiktok.title }} on TikTok">
+      <img src="{{ tiktok.thumbnail.url }}" alt="{{ tiktok.title }} TikTok thumbnail" loading="lazy">
+      <span class="selected-tiktok-mark" aria-hidden="true">♪</span>
+      <span class="selected-card-badge">TikTok</span>
+      {% if tiktok.brand_name %}<span class="selected-card-label">{{ tiktok.brand_name }}</span>{% endif %}
+    </a>
+    {% endfor %}
+
+    {% if bottom_photo %}
+    <a class="selected-card selected-vertical-card selected-bottom-photo reveal" href="/portfolio/" aria-label="View {{ bottom_photo.title }} in the portfolio">
+      <img src="{{ bottom_photo.image.url }}" alt="{{ bottom_photo.alt_text|default:bottom_photo.title }}" loading="lazy">
+      <span class="selected-card-label">{{ bottom_photo.get_category_display }}</span>
+    </a>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  <div class="selected-showcase-footer reveal">
+    <a class="arrow-link" href="/portfolio/">View full portfolio</a>
+  </div>
+</div>
+{% endif %}
