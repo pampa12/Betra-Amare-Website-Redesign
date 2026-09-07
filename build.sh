@@ -2,8 +2,10 @@
 set -o errexit
 
 pip install -r requirements.txt
+
+# Apply database changes first so every deploy starts with the schema expected by the current code.
+python manage.py migrate --noinput
 python manage.py collectstatic --no-input
-python manage.py migrate
 
 # Create the production admin once when the temporary Render environment
 # variables are present. Existing accounts are left unchanged on later deploys.
