@@ -1,0 +1,177 @@
+/* Editorial, cinematic refinement inspired by an independent portfolio reference.
+   Scoped to the Betra Amare portfolio, retaining the site's plum / blush palette. */
+.creative-portfolio{
+  --cinematic-plum:#2c1722;--cinematic-plum-soft:#4a2435;
+  --cinematic-paper:#fff9fb;--cinematic-blush:#d982a3;
+  --cinematic-ink:#3b2530;--cinematic-muted:#896873;
+  overflow:clip;
+}
+.cinematic-cover{
+  position:relative;
+  background:#2a1822;
+  color:#fff9fb;
+  min-height:min(830px,89vh);
+}
+.cinematic-cover::before{content:none}
+.cinematic-hero-shell{padding:30px 0 26px;min-height:inherit;display:flex;flex-direction:column}
+.cinematic-meta,.cinematic-hero-bottom{
+  display:flex;justify-content:space-between;align-items:center;gap:20px;
+  font:600 .64rem/1.5 'DM Sans',Arial,sans-serif;
+  color:#d6b3c3;letter-spacing:.18em;text-transform:uppercase;
+}
+.cinematic-meta{border-bottom:1px solid rgba(255,255,255,.18);padding-bottom:22px}
+.cinematic-hero-bottom{border-top:1px solid rgba(255,255,255,.18);padding-top:24px}
+.cinematic-hero-bottom span span{font-size:1rem}
+.cinematic-hero-layout{
+  flex:1;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);
+  gap:clamp(30px,5vw,86px);align-items:center;
+  padding:clamp(50px,6vw,95px) 0;
+}
+.cinematic-hero-copy{position:relative;z-index:2}
+.cinematic-sequence{display:block;margin-bottom:35px;font-size:.67rem;font-weight:700;letter-spacing:.2em;color:#cba4b5}
+.cinematic-cover .cinematic-title{
+  font-family:'DM Sans',Arial,sans-serif;font-size:clamp(5rem,8.8vw,10rem);
+  letter-spacing:-.105em;line-height:.82;font-weight:600;color:#fff9fb;margin:0 0 36px;
+}
+.cinematic-title span{display:block}
+.cinematic-cover .cinematic-title em{
+  display:block;font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:1.08em;letter-spacing:-.075em;font-weight:400;line-height:.95;
+  color:#e1a6c2;transform:translateX(5%);
+}
+.cinematic-hero-copy p{max-width:500px;color:#e2cbd6;font-size:1rem;line-height:1.75;margin-bottom:35px}
+.cinematic-text-cta{display:inline-flex;align-items:center;gap:50px;border-bottom:1px solid rgba(255,255,255,.6);
+  padding:10px 0;text-transform:uppercase;letter-spacing:.14em;text-decoration:none;color:#fff;
+  font-weight:700;font-size:.68rem}
+.cinematic-text-cta:hover{color:#f2bbd1}
+.cinematic-text-cta span{font-size:1.1rem}
+.cinematic-hero-art{
+  position:relative;width:100%;aspect-ratio:4/5;max-height:560px;background:#472b3b;
+  overflow:hidden;box-shadow:22px 22px 0 rgba(255,255,255,.055);
+}
+.cinematic-hero-art::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,transparent 68%,rgba(20,10,17,.65))}
+.cinematic-hero-art>img{width:100%;height:100%;object-fit:cover;object-position:center}
+.cinematic-art-label{position:absolute;left:24px;right:24px;bottom:22px;z-index:2;display:flex;
+  justify-content:space-between;align-items:center;gap:10px;color:#fff;
+  font-size:.52rem;letter-spacing:.17em;font-weight:700;text-transform:uppercase}
+.cinematic-hero-placeholder{height:100%;display:grid;align-content:center;text-align:center}
+.cinematic-hero-placeholder span{font:500 clamp(3rem,7vw,8rem)/.9 'Cormorant Garamond',Georgia,serif;letter-spacing:.04em}
+.cinematic-hero-placeholder em{font:400 clamp(2rem,4vw,5rem) 'Cormorant Garamond',Georgia,serif;color:#e7c0d0}
+.cp-section-nav{top:90px;background:rgba(255,249,251,.96)}
+.cp-section-nav-inner{gap:32px}
+.cp-section-nav a{font-size:.65rem;padding:20px 0}
+.cp-section{padding:clamp(98px,10vw,155px) 0}
+.creative-portfolio .cp-heading{font-family:'DM Sans',Arial,sans-serif;line-height:.99;
+  font-size:clamp(2.7rem,5.2vw,5.6rem);font-weight:650;letter-spacing:-.068em}
+.creative-portfolio .cp-heading em{font-size:1.03em;font-style:italic;font-weight:400;letter-spacing:-.045em}
+.cp-about{background:#fff9fb}
+.cp-about-grid{grid-template-columns:1fr .85fr;gap:clamp(42px,9vw,140px)}
+.cp-about-copy>p:not(.cp-overline){color:#725564;font-size:1rem;max-width:515px}
+.cp-about-visual{box-shadow:none;transform:none;padding:0;background:#f1d8e2;aspect-ratio:4/4.65}
+.cp-about-photo-caption{left:-12px;bottom:18px;background:#fff9fb;padding:11px 14px;transform:none}
+.cp-showcase{background:#f8eff2}
+.cp-showcase-grid{grid-template-columns:1.03fr .97fr;gap:clamp(35px,8vw,120px)}
+.cp-showcase .cp-heading{font-size:clamp(3rem,5.4vw,6rem);max-width:620px}
+.cp-showcase .cp-heading em{font-size:1.08em}
+.cp-showcase-copy>p:not(.cp-overline){font-size:.98rem;max-width:500px;color:#755969}
+.cp-device-display{background:none;min-height:690px}
+.cp-phone-backdrop{background:radial-gradient(ellipse,#efc6d6,transparent 70%)}
+.cp-iphone{filter:drop-shadow(0 22px 17px rgba(35,19,29,.12))}
+.cp-showcase-notes{color:#8a6375}
+.cp-partnerships{background:#fff9fb}
+.cp-partnerships-heading>p{font-size:.96rem;max-width:420px;color:#776272}
+.cp-brand-devices{grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:18px}
+.cp-brand-phone{aspect-ratio:4/5.5;border:0;border-radius:0;background:#e5c6d2;box-shadow:none;overflow:hidden}
+.cp-brand-phone-head{position:absolute;top:0;left:0;right:0;z-index:1;height:36px;
+  background:linear-gradient(180deg,rgba(28,16,24,.55),transparent);padding:11px 13px}
+.cp-brand-phone-screen{height:calc(100% - 65px)}
+.cp-brand-phone-caption{height:65px;background:#f8ecf1;padding:12px 15px}
+.cp-partnerships-foot{border-top:1px solid rgba(117,65,85,.18)}
+.cp-skills{background:#321b28}
+.cp-skills .cp-heading{color:#fff9fb}
+.cp-skills-intro{align-items:flex-start;text-align:left;max-width:760px}
+.cp-skills-intro>p:last-child{margin:0}
+.cp-skill-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.18)}
+.cp-skill-card,.cp-skill-card:nth-child(4n+2),.cp-skill-card:nth-child(4n+3),.cp-skill-card:nth-child(4n+4){
+  min-height:200px;padding:25px;background:#321b28;color:#f6e8ef;transition:background .3s ease}
+.cp-skill-card:hover{transform:none;background:#4a2a3b}
+.cp-skill-card>span{color:#cf9cb2}
+.cp-skill-card small{color:#cbb0bd}
+.cp-skills-note{color:#d1b1c0}
+.cp-gallery{background:#fff9fb}
+.cp-gallery-heading>p{color:#715565}
+.cp-filters{border-bottom:1px solid rgba(117,65,85,.18)}
+.cp-filters .filter-btn{border:0;border-radius:0;background:transparent;color:#7e5d6d;
+  border-bottom:1px solid transparent;padding:12px 3px;margin-right:12px;font-weight:700}
+.cp-filters .filter-btn.active,.cp-filters .filter-btn:hover{
+  color:#4a2435;background:transparent;border-color:#4a2435}
+.cinematic-project-grid{
+  grid-template-columns:repeat(12,minmax(0,1fr));gap:20px;
+}
+.cinematic-project-grid .portfolio-item{
+  grid-column:span 4;aspect-ratio:4/5.15;background:#ecdde3;box-shadow:none;
+}
+.cinematic-project-grid .portfolio-item:nth-child(5n+1){grid-column:span 7;aspect-ratio:1.22}
+.cinematic-project-grid .portfolio-item:nth-child(5n+2){grid-column:span 5;aspect-ratio:.96}
+.cinematic-project-grid .portfolio-item:nth-child(5n+3){grid-column:span 5;aspect-ratio:.98}
+.cinematic-project-grid .portfolio-item:nth-child(5n+4){grid-column:span 7;aspect-ratio:1.25}
+.cinematic-project-grid .portfolio-item:nth-child(5n+5){grid-column:span 12;aspect-ratio:2.15}
+.cinematic-project-grid .portfolio-item img,
+.cinematic-project-grid .portfolio-item video{width:100%;height:100%;object-fit:cover}
+.cinematic-project-grid .portfolio-caption{opacity:1;gap:10px;padding:70px 24px 24px}
+.cinematic-project-grid .portfolio-caption strong{font-family:'DM Sans',Arial,sans-serif;
+  text-transform:none;font-size:clamp(1.1rem,1.8vw,1.7rem);font-weight:500;letter-spacing:-.03em}
+.cinematic-project-grid .portfolio-item:focus-visible{outline:3px solid #4a2435}
+.cp-connect{background:#e9ccda}
+.cp-connect .cp-heading{max-width:730px}
+.cp-connect-art span{color:rgba(255,249,251,.5)}
+/* Scroll reveals are progressive enhancement; content remains visible if scripts fail. */
+@media (prefers-reduced-motion: no-preference){
+  .creative-portfolio .cinematic-enter{
+    opacity:0;transform:translate3d(0,24px,0);
+    transition:opacity .8s ease,transform .8s cubic-bezier(.22,1,.36,1)
+  }
+  .creative-portfolio .cinematic-enter.cinematic-inview{opacity:1;transform:translate3d(0,0,0)}
+  .cinematic-hero-copy{animation:cinematic-hero-rise .85s both}
+  .cinematic-hero-art{animation:cinematic-hero-rise 1s .12s both}
+  @keyframes cinematic-hero-rise{
+    from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}
+  }
+}
+@media (max-width:960px){
+  .cinematic-hero-layout{grid-template-columns:1.1fr .9fr}
+  .cinematic-cover .cinematic-title{font-size:clamp(3.9rem,8.3vw,6rem)}
+  .cinematic-hero-art{max-height:480px}
+  .cp-skill-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cp-showcase-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:760px){
+  .cinematic-cover{min-height:unset}
+  .cinematic-hero-layout{grid-template-columns:1fr;gap:38px;padding:72px 0 45px}
+  .cinematic-hero-copy{max-width:650px}
+  .cinematic-cover .cinematic-title{font-size:clamp(4.2rem,12vw,6.9rem)}
+  .cinematic-cover .cinematic-title em{transform:none}
+  .cinematic-hero-art{width:min(100%,500px);margin-inline:auto;aspect-ratio:4/4;max-height:430px}
+  .cinematic-meta,.cinematic-hero-bottom{font-size:.55rem;letter-spacing:.09em}
+  .cp-section{padding:80px 0}
+  .cp-about-grid,.cp-showcase-grid{grid-template-columns:1fr}
+  .cp-about-copy{order:0}
+  .cp-about-visual{order:1}
+  .cp-device-display{min-height:650px}
+  .cp-brand-devices{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cinematic-project-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .cinematic-project-grid .portfolio-item,
+  .cinematic-project-grid .portfolio-item:nth-child(n){grid-column:span 1;aspect-ratio:4/5}
+  .cinematic-project-grid .portfolio-item:nth-child(4n+1){grid-column:span 2;aspect-ratio:1.4}
+}
+@media(max-width:480px){
+  .cinematic-cover .cinematic-title{font-size:clamp(3.3rem,12.8vw,4.4rem)}
+  .cinematic-hero-copy p{font-size:.9rem}
+  .cinematic-meta span:last-child{display:none}
+  .cp-section-nav{top:70px}
+  .cp-brand-devices{grid-template-columns:1fr 1fr;gap:9px}
+  .cinematic-project-grid{grid-template-columns:1fr}
+  .cinematic-project-grid .portfolio-item:nth-child(n){grid-column:span 1;aspect-ratio:4/4.5}
+  .cp-skill-card{min-height:150px;padding:18px}
+}
