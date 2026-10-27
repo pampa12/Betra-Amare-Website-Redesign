@@ -10,17 +10,19 @@ class CreativePortfolioTests(TestCase):
     def test_empty_portfolio_displays_pink_portfolio_sections_without_fake_collaborations(self):
         response = self.client.get(reverse("website:portfolio"))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "MY")
-        self.assertContains(response, "marketing")
-        self.assertContains(response, "YOUR SOCIALS DESERVE")
-        self.assertContains(response, "BRAND")
-        self.assertContains(response, "SKILLS")
+        self.assertContains(response, "Creative")
+        self.assertContains(response, "portfolio.")
+        self.assertContains(response, "CONTENT THAT")
+        self.assertContains(response, "SELECTED")
+        self.assertContains(response, "TOOLS OF")
+        self.assertContains(response, "portfolio-cinematic.css")
+        self.assertContains(response, "portfolio-cinematic.js")
         self.assertContains(response, "More projects, coming soon.")
         self.assertContains(response, "Collaboration work, curated here.")
         self.assertContains(response, "portfolio-story.css")
         self.assertNotContains(response, 'class="portfolio-item')
 
-    def test_existing_photos_show_in_collage_phones_and_work_gallery(self):
+    def test_existing_photos_show_in_cinematic_hero_phone_and_work_gallery(self):
         AboutContent.objects.create(story_image="about/intro-photo")
         PortfolioItem.objects.create(
             title="Beauty campaign", category="beauty",
@@ -41,6 +43,8 @@ class CreativePortfolioTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Beauty campaign")
         self.assertContains(response, "Fashion portrait")
+        self.assertContains(response, 'class="cinematic-hero-art"')
+        self.assertContains(response, 'class="portfolio-masonry cp-masonry cinematic-project-grid"')
         self.assertContains(response, 'class="cp-iphone"')
         self.assertContains(response, 'data-phone-slideshow')
         self.assertContains(response, 'class="cp-reel-image is-active"')
