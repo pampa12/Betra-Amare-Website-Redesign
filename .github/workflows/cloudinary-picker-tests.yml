@@ -1,4 +1,4 @@
-name: Django admin Cloudinary picker tests
+name: Django website tests
 
 on:
   pull_request:
@@ -23,5 +23,5 @@ jobs:
         run: python manage.py check
       - name: Collect Django admin static files for manifest storage
         run: python manage.py collectstatic --noinput
-      - name: Run Cloudinary picker tests (mocked API)
-        run: python manage.py test website.tests_cloudinary_picker
+      - name: Run admin and portfolio page tests
+        run: python manage.py test website.tests_cloudinary_picker website.tests_portfolio_redesign

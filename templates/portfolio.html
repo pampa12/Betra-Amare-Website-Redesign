@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@400;500;600;700&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/static/css/refined.css">
+  <link rel="stylesheet" href="/static/css/portfolio-story.css">
 </head>
 <body>
   <header class="site-header">
@@ -23,29 +24,158 @@
     </div>
   </header>
 
-  <main>
-    <section class="page-hero">
-      <div class="shell page-intro reveal">
-        <div>
-          <p class="eyebrow">{% if portfolio_content %}{{ portfolio_content.eyebrow }}{% else %}Portfolio{% endif %}</p>
-          <h1>{% if portfolio_content %}{{ portfolio_content.headline_line1 }}<br><em>{{ portfolio_content.headline_emphasis }}</em>{% else %}A collection of<br><em>moments &amp; moods.</em>{% endif %}</h1>
+  <main class="creative-portfolio" id="main-content">
+    <section class="cp-cover" aria-labelledby="cp-cover-title">
+      <div class="shell cp-cover-inner">
+        <div class="cp-cover-top"><span>BETRA AMARE / CREATIVE WORK</span><span>BEAUTY • LIFESTYLE • UGC</span></div>
+        <div class="cp-cover-grid">
+          <div class="cp-cover-copy">
+            <p class="cp-overline">Digital creator / storyteller / creative partner</p>
+            <h1 id="cp-cover-title">MY <em>marketing</em><span>PORTFOLIO <i aria-hidden="true">♡</i></span></h1>
+            <p class="cp-cover-description">Creating scroll-stopping visuals, thoughtful stories, and content that feels like a real connection.</p>
+            <a class="cp-primary-cta" href="#portfolio-showcase">Explore my work <span aria-hidden="true">↗</span></a>
+          </div>
+          <div class="cp-cover-collage">
+            <div class="cp-cover-card cp-cover-card-a">
+              {% if showcase_photos %}
+              <img src="{{ showcase_photos.0.image.url }}" alt="{{ showcase_photos.0.alt_text|default:showcase_photos.0.title }}" fetchpriority="high">
+              {% else %}<div class="cp-image-fallback" aria-hidden="true">B<span>A</span></div>{% endif %}
+            </div>
+            <div class="cp-cover-card cp-cover-card-b">
+              {% if showcase_photos|length > 1 %}
+              <img src="{{ showcase_photos.1.image.url }}" alt="{{ showcase_photos.1.alt_text|default:showcase_photos.1.title }}">
+              {% else %}<div class="cp-card-type" aria-hidden="true">create<br><em>with me.</em></div>{% endif %}
+            </div>
+            <div class="cp-cover-stamp" aria-hidden="true">MADE TO<br><strong>STAND OUT</strong><span>✳</span></div>
+            <span class="cp-cover-note">CONTENT MADE WITH INTENTION ↗</span>
+          </div>
         </div>
-        <p class="body-copy">{% if portfolio_content %}{{ portfolio_content.intro_text }}{% else %}Beauty, fashion, lifestyle, and brand storytelling — created with a soft editorial eye and a focus on personality.{% endif %}</p>
+        <div class="cp-cover-bottom"><span>CREATOR PORTFOLIO / BETRA AMARE</span><a href="#portfolio-about">Scroll to explore ↓</a></div>
       </div>
     </section>
 
-    <section class="section portfolio-section">
-      <div class="shell">
-        <div class="portfolio-filter reveal" aria-label="Portfolio filters">
-          <button class="filter-btn active" type="button" data-filter="all">All</button>
-          <button class="filter-btn" type="button" data-filter="beauty">Beauty</button>
-          <button class="filter-btn" type="button" data-filter="fashion">Fashion</button>
-          <button class="filter-btn" type="button" data-filter="lifestyle">Lifestyle</button>
-          <button class="filter-btn" type="button" data-filter="brand">Brand Content</button>
-        </div>
+    <nav class="cp-section-nav" aria-label="Portfolio page sections">
+      <div class="shell cp-section-nav-inner">
+        <a href="#portfolio-about">About</a>
+        <a href="#portfolio-showcase">Social media</a>
+        <a href="#portfolio-partnerships">Brand work</a>
+        <a href="#portfolio-skills">Skills &amp; tools</a>
+        <a href="#portfolio-gallery">Gallery</a>
+        <a href="#portfolio-connect">Contact</a>
+      </div>
+    </nav>
 
-        <div class="portfolio-masonry">
-          {% if portfolio_items %}
+    <section class="cp-about cp-section" id="portfolio-about" aria-labelledby="cp-about-heading">
+      <div class="shell cp-about-grid">
+        <div class="cp-about-copy">
+          <p class="cp-overline">01 / Meet the creator</p>
+          <h2 class="cp-heading" id="cp-about-heading">MORE THAN <em>pretty pictures.</em></h2>
+          <p class="cp-lead">Hi, I'm Betra — the person behind the ideas.</p>
+          <p>{% if portfolio_content %}{{ portfolio_content.intro_text }}{% else %}Beauty, fashion, lifestyle, and brand storytelling — created with a soft editorial eye and a focus on personality.{% endif %}</p>
+          <p>I bring a personal, creative perspective to every story, whether it's a beauty moment, a styled photo, or a brand collaboration.</p>
+          <a class="cp-text-link" href="/about/">A little more about me ↗</a>
+        </div>
+        <div class="cp-about-visual">
+          {% if about_content and about_content.story_image %}
+          <img src="{{ about_content.story_image.url }}" alt="Portrait of Betra Amare" loading="lazy">
+          {% elif showcase_photos %}
+          <img src="{{ showcase_photos.0.image.url }}" alt="{{ showcase_photos.0.alt_text|default:showcase_photos.0.title }}" loading="lazy">
+          {% else %}<div class="cp-image-fallback" aria-hidden="true">BETRA <em>AMARE</em></div>{% endif %}
+          <span class="cp-about-photo-caption">YOUR CREATIVE GIRL ♡</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="cp-showcase cp-section" id="portfolio-showcase" aria-labelledby="cp-showcase-heading">
+      <div class="shell">
+        <div class="cp-showcase-grid">
+          <div class="cp-showcase-copy">
+            <p class="cp-overline">02 / Social media &amp; visual storytelling</p>
+            <h2 class="cp-heading" id="cp-showcase-heading">YOUR SOCIALS DESERVE <em>A GLOW-UP.</em></h2>
+            <p>Content that does more than look beautiful. I think about the idea, the audience, the story, and the details that keep people watching.</p>
+            <p>From creator-led visuals to campaign-ready content, I love making things that feel polished without losing their personality.</p>
+            <a class="cp-text-link" href="#portfolio-gallery">Explore my content ↗</a>
+          </div>
+          <div class="cp-device-display" aria-label="Selected social media content">
+            {% if showcase_photos %}
+              {% for photo in showcase_photos %}
+              <div class="cp-phone cp-phone-{{ forloop.counter }}">
+                <div class="cp-phone-top" aria-hidden="true"><span>● ● ●</span><span>•••</span></div>
+                <div class="cp-phone-screen">
+                  <img src="{{ photo.image.url }}" alt="{{ photo.alt_text|default:photo.title }}" loading="lazy">
+                </div>
+                <div class="cp-phone-bottom"><span>♡</span><span>{{ photo.get_category_display }}</span><span>↗</span></div>
+              </div>
+              {% endfor %}
+            {% else %}
+              <div class="cp-mockup-empty"><span aria-hidden="true">✳</span><h3>Social-first storytelling</h3><p>Selected projects will appear here as they are added in Django Admin.</p></div>
+            {% endif %}
+          </div>
+        </div>
+        <div class="cp-showcase-notes"><span>CONTENT STRATEGY</span><span>VISUAL STORYTELLING</span><span>CREATOR-LED CONTENT</span><span>UGC</span></div>
+      </div>
+    </section>
+
+    <section class="cp-partnerships cp-section" id="portfolio-partnerships" aria-labelledby="cp-partnerships-heading">
+      <div class="shell">
+        <div class="cp-partnerships-heading">
+          <div>
+            <p class="cp-overline">03 / Creative collaborations</p>
+            <h2 class="cp-heading" id="cp-partnerships-heading">BRAND <em>partnerships.</em></h2>
+          </div>
+          <p>Brand content should feel like a natural part of the story. Here's a space for my collaborations, campaigns, and creative projects.</p>
+        </div>
+        {% if brand_photos %}
+        <div class="cp-brand-devices">
+          {% for item in brand_photos %}
+          <div class="cp-brand-phone">
+            <div class="cp-brand-phone-head" aria-hidden="true">BETRA ♡ <span>•••</span></div>
+            <div class="cp-brand-phone-screen">
+              <img src="{{ item.image.url }}" alt="{{ item.alt_text|default:item.title }}" loading="lazy">
+            </div>
+            <div class="cp-brand-phone-caption">{{ item.title }}</div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="cp-brand-empty">
+          <div class="cp-brand-empty-art" aria-hidden="true">LET'S CREATE<br><em>something beautiful.</em></div>
+          <div><h3>Collaboration work, curated here.</h3><p>As brand projects are added in Django Admin under <strong>Portfolio items → Brand Content</strong>, the finished visuals will appear in this section automatically.</p></div>
+        </div>
+        {% endif %}
+        <div class="cp-partnerships-foot"><span>CONTENT CREATION / UGC / MODELING / CREATIVE CONCEPTS</span><a class="cp-text-link" href="/media-kit/">View media kit ↗</a></div>
+      </div>
+    </section>
+
+    <section class="cp-skills cp-section" id="portfolio-skills" aria-labelledby="cp-skills-heading">
+      <div class="shell">
+        <div class="cp-skills-intro"><p class="cp-overline">04 / What I bring to the table</p><h2 class="cp-heading" id="cp-skills-heading">SKILLS <em>&amp; strengths.</em></h2><p>My creative toolkit for planning, producing, and sharing content that feels intentional.</p></div>
+        <div class="cp-skill-grid">
+          <div class="cp-skill-card"><span>01</span><strong>Social media<br>content</strong><small>CREATION</small></div>
+          <div class="cp-skill-card"><span>02</span><strong>Short-form<br>video</strong><small>STORYTELLING</small></div>
+          <div class="cp-skill-card"><span>03</span><strong>Visual<br>editing</strong><small>PHOTO &amp; VIDEO</small></div>
+          <div class="cp-skill-card"><span>04</span><strong>Brand<br>storytelling</strong><small>CREATIVE CONCEPTS</small></div>
+          <div class="cp-skill-card"><span>05</span><strong>Creator-led<br>campaigns</strong><small>UGC</small></div>
+          <div class="cp-skill-card"><span>06</span><strong>Editorial<br>imagery</strong><small>BEAUTY &amp; LIFESTYLE</small></div>
+          <div class="cp-skill-card"><span>07</span><strong>Audience<br>engagement</strong><small>COMMUNITY</small></div>
+          <div class="cp-skill-card"><span>08</span><strong>Content<br>planning</strong><small>STRATEGY</small></div>
+        </div>
+        <p class="cp-skills-note">Skills &amp; creative services — not a list of formal certifications.</p>
+      </div>
+    </section>
+
+    <section class="cp-gallery cp-section" id="portfolio-gallery" aria-labelledby="cp-gallery-heading">
+      <div class="shell">
+        <div class="cp-gallery-heading"><div><p class="cp-overline">05 / My selected work</p><h2 class="cp-heading" id="cp-gallery-heading">THE <em>portfolio.</em></h2></div><p>A look at the photos, videos and moments that make up my creative world.</p></div>
+        {% if portfolio_items %}
+        <div class="portfolio-filter cp-filters" role="group" aria-label="Filter portfolio projects">
+          <button class="filter-btn active" id="all" type="button" data-filter="all" aria-pressed="true">All projects</button>
+          <button class="filter-btn" id="beauty" type="button" data-filter="beauty" aria-pressed="false">Beauty</button>
+          <button class="filter-btn" id="fashion" type="button" data-filter="fashion" aria-pressed="false">Fashion</button>
+          <button class="filter-btn" id="lifestyle" type="button" data-filter="lifestyle" aria-pressed="false">Lifestyle</button>
+          <button class="filter-btn" id="brand" type="button" data-filter="brand" aria-pressed="false">Brand Content</button>
+        </div>
+        <div class="portfolio-masonry cp-masonry">
             {% for item in portfolio_items %}
               {% if item.video %}
               <div
@@ -97,11 +227,12 @@
               </div>
               {% endif %}
             {% endfor %}
-          {% endif %}
         </div>
+        {% else %}
+        <div class="cp-gallery-empty"><h3>More projects, coming soon.</h3><p>I'm putting together a collection of beauty, fashion, lifestyle and brand work.</p><a class="cp-text-link" href="/inquire/">Create something together ↗</a></div>
+        {% endif %}
       </div>
     </section>
-
     <div class="portfolio-lightbox" id="portfolioLightbox" role="dialog" aria-modal="true" aria-label="Portfolio media viewer" aria-hidden="true">
       <div class="portfolio-lightbox-dialog">
         <button class="portfolio-lightbox-close" type="button" aria-label="Close media viewer">×</button>
@@ -110,15 +241,15 @@
       </div>
     </div>
 
-    <section class="section collab-section">
-      <div class="shell collab-inner reveal">
-        <p class="eyebrow">{% if portfolio_content %}{{ portfolio_content.collab_eyebrow }}{% else %}Have something in mind?{% endif %}</p>
-        <h2 class="display-title huge">{% if portfolio_content %}{{ portfolio_content.collab_title_prefix }} <em>{{ portfolio_content.collab_title_emphasis }}</em>{% else %}Let's make something that feels <em>like you.</em>{% endif %}</h2>
-        <div class="cta-row"><a class="dark-button" href="/inquire.html">{% if portfolio_content %}{{ portfolio_content.button_text }}{% else %}Start a project{% endif %}</a><a class="plain-email" href="mailto:{% if portfolio_content %}{{ portfolio_content.work_email }}{% else %}workwithbetra@gmail.com{% endif %}">{% if portfolio_content %}{{ portfolio_content.work_email }}{% else %}workwithbetra@gmail.com{% endif %}</a></div>
+
+
+    <section class="cp-connect cp-section" id="portfolio-connect" aria-labelledby="cp-connect-heading">
+      <div class="shell cp-connect-grid">
+        <div><p class="cp-overline">06 / Work with me</p><h2 class="cp-heading" id="cp-connect-heading">LET'S CREATE <em>together. ♡</em></h2><p>{% if portfolio_content %}{{ portfolio_content.collab_title_prefix }} {{ portfolio_content.collab_title_emphasis }}{% else %}Let's make something that feels like you.{% endif %}</p><a class="cp-primary-cta" href="/inquire/">{% if portfolio_content %}{{ portfolio_content.button_text }}{% else %}Start a project{% endif %} <span aria-hidden="true">↗</span></a><a class="cp-email-link" href="mailto:{% if portfolio_content %}{{ portfolio_content.work_email }}{% else %}workwithbetra@gmail.com{% endif %}">{% if portfolio_content %}{{ portfolio_content.work_email }}{% else %}workwithbetra@gmail.com{% endif %}</a></div>
+        <div class="cp-connect-art" aria-hidden="true"><span>BETRA</span><i>♡</i></div>
       </div>
     </section>
   </main>
-
   <footer class="site-footer">
     <div class="shell footer-top"><p class="footer-wordmark">Betra Amare</p><div class="footer-nav"><a href="/portfolio.html">Portfolio</a><a href="/media-kit/">Media Kit</a><a href="/about.html">About</a><a href="/contact.html">Contact</a><a href="/inquire.html">Inquire</a><a href="{% if contact_content %}{{ contact_content.instagram_url }}{% else %}https://www.instagram.com/betra_amare{% endif %}" target="_blank" rel="noopener">Instagram</a><a href="{% if contact_content %}{{ contact_content.tiktok_url }}{% else %}https://www.tiktok.com/@betraamarey{% endif %}" target="_blank" rel="noopener">TikTok</a></div></div>
     <div class="shell footer-bottom"><span>© <span data-year></span> Betra Amare. All rights reserved.</span><a href="#">Back to top ↑</a></div>
