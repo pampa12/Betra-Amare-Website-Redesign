@@ -21,5 +21,7 @@ jobs:
         run: pip install -r requirements.txt
       - name: Check Django configuration
         run: python manage.py check
+      - name: Collect Django admin static files for manifest storage
+        run: python manage.py collectstatic --noinput
       - name: Run Cloudinary picker tests (mocked API)
         run: python manage.py test website.tests_cloudinary_picker
