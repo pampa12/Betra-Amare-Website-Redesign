@@ -8,6 +8,9 @@ on:
 jobs:
   django-tests:
     runs-on: ubuntu-latest
+    env:
+      # Placeholder values only; mocked tests never call a real Cloudinary account.
+      CLOUDINARY_URL: cloudinary://ci-key:ci-secret@ci-cloud
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
