@@ -302,16 +302,20 @@ def home(request):
 
 
 def portfolio(request):
-    """Render active portfolio items and editable portfolio page copy."""
-    portfolio_items = PortfolioItem.objects.filter(active=True)
+    """Render the creative portfolio with existing admin-managed Cloudinary media."""
+    portfolio_items = list(PortfolioItem.objects.filter(active=True))
+    showcase_photos = [item for item in portfolio_items if item.image][:3]
     portfolio_content = PortfolioPageContent.objects.first()
+    about_content = AboutContent.objects.first()
     contact_content = ContactContent.objects.first()
     response = render(
         request,
         "portfolio.html",
         {
             "portfolio_items": portfolio_items,
+            "showcase_photos": showcase_photos,
             "portfolio_content": portfolio_content,
+            "about_content": about_content,
             "contact_content": contact_content,
         },
     )
