@@ -84,8 +84,8 @@ class CloudinaryImagePickerTests(TestCase):
         self.assertEqual(response.status_code, 503)
 
     @patch("website.admin_cloudinary.cloudinary.api.resource")
-    @patch("website.models._optimize_new_upload")
-    def test_existing_photo_reuses_public_id_without_upload(self, optimize, fetch):
+    @patch("cloudinary.uploader.upload")
+    def test_existing_photo_reuses_public_id_without_upload(self, upload, fetch):
         fetch.return_value = resource()
         form = PortfolioItemAdminForm(data=portfolio_data(reuse_image=PUBLIC_ID))
         self.assertTrue(form.is_valid(), form.errors.as_text())
@@ -94,6 +94,7 @@ class CloudinaryImagePickerTests(TestCase):
         self.assertTrue(item.image._committed)
         fetch.assert_called_once_with(PUBLIC_ID, resource_type="image", type="upload")
         # Even when save() calls image optimization, it won't open or re-upload an existing public ID.
+        upload.assert_not_called()
         self.assertTrue(item.pk)
         self.assertEqual(PortfolioItem.objects.get(pk=item.pk).image.name, PUBLIC_ID)
 
@@ -128,5 +129,5 @@ class CloudinaryImagePickerTests(TestCase):
         self.assertContains(home, "reuse_category_1_image")
         self.assertContains(home, "reuse_hero_image")
         self.assertContains(portfolio, "reuse_image")
-        self.assertContains(portfolio, "Choose from Cloudinary", status_code=200)
+        self.assertContains(portfolio, "Or choose an existing Cloudinary photo", status_code=200)
         fetch.assert_not_called()
