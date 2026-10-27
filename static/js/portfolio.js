@@ -11,24 +11,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
     filterButtons.forEach((button) => {
       const category = button.dataset.filter;
-      if (category !== 'all' && (counts[category] || 0) < 1) {
+      if (category !== 'all' && !counts[category]) {
         button.hidden = true;
         button.setAttribute('aria-hidden', 'true');
       }
     });
 
+    const applyFilter = (filter) => {
+      const chosen = filterButtons.find(
+        (button) => button.dataset.filter === filter && !button.hidden
+      );
+      const active = chosen ? filter : 'all';
+      filterButtons.forEach((button) => {
+        const selected = button.dataset.filter === active;
+        button.classList.toggle('active', selected);
+        button.setAttribute('aria-pressed', String(selected));
+      });
+      portfolioItems.forEach((item) => {
+        item.classList.toggle('is-hidden', active !== 'all' && item.dataset.category !== active);
+      });
+    };
+
+    // Home page category cards link to /portfolio/#beauty, #fashion, etc.
+    // Honor those links on arrival and when navigating backward/forward.
+    const filterFromHash = () => {
+      const category = decodeURIComponent(window.location.hash.slice(1));
+      if (category && filterButtons.some(button => button.dataset.filter === category)) {
+        applyFilter(category);
+      }
+    };
+    applyFilter('all');
+    filterFromHash();
+    window.addEventListener('hashchange', filterFromHash);
+
     filterButtons.forEach((button) => {
       button.addEventListener('click', () => {
         if (button.hidden) return;
-        const filter = button.dataset.filter;
-
-        filterButtons.forEach((otherButton) => otherButton.classList.remove('active'));
-        button.classList.add('active');
-
-        portfolioItems.forEach((item) => {
-          const matches = filter === 'all' || item.dataset.category === filter;
-          item.classList.toggle('is-hidden', !matches);
-        });
+        applyFilter(button.dataset.filter);
       });
     });
   }
