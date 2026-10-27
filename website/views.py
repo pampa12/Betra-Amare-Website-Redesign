@@ -305,6 +305,9 @@ def portfolio(request):
     """Render the creative portfolio with existing admin-managed Cloudinary media."""
     portfolio_items = list(PortfolioItem.objects.filter(active=True))
     showcase_photos = [item for item in portfolio_items if item.image][:3]
+    # Only label actual brand-category work as brand partnerships.
+    # A project appears here after it is approved as an active Brand Content item.
+    brand_photos = [item for item in portfolio_items if item.category == "brand" and item.image][:5]
     portfolio_content = PortfolioPageContent.objects.first()
     about_content = AboutContent.objects.first()
     contact_content = ContactContent.objects.first()
@@ -314,6 +317,7 @@ def portfolio(request):
         {
             "portfolio_items": portfolio_items,
             "showcase_photos": showcase_photos,
+            "brand_photos": brand_photos,
             "portfolio_content": portfolio_content,
             "about_content": about_content,
             "contact_content": contact_content,
