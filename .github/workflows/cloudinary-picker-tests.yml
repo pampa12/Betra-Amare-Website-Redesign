@@ -1,0 +1,27 @@
+name: Django admin Cloudinary picker tests
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  django-tests:
+    runs-on: ubuntu-latest
+    env:
+      # Placeholder values only; mocked tests never call a real Cloudinary account.
+      CLOUDINARY_URL: cloudinary://ci-key:ci-secret@ci-cloud
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+          cache: pip
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Check Django configuration
+        run: python manage.py check
+      - name: Collect Django admin static files for manifest storage
+        run: python manage.py collectstatic --noinput
+      - name: Run Cloudinary picker tests (mocked API)
+        run: python manage.py test website.tests_cloudinary_picker

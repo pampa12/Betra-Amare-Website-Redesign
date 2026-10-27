@@ -5,6 +5,11 @@ from django import forms
 from django.contrib import admin
 from django.utils.text import slugify
 
+from .admin_cloudinary import (
+    CloudinaryPickerAdminMixin,
+    ExistingCloudinaryImageFormMixin,
+    existing_image_field,
+)
 from .featured_tiktok import FeaturedTikTok
 from .models import (
     AboutContent,
@@ -28,7 +33,59 @@ def _give_new_upload_clean_name(field_file, title):
     field_file.name = f"{title_slug}-{uuid4().hex[:8]}{extension}"
 
 
-class PortfolioItemAdminForm(forms.ModelForm):
+class HomepageContentAdminForm(ExistingCloudinaryImageFormMixin, forms.ModelForm):
+    reusable_image_fields = (
+        "hero_image",
+        "category_1_image", "category_2_image", "category_3_image",
+        "about_main_image", "about_accent_image",
+        "social_photo_1", "social_photo_2", "social_photo_3", "social_photo_4",
+    )
+    reuse_hero_image = existing_image_field()
+    reuse_category_1_image = existing_image_field()
+    reuse_category_2_image = existing_image_field()
+    reuse_category_3_image = existing_image_field()
+    reuse_about_main_image = existing_image_field()
+    reuse_about_accent_image = existing_image_field()
+    reuse_social_photo_1 = existing_image_field()
+    reuse_social_photo_2 = existing_image_field()
+    reuse_social_photo_3 = existing_image_field()
+    reuse_social_photo_4 = existing_image_field()
+
+    class Meta:
+        model = HomepageContent
+        fields = "__all__"
+
+
+class AboutContentAdminForm(ExistingCloudinaryImageFormMixin, forms.ModelForm):
+    reusable_image_fields = ("story_image",)
+    reuse_story_image = existing_image_field()
+
+    class Meta:
+        model = AboutContent
+        fields = "__all__"
+
+
+class MediaKitContentAdminForm(ExistingCloudinaryImageFormMixin, forms.ModelForm):
+    reusable_image_fields = ("hero_image",)
+    reuse_hero_image = existing_image_field()
+
+    class Meta:
+        model = MediaKitContent
+        fields = "__all__"
+
+
+class FeaturedTikTokAdminForm(ExistingCloudinaryImageFormMixin, forms.ModelForm):
+    reusable_image_fields = ("thumbnail",)
+    reuse_thumbnail = existing_image_field()
+
+    class Meta:
+        model = FeaturedTikTok
+        fields = "__all__"
+
+
+class PortfolioItemAdminForm(ExistingCloudinaryImageFormMixin, forms.ModelForm):
+    reusable_image_fields = ("image",)
+    reuse_image = existing_image_field()
     alt_text = forms.CharField(
         max_length=180,
         required=True,
@@ -70,21 +127,31 @@ class SingletonContentAdmin(admin.ModelAdmin):
 
 
 @admin.register(HomepageContent)
-class HomepageContentAdmin(SingletonContentAdmin):
+class HomepageContentAdmin(CloudinaryPickerAdminMixin, SingletonContentAdmin):
+    form = HomepageContentAdminForm
     fieldsets = (
-        ("Hero", {"fields": ("eyebrow", "headline_line1", "headline_line2", "headline_emphasis", "intro_text", "hero_image", "cta_text")}),
+        ("Hero", {"fields": ("eyebrow", "headline_line1", "headline_line2", "headline_emphasis", "intro_text", "hero_image", "reuse_hero_image", "cta_text")}),
         ("A little bit of my world", {"fields": ("world_eyebrow", "world_title_line1", "world_title_emphasis", "world_body")}),
-        ("Category cards", {"fields": (("category_1_title", "category_1_subtitle"), "category_1_image", ("category_2_title", "category_2_subtitle"), "category_2_image", ("category_3_title", "category_3_subtitle"), "category_3_image")}),
-        ("Meet Betra", {"fields": ("about_eyebrow", "about_title_line1", "about_title_emphasis", "about_text_1", "about_text_2", "about_main_image", "about_accent_image")}),
+        ("Category cards", {"fields": (("category_1_title", "category_1_subtitle"), "category_1_image", "reuse_category_1_image", ("category_2_title", "category_2_subtitle"), "category_2_image", "reuse_category_2_image", ("category_3_title", "category_3_subtitle"), "category_3_image", "reuse_category_3_image")}),
+        ("Meet Betra", {"fields": ("about_eyebrow", "about_title_line1", "about_title_emphasis", "about_text_1", "about_text_2", "about_main_image", "reuse_about_main_image", "about_accent_image", "reuse_about_accent_image")}),
         ("Selected work", {"fields": ("selected_eyebrow", "selected_title")}),
         ("Collaboration", {"fields": ("collab_eyebrow", "collab_title_prefix", "collab_title_emphasis", "collab_body", "collab_button_text", "collab_email")}),
-        ("Social", {"fields": ("social_eyebrow", "social_title", "social_photo_1", "social_photo_2", "social_photo_3", "social_photo_4")}),
+        ("Social", {"fields": ("social_eyebrow", "social_title", "social_photo_1", "reuse_social_photo_1", "social_photo_2", "reuse_social_photo_2", "social_photo_3", "reuse_social_photo_3", "social_photo_4", "reuse_social_photo_4")}),
     )
 
 
 @admin.register(AboutContent)
-class AboutContentAdmin(SingletonContentAdmin):
-    pass
+class AboutContentAdmin(CloudinaryPickerAdminMixin, SingletonContentAdmin):
+    form = AboutContentAdminForm
+    fieldsets = (
+        ("About page", {"fields": (
+            "eyebrow", "headline_line1", "headline_emphasis", "intro_text",
+            "story_eyebrow", "story_title", "story_paragraph_1", "story_paragraph_2",
+            "story_paragraph_3", "story_image", "reuse_story_image",
+            "value_1_title", "value_1_text", "value_2_title", "value_2_text",
+            "value_3_title", "value_3_text",
+        )}),
+    )
 
 
 @admin.register(ContactContent)
@@ -103,9 +170,10 @@ class InquiryPageContentAdmin(SingletonContentAdmin):
 
 
 @admin.register(MediaKitContent)
-class MediaKitContentAdmin(SingletonContentAdmin):
+class MediaKitContentAdmin(CloudinaryPickerAdminMixin, SingletonContentAdmin):
+    form = MediaKitContentAdminForm
     fieldsets = (
-        ("Hero", {"fields": ("eyebrow", "headline_line1", "headline_emphasis", "intro_text", "hero_image")}),
+        ("Hero", {"fields": ("eyebrow", "headline_line1", "headline_emphasis", "intro_text", "hero_image", "reuse_hero_image")}),
         ("Creator profile", {"fields": ("profile_eyebrow", "profile_title", "profile_body")}),
         (
             "Audience & performance",
@@ -125,7 +193,8 @@ class MediaKitContentAdmin(SingletonContentAdmin):
 
 
 @admin.register(FeaturedTikTok)
-class FeaturedTikTokAdmin(admin.ModelAdmin):
+class FeaturedTikTokAdmin(CloudinaryPickerAdminMixin, admin.ModelAdmin):
+    form = FeaturedTikTokAdminForm
     list_display = ("title", "brand_name", "show_on_homepage", "active", "sort_order", "updated_at")
     list_filter = ("show_on_homepage", "active")
     search_fields = ("title", "brand_name", "description", "tiktok_url")
@@ -133,7 +202,7 @@ class FeaturedTikTokAdmin(admin.ModelAdmin):
         (
             "TikTok post",
             {
-                "fields": ("title", "brand_name", "tiktok_url", "thumbnail", "description"),
+                "fields": ("title", "brand_name", "tiktok_url", "thumbnail", "reuse_thumbnail", "description"),
                 "description": (
                     "Paste the full TikTok URL. For homepage display, upload a clean still-frame thumbnail; "
                     "the Media Kit can continue using the live TikTok player."
@@ -154,7 +223,7 @@ class FeaturedTikTokAdmin(admin.ModelAdmin):
 
 
 @admin.register(PortfolioItem)
-class PortfolioItemAdmin(admin.ModelAdmin):
+class PortfolioItemAdmin(CloudinaryPickerAdminMixin, admin.ModelAdmin):
     form = PortfolioItemAdminForm
     list_display = (
         "title",
@@ -171,7 +240,7 @@ class PortfolioItemAdmin(admin.ModelAdmin):
         (
             "Portfolio media",
             {
-                "fields": ("title", "category", "image", "video", "alt_text", "link_url"),
+                "fields": ("title", "category", "image", "reuse_image", "video", "alt_text", "link_url"),
                 "description": (
                     "Add a photo, a video, or both. If both are added, the photo is used as the video's poster image. "
                     "Alt text is required so every portfolio item is accessible and search-friendly."
