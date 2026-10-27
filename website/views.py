@@ -9,6 +9,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 
+from .featured_tiktok import FeaturedTikTok
 from .forms import InquiryForm
 from .models import (
     AboutContent,
@@ -305,6 +306,19 @@ def portfolio(request):
     """Render the creative portfolio with existing admin-managed Cloudinary media."""
     portfolio_items = list(PortfolioItem.objects.filter(active=True))
     showcase_photos = [item for item in portfolio_items if item.image][:3]
+    # Prefer real Cloudinary-hosted video to make the phone demo actually play.
+    # If a video hasn't been uploaded, use an already-approved TikTok post.
+    # Only use a photo slideshow when no playable video source is available.
+    showcase_videos = [item for item in portfolio_items if item.video]
+    showcase_video = next((item for item in showcase_videos if item.featured), None)
+    if not showcase_video and showcase_videos:
+        showcase_video = showcase_videos[0]
+    showcase_tiktok = None
+    if not showcase_video:
+        showcase_tiktok = next(
+            (post for post in FeaturedTikTok.objects.filter(active=True) if post.video_id),
+            None,
+        )
     # Only label actual brand-category work as brand partnerships.
     # A project appears here after it is approved as an active Brand Content item.
     brand_photos = [item for item in portfolio_items if item.category == "brand" and item.image][:5]
@@ -317,6 +331,8 @@ def portfolio(request):
         {
             "portfolio_items": portfolio_items,
             "showcase_photos": showcase_photos,
+            "showcase_video": showcase_video,
+            "showcase_tiktok": showcase_tiktok,
             "brand_photos": brand_photos,
             "portfolio_content": portfolio_content,
             "about_content": about_content,
