@@ -1,0 +1,185 @@
+/* Betra's creative marketing portfolio — scoped, responsive and Cloudinary-driven. */
+.creative-portfolio {
+  --cp-ink: #263a4d;
+  --cp-blue: #a8c8df;
+  --cp-muted: #637787;
+  --cp-cream: #fcfaf2;
+  --cp-yellow: #f5e6a3;
+  --cp-line: #c8dbe7;
+  color: var(--cp-ink);
+  background: var(--cp-cream);
+  overflow: clip;
+}
+.creative-portfolio *, .creative-portfolio *::before, .creative-portfolio *::after { box-sizing: border-box; }
+.creative-portfolio h1, .creative-portfolio h2, .creative-portfolio h3, .creative-portfolio p { margin-top: 0; }
+.creative-portfolio [id] { scroll-margin-top: 120px; }
+.creative-portfolio a:focus-visible, .creative-portfolio button:focus-visible { outline: 3px solid #315e82; outline-offset: 5px; }
+.cp-overline, .cp-kicker { font-weight: 700; font-size: .7rem; letter-spacing: .19em; text-transform: uppercase; color: #526f85; margin: 0 0 22px; }
+.cp-heading { font-family: 'DM Sans', Arial, sans-serif; color: var(--cp-ink); font-size: clamp(2.9rem,7vw,7rem); line-height: .92; font-weight: 700; letter-spacing: -.075em; margin: 0 0 28px; }
+.cp-heading span, .cp-cover h1 span { display: block; font-family: 'Dancing Script', cursive; font-weight: 600; letter-spacing: -.04em; line-height: 1; text-transform: none; color: #709ec3; }
+.cp-section { padding: clamp(75px,8.5vw,128px) 0; }
+.creative-portfolio p { line-height: 1.76; }
+
+/* Cover: striped sky-blue notebook background, oversized title and stamp. */
+.cp-cover { position: relative; z-index: 0; display: grid; align-items: center; min-height: min(830px, 85vh); background: #fafaf2; isolation: isolate; }
+.cp-cover-stripe { position: absolute; z-index: -1; inset: 20% 0 38%; background: repeating-linear-gradient(to bottom, #c5dcec 0 13px, #f7f9f7 13px 43px, #f7f9f7 43px 48px); opacity: .94; }
+.cp-cover::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 12px; background: #a8c8df; }
+.cp-cover-inner { padding: 50px 0 45px; position: relative; }
+.cp-cover-top, .cp-cover-bottom { display: flex; justify-content: space-between; align-items: center; gap: 25px; font-size: .68rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+.cp-cover-top { border-top: 1px solid #7297b1; padding-top: 22px; }
+.cp-cover-head { padding: clamp(95px,13vw,178px) 0 clamp(75px,9vw,122px); text-align: center; }
+.cp-cover h1 { font-family: 'DM Sans', sans-serif; font-weight: 700; letter-spacing: -.1em; font-size: clamp(3.15rem,10.3vw,10.5rem); line-height: .86; margin: 0 0 26px; }
+.cp-cover h1 span { margin: -.01em 0 0 25%; transform: rotate(-5deg); font-size: clamp(4rem,8.7vw,9.3rem); }
+.cp-cover-description { margin: 26px auto 0; max-width: 480px; font-size: 1rem; color: #3f6078; }
+.cp-cover-bottom { padding-bottom: 5px; }
+.cp-main-link { display: inline-flex; gap: 18px; align-items: center; text-decoration: none; border-bottom: 1px solid currentColor; padding: 8px 0; }
+.cp-main-link span { font-size: 1.2rem; }
+.cp-sticker { position: absolute; right: 1.3%; top: 25%; width: clamp(108px,12vw,165px); aspect-ratio: 1; border-radius: 50%; border: 1px dashed #8d7a33; background: #f8e79f; color: #273648; transform: rotate(13deg); display: grid; align-content: center; justify-items: center; box-shadow: 5px 7px 0 #e0e7e4; }
+.cp-sticker span { font-size: .72rem; } .cp-sticker strong { font-family: 'Dancing Script', cursive; font-size: 1.55rem; line-height: 1; } .cp-sticker small { font-size: 1.8rem; }
+.cp-section-nav { position: sticky; z-index: 35; top: 89px; background: rgba(252,250,242,.95); border-bottom: 1px solid var(--cp-line); backdrop-filter: blur(10px); }
+.cp-section-nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; overflow-x: auto; scrollbar-width: thin; }
+.cp-section-nav a { display: inline-block; flex: 0 0 auto; padding: 18px 2px; color: #3d5c72; font-weight: 700; text-transform: uppercase; letter-spacing: .11em; font-size: .67rem; text-decoration: none; white-space: nowrap; }
+.cp-section-nav a:hover { color: #8a593b; }
+
+/* About-me split portrait, photo can be populated through admin / Cloudinary. */
+.cp-about { background: #f7f7f0; }
+.cp-about-grid { display: grid; grid-template-columns: minmax(0,.94fr) minmax(0,1.06fr); gap: clamp(35px,7vw,112px); align-items: center; }
+.cp-about-visual { position: relative; min-height: 420px; aspect-ratio: 4 / 4.4; max-height: 680px; background: #e6edf0; border: 14px solid #fdfcf8; outline: 1px solid #b4cbd9; box-shadow: 14px 15px 0 #bfd5e5; }
+.cp-about-visual img { height: 100%; width: 100%; object-fit: cover; }
+.cp-typographic-portrait { display: flex; justify-content: center; align-items: center; height: 100%; font-size: clamp(7rem,15vw,15rem); font-family: 'Cormorant Garamond', Georgia, serif; letter-spacing: -.12em; color: #5c8caf; }
+.cp-typographic-portrait span { transform: translate(-.06em,.13em); font-style: italic; color: #bf9d50; }
+.cp-photo-note { position: absolute; bottom: 24px; left: -24px; background: var(--cp-yellow); padding: 12px 22px; font-size: .6rem; letter-spacing: .14em; font-weight: 700; }
+.cp-about-copy { max-width: 555px; }
+.cp-about-copy > p:not(.cp-overline):not(.cp-script-intro) { color: #4f6371; font-size: 1rem; margin-bottom: 18px; }
+.cp-script-intro { font: 600 clamp(1.6rem,3vw,2.5rem)/1.1 'Dancing Script', cursive; color: #779fb7; margin-bottom: 25px; }
+.cp-inline-link { display: inline-flex; gap: 14px; align-items: center; text-transform: uppercase; letter-spacing: .13em; font-size: .68rem; font-weight: 700; text-decoration: none; padding: 9px 0; margin-top: 12px; border-bottom: 1px solid currentColor; }
+
+/* Capabilities presented as creative skill / certification-like notecards, with no invented credentials. */
+.cp-capabilities { background: #e5f0f7; }
+.cp-section-header { text-align: center; max-width: 860px; margin: 0 auto 55px; }
+.cp-section-header > p:last-child { max-width: 530px; margin: 0 auto; color: #47667e; }
+.cp-skill-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 18px; }
+.cp-skill-card { position: relative; min-height: 375px; background: #fffdf7; border: 1px solid #abc7da; padding: 34px 30px 26px; display: flex; flex-direction: column; box-shadow: 7px 7px 0 #c1d5e4; }
+.cp-skill-card:nth-child(2) { background: #f9efc0; transform: translateY(22px); }
+.cp-skill-num { font-size: .66rem; letter-spacing: .16em; font-weight: 700; }
+.cp-skill-icon { align-self: flex-end; font-size: 2.4rem; color: #709dc0; line-height: 1; }
+.cp-skill-card h3 { margin: 32px 0 18px; font-size: clamp(1.25rem,2.3vw,2rem); letter-spacing: -.05em; line-height: 1.1; font-weight: 700; }
+.cp-skill-card h3 em { font-family: 'Dancing Script', cursive; display: block; font-weight: 600; font-size: 1.7em; color: #709bbd; }
+.cp-skill-card p { font-size: .86rem; color: #526a7a; }
+.cp-skill-tag { margin-top: auto; padding-top: 18px; border-top: 1px solid #b8cfdc; font-size: .62rem; letter-spacing: .15em; font-weight: 700; }
+
+/* Phone mockups present existing Cloudinary portfolio images. */
+.cp-showcase { background: #fcfaf5; }
+.cp-showcase-grid { display: grid; grid-template-columns: minmax(0,.85fr) minmax(0,1.15fr); align-items: center; gap: clamp(30px,6vw,95px); }
+.cp-showcase-copy > p:not(.cp-overline) { max-width: 500px; color: #576e7c; font-size: 1rem; }
+.cp-device-display { display: flex; align-items: center; justify-content: center; gap: 0; padding: 42px 12px; background: repeating-linear-gradient(to bottom, #f8fbf9 0 29px, #d3e4ed 29px 31px); min-height: 500px; }
+.cp-phone { position: relative; flex: 0 1 195px; width: min(30%,195px); aspect-ratio: .5; border: 8px solid #30465b; border-radius: 35px; background: #30465b; padding: 6px; box-shadow: 8px 13px 26px #61748455; overflow: hidden; }
+.cp-phone + .cp-phone { margin-left: -5%; }
+.cp-phone-1 { transform: rotate(-8deg) translateY(12px); z-index: 1; }
+.cp-phone-2 { transform: rotate(5deg) translateY(-18px); z-index: 3; }
+.cp-phone-3 { transform: rotate(-2deg) translateY(16px); z-index: 2; }
+.cp-phone-camera { position: absolute; top: 8px; left: 36%; right: 36%; height: 12px; border-radius: 0 0 12px 12px; background: #30465b; z-index: 1; }
+.cp-phone-screen { height: 100%; border-radius: 24px; overflow: hidden; background: #bdd3df; }
+.cp-phone-screen img { width: 100%; height: 100%; object-fit: cover; }
+.cp-phone-label { position: absolute; left: 13px; right: 13px; bottom: 16px; text-align: center; background: #fff8e5d9; color: #244158; font-size: .6rem; padding: 7px 3px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; border-radius: 4px; }
+.cp-showcase-empty { text-align: center; margin: auto; max-width: 320px; }
+.cp-showcase-empty span { font-size: 5rem; color: #709bbd; display: block; }
+.cp-showcase-empty p { font-family: 'Cormorant Garamond',serif; font-size: 2rem; }
+.cp-showcase-empty a { font-size: .8rem; }
+
+/* Dynamic gallery: existing photos and videos, now displayed as projects. */
+.cp-gallery { background: #f4f8f9; }
+.cp-gallery-heading { display: flex; align-items: end; justify-content: space-between; gap: 50px; margin-bottom: 38px; }
+.cp-gallery-heading .cp-heading { margin-bottom: 0; }
+.cp-gallery-heading > p { max-width: 330px; font-size: .92rem; color: #597083; }
+.cp-filters { gap: 12px; margin-bottom: 36px; border-bottom: 1px solid #c5d6e1; }
+.cp-filters .filter-btn { display: inline-flex; align-items: center; border: 1px solid #a9bfd0; background: #fffdf9; color: #3b5e76; border-radius: 40px; padding: 8px 17px; font-size: .65rem; margin-bottom: 14px; }
+.cp-filters .filter-btn.active, .cp-filters .filter-btn:hover { color: #fff; background: #355774; border-color: #355774; }
+.cp-filters .filter-btn[hidden] { display: none; }
+.cp-masonry { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; columns: initial; }
+.cp-masonry .portfolio-item { position: relative; margin: 0; aspect-ratio: 4 / 5; overflow: hidden; background: #d6e5eb; border-radius: 3px; box-shadow: 5px 6px 0 #e6d9a1; }
+.cp-masonry .portfolio-item img, .cp-masonry .portfolio-item video { width: 100%; height: 100%; object-fit: cover; }
+.cp-masonry .portfolio-item.is-hidden { display: none; }
+.cp-masonry .portfolio-item .portfolio-caption { opacity: 1; padding: 60px 18px 18px; }
+.cp-masonry .portfolio-item.reveal { opacity: 1; transform: none; }
+.cp-masonry .portfolio-caption strong { font-size: clamp(1.1rem,2vw,1.55rem); }
+.cp-masonry .portfolio-item:focus-visible { outline-offset: 3px; }
+.cp-gallery-empty { border: 1px solid #aec7d9; padding: 60px 30px; text-align: center; background: #fffdf9; }
+.cp-gallery-empty h3 { font: 600 clamp(1.8rem,3vw,2.8rem) 'Cormorant Garamond',serif; }
+.cp-gallery-empty p { color: #617687; }
+
+/* Process and contact at end of page. */
+.cp-process { background: #f8f0cf; }
+.cp-process-layout { display: grid; grid-template-columns: minmax(0,.8fr) minmax(0,1.2fr); gap: 65px; }
+.cp-process-steps { border-top: 1px solid #b4b48c; }
+.cp-process-steps > div { display: grid; grid-template-columns: 65px minmax(0,.5fr) minmax(0,1fr); align-items: start; gap: 12px; padding: 24px 0; border-bottom: 1px solid #b4b48c; }
+.cp-process-steps span { font-size: .74rem; letter-spacing: .1em; font-weight: 700; }
+.cp-process-steps h3 { font-family: 'Dancing Script', cursive; color: #47799d; font-size: 2rem; font-weight: 600; }
+.cp-process-steps p { color: #586a70; font-size: .88rem; margin: 0; }
+.cp-connect { background: #bdd8ea; padding: clamp(75px,10vw,145px) 0; }
+.cp-connect-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 35px; align-items: center; }
+.cp-connect .cp-heading { font-size: clamp(3.3rem,7vw,7.5rem); }
+.cp-connect .cp-heading span { color: #fff9e3; }
+.cp-connect-grid > div:first-child > p:not(.cp-overline) { color: #36556c; margin-bottom: 28px; }
+.cp-primary-cta { padding: 14px 25px; background: #293f53; color: #fff; text-decoration: none; font-size: .74rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; display: inline-flex; gap: 25px; }
+.cp-email-link { display: block; width: max-content; max-width: 100%; overflow-wrap: anywhere; margin-top: 20px; font-size: .83rem; text-decoration: underline; }
+.cp-connect-art { position: relative; min-height: 300px; display: flex; align-items: center; justify-content: center; }
+.cp-connect-art span { font: 700 clamp(5rem,14vw,12rem) 'DM Sans',sans-serif; color: #dbe9ef; transform: rotate(-10deg); letter-spacing: -.15em; }
+.cp-connect-art i { position: absolute; right: 10%; bottom: 13%; font: 600 6rem 'Dancing Script',cursive; color: #4d7591; transform: rotate(20deg); }
+
+@media (max-width: 1050px) {
+  .cp-section-nav { top: 89px; }
+  .cp-about-grid, .cp-showcase-grid { gap: 35px; }
+  .cp-device-display { min-height: 400px; }
+  .cp-phone { border-width: 6px; border-radius: 24px; }
+  .cp-phone-screen { border-radius: 16px; }
+  .cp-process-layout { gap: 30px; }
+}
+@media (max-width: 760px) {
+  .cp-cover { min-height: 660px; }
+  .cp-cover-inner { padding-top: 34px; padding-bottom: 34px; }
+  .cp-cover-top, .cp-cover-bottom { font-size: .55rem; letter-spacing: .1em; }
+  .cp-cover-head { padding: 130px 0 125px; }
+  .cp-cover h1 { font-size: clamp(3.35rem,12vw,6.5rem); }
+  .cp-cover h1 span { font-size: clamp(4rem,12vw,6.5rem); margin-left: 12%; }
+  .cp-sticker { right: 4%; top: 16%; width: 96px; }
+  .cp-sticker strong { font-size: 1.15rem; }
+  .cp-sticker small { font-size: 1.3rem; }
+  .cp-section-nav { top: 70px; }
+  .cp-section-nav-inner { gap: 20px; }
+  .cp-section-nav a { padding: 15px 0; }
+  .cp-about-grid, .cp-showcase-grid, .cp-process-layout, .cp-connect-grid { grid-template-columns: 1fr; }
+  .cp-about-visual { width: min(100%, 440px); margin: 0 auto; }
+  .cp-skill-grid { grid-template-columns: 1fr; gap: 18px; }
+  .cp-skill-card { min-height: 280px; padding: 27px; }
+  .cp-skill-card:nth-child(2) { transform: none; }
+  .cp-skill-card h3 { margin-top: 18px; }
+  .cp-showcase-copy { text-align: left; }
+  .cp-device-display { padding: 32px 15px; }
+  .cp-gallery-heading { align-items: start; flex-direction: column; gap: 18px; }
+  .cp-masonry { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 15px; }
+  .cp-process-steps > div { grid-template-columns: 55px 1fr; }
+  .cp-process-steps p { grid-column: 2; }
+  .cp-connect-art { min-height: 160px; }
+  .cp-connect-art span { font-size: clamp(5rem,17vw,8rem); }
+  .cp-connect-art i { bottom: -10px; }
+}
+@media (max-width: 480px) {
+  .cp-cover { min-height: 590px; }
+  .cp-cover-stripe { inset: 23% 0 36%; }
+  .cp-cover-head { padding: 135px 0 95px; }
+  .cp-cover h1 { font-size: clamp(2.9rem,12.5vw,4.2rem); }
+  .cp-cover h1 span { margin-left: 9%; font-size: clamp(3.4rem,14vw,4.5rem); }
+  .cp-cover-description { font-size: .85rem; max-width: 260px; }
+  .cp-sticker { top: 15%; width: 78px; }
+  .cp-sticker strong { font-size: 1rem; }
+  .cp-sticker small { font-size: 1rem; }
+  .cp-about-visual { min-height: 350px; border-width: 8px; }
+  .cp-photo-note { left: -10px; font-size: .5rem; }
+  .cp-masonry { grid-template-columns: 1fr; }
+  .cp-masonry .portfolio-item { aspect-ratio: 4 / 4.8; }
+  .cp-process-steps > div { grid-template-columns: 50px 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cp-phone, .cp-cover h1 span, .cp-sticker { transition: none; }
+}
