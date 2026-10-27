@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="/static/css/refined.css">
   <link rel="stylesheet" href="/static/css/portfolio-story.css">
   <link rel="stylesheet" href="/static/css/portfolio-cinematic.css">
+  <link rel="stylesheet" href="/static/css/portfolio-film.css">
 </head>
 <body>
   <header class="site-header">
@@ -25,211 +26,60 @@
     </div>
   </header>
 
-  <main class="creative-portfolio" id="main-content">
-    <section class="cp-cover cinematic-cover" aria-labelledby="cp-cover-title">
-      <div class="shell cinematic-hero-shell">
-        <div class="cinematic-meta"><span>BETRA AMARE &nbsp; / &nbsp; CREATIVE PORTFOLIO</span><span>EST. IN CREATIVITY</span></div>
-        <div class="cinematic-hero-layout">
-          <div class="cinematic-hero-copy">
-            <span class="cinematic-sequence">01 — SELECTED WORK</span>
-            <h1 id="cp-cover-title" class="cinematic-title"><span>Creative</span><em>portfolio.</em></h1>
-            <p>Beauty, fashion, lifestyle and digital storytelling — a considered collection of visuals, ideas and collaborations.</p>
-            <a class="cinematic-text-cta" href="#portfolio-gallery">Explore selected work <span aria-hidden="true">↘</span></a>
-          </div>
-          <div class="cinematic-hero-art">
-            {% if showcase_photos %}
-            <img src="{{ showcase_photos.0.image.url }}" alt="{{ showcase_photos.0.alt_text|default:showcase_photos.0.title }}" fetchpriority="high">
-            {% elif about_content and about_content.story_image %}
-            <img src="{{ about_content.story_image.url }}" alt="Betra Amare portrait" fetchpriority="high">
-            {% else %}
-            <div class="cinematic-hero-placeholder" aria-hidden="true"><span>BETRA</span><em>AMARE</em></div>
-            {% endif %}
-            <div class="cinematic-art-label"><span>VISUAL STORYTELLING</span><span>© BETRA AMARE</span></div>
-          </div>
-        </div>
-        <div class="cinematic-hero-bottom"><span>CREATOR / MODEL / COLLABORATOR</span><span>SCROLL TO DISCOVER <span aria-hidden="true">↓</span></span></div>
+  <main class="film-portfolio" id="main-content">
+    <section class="film-intro" aria-labelledby="film-intro-heading" id="portfolio-top">
+      <div class="film-hero-grain" aria-hidden="true"></div>
+      <div class="film-intro-top">
+        <span>BETRA AMARE / PORTFOLIO</span>
+        <span>INDEPENDENT CREATIVE • MODEL • DIGITAL CREATOR</span>
       </div>
+      <div class="film-intro-center">
+        <p class="film-intro-prelude">Who made this creative portfolio?</p>
+        <h1 id="film-intro-heading" class="film-intro-heading"><span class="film-name" data-film-word>BETRA <em>AMARE.</em></span><span class="film-portfolio-word" data-film-word>PORTFOLIO<span class="film-title-period">.</span></span></h1>
+        <p class="film-intro-subtitle">A collection of stories, content, and creative work.</p>
+        <a class="film-hero-action" href="#portfolio-about">Discover the work <span aria-hidden="true">↘</span></a>
+      </div>
+      <div class="film-intro-bottom"><span>VISUAL STORIES • CREATIVE PARTNERSHIPS • UGC</span><a href="#portfolio-about">SCROLL TO EXPLORE <span aria-hidden="true">↓</span></a></div>
     </section>
 
-    <nav class="cp-section-nav" aria-label="Portfolio page sections">
-      <div class="shell cp-section-nav-inner">
-        <a href="#portfolio-about">About</a>
-        <a href="#portfolio-showcase">Social media</a>
-        <a href="#portfolio-partnerships">Brand work</a>
-        <a href="#portfolio-skills">Skills &amp; tools</a>
-        <a href="#portfolio-gallery">Gallery</a>
-        <a href="#portfolio-connect">Contact</a>
-      </div>
-    </nav>
-
-    <section class="cp-about cp-section" id="portfolio-about" aria-labelledby="cp-about-heading">
-      <div class="shell cp-about-grid">
-        <div class="cp-about-copy">
-          <p class="cp-overline">01 / Meet the creator</p>
-          <h2 class="cp-heading" id="cp-about-heading">A LITTLE <em>about me.</em></h2>
-          <p class="cp-lead">Hi, I'm Betra — the person behind the ideas.</p>
-          <p>{% if portfolio_content %}{{ portfolio_content.intro_text }}{% else %}Beauty, fashion, lifestyle, and brand storytelling — created with a soft editorial eye and a focus on personality.{% endif %}</p>
-          <p>I bring a personal, creative perspective to every story, whether it's a beauty moment, a styled photo, or a brand collaboration.</p>
-          <a class="cp-text-link" href="/about/">A little more about me ↗</a>
-        </div>
-        <div class="cp-about-visual">
+    <section class="film-about" id="portfolio-about" aria-labelledby="film-about-heading">
+      <div class="film-page-index"><span>01 / ABOUT</span><span>THE PERSON BEHIND THE WORK</span></div>
+      <div class="film-about-layout">
+        <div class="film-about-portrait film-reveal">
           {% if about_content and about_content.story_image %}
-          <img src="{{ about_content.story_image.url }}" alt="Portrait of Betra Amare" loading="lazy">
+          <img src="{{ about_content.story_image.url }}" alt="Betra Amare portrait" loading="lazy">
           {% elif showcase_photos %}
           <img src="{{ showcase_photos.0.image.url }}" alt="{{ showcase_photos.0.alt_text|default:showcase_photos.0.title }}" loading="lazy">
-          {% else %}<div class="cp-image-fallback" aria-hidden="true">BETRA <em>AMARE</em></div>{% endif %}
-          <span class="cp-about-photo-caption">YOUR CREATIVE GIRL ♡</span>
+          {% else %}<div class="film-portrait-placeholder" aria-hidden="true">BA.</div>{% endif %}
+          <span class="film-portrait-label">MODEL &amp; DIGITAL CREATOR</span>
+        </div>
+        <div class="film-about-copy film-reveal">
+          <p class="film-overline">HELLO, I'M</p>
+          <h2 id="film-about-heading">BETRA<br><em>AMARE.</em></h2>
+          <p class="film-about-lead">Creative work with feeling, style and a point of view.</p>
+          <p>{% if portfolio_content %}{{ portfolio_content.intro_text }}{% else %}Beauty, fashion, lifestyle, and brand storytelling — created with a soft editorial eye and a focus on personality.{% endif %}</p>
+          <a class="film-text-link" href="/about/">MORE ABOUT ME <span aria-hidden="true">↗</span></a>
+          <span class="film-about-aside">PHOTOGRAPHY / MODELING / SOCIAL CONTENT</span>
         </div>
       </div>
     </section>
 
-    <section class="cp-showcase cp-section cinematic-feature-section" id="portfolio-showcase" aria-labelledby="cp-showcase-heading">
-      <div class="shell">
-        <div class="cp-showcase-grid">
-          <div class="cp-showcase-copy">
-            <p class="cp-overline">02 / Social media &amp; visual storytelling</p>
-            <h2 class="cp-heading" id="cp-showcase-heading">CONTENT THAT <em>connects.</em></h2>
-            <p>Content that does more than look beautiful. I think about the idea, the audience, the story, and the details that keep people watching.</p>
-            <p>From creator-led visuals to campaign-ready content, I love making things that feel polished without losing their personality.</p>
-            <a class="cp-text-link" href="#portfolio-gallery">Explore my content ↗</a>
-          </div>
-          <div class="cp-device-display" aria-label="Moving portfolio content displayed inside a realistic smartphone">
-            <div class="cp-phone-scene">
-              <div class="cp-phone-backdrop" aria-hidden="true"></div>
-              <div class="cp-iphone" data-portfolio-phone data-mode="{% if showcase_video %}video{% elif showcase_tiktok %}tiktok{% else %}photos{% endif %}">
-                <span class="cp-device-edge-button cp-device-edge-button-left" aria-hidden="true"></span>
-                <span class="cp-device-edge-button cp-device-edge-button-right" aria-hidden="true"></span>
-                <div class="cp-iphone-bezel">
-                  <div class="cp-iphone-screen">
-                    {% if showcase_video %}
-                      <video class="cp-phone-video" data-portfolio-reel autoplay muted loop playsinline controls preload="metadata" aria-label="{{ showcase_video.alt_text|default:showcase_video.title }}"
-                        {% if showcase_video.image %}poster="{{ showcase_video.image.url }}"{% endif %}>
-                        <source src="{{ showcase_video.video.url }}">
-                        Your browser does not support this video.
-                      </video>
-                    {% elif showcase_tiktok %}
-                      <iframe
-                        class="cp-phone-tiktok"
-                        src="https://www.tiktok.com/player/v1/{{ showcase_tiktok.video_id }}?autoplay=1&amp;muted=1&amp;loop=1&amp;controls=1&amp;description=0&amp;music_info=0"
-                        title="{{ showcase_tiktok.title }} — TikTok video"
-                        loading="lazy"
-                        allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
-                        referrerpolicy="strict-origin-when-cross-origin"
-                        allowfullscreen></iframe>
-                    {% elif showcase_photos %}
-                      <div class="cp-reel-gallery" data-phone-slideshow aria-label="Animated selected portfolio photos">
-                        {% for photo in showcase_photos %}
-                          <img class="cp-reel-image{% if forloop.first %} is-active{% endif %}" src="{{ photo.image.url }}" alt="{{ photo.alt_text|default:photo.title }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" aria-hidden="{% if forloop.first %}false{% else %}true{% endif %}">
-                        {% endfor %}
-                      </div>
-                    {% else %}
-                      <div class="cp-reel-empty">
-                        <strong>BETRA<br><em>AMARE.</em></strong>
-                        <span>Creative films &amp; visuals</span>
-                      </div>
-                    {% endif %}
-                    {% if not showcase_tiktok %}
-                      <div class="cp-reel-scrim" aria-hidden="true"></div>
-                      <div class="cp-screen-story">
-                        <span class="cp-screen-story-label">BETRA AMARE <span aria-hidden="true">✦</span> CREATIVE STUDIO</span>
-                        <span class="cp-screen-story-caption">
-                          {% if showcase_video %}{{ showcase_video.title }}{% else %}Beauty. Stories. Real moments.{% endif %}
-                        </span>
-                      </div>
-                    {% endif %}
-                    <div class="cp-device-statusbar" aria-hidden="true">
-                      <span>9:41</span>
-                      <span class="cp-device-status-icons">
-                        <svg viewBox="0 0 22 14" width="19" height="13" aria-hidden="true" focusable="false"><rect x="1" y="9" width="3" height="4" rx=".5"/><rect x="6" y="6" width="3" height="7" rx=".5"/><rect x="11" y="3" width="3" height="10" rx=".5"/><rect x="16" y="1" width="3" height="12" rx=".5"/></svg>
-                        <svg viewBox="0 0 20 14" width="17" height="13" aria-hidden="true" focusable="false"><path d="M1 4Q10 -3 19 4L16 7Q10 2 4 7ZM7 10Q10 7 13 10L10 13Z"/></svg>
-                        <svg viewBox="0 0 28 14" width="25" height="13" aria-hidden="true" focusable="false"><rect x="1" y="2" width="23" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3.5" y="4.3" width="17" height="6.2" rx="1"/><path d="M26 6v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                      </span>
-                    </div>
-                    <div class="cp-dynamic-island" aria-hidden="true"><span></span></div>
-                    <div class="cp-home-indicator" aria-hidden="true"></div>
-                  </div>
-                </div>
-              </div>
-              <div class="cp-phone-meta">
-                <span class="cp-phone-meta-line">VERTICAL CONTENT / 9:16</span>
-                {% if showcase_video %}
-                  <button class="cp-motion-button" data-phone-motion-button type="button" aria-pressed="false">Pause video</button>
-                {% elif showcase_tiktok %}
-                  <a href="{{ showcase_tiktok.tiktok_url }}" target="_blank" rel="noopener noreferrer" class="cp-motion-link">Open original TikTok ↗</a>
-                {% elif showcase_photos %}
-                  <button class="cp-motion-button" data-phone-motion-button type="button" aria-pressed="false">Pause slideshow</button>
-                {% endif %}
-              </div>
-              {% if not showcase_video and not showcase_tiktok and showcase_photos %}
-                <p class="cp-phone-fallback-note">Photos move automatically. Add a video under Portfolio items in Django Admin to play a real reel here.</p>
-              {% endif %}
-            </div>
-          </div>
-        </div>
-        <div class="cp-showcase-notes"><span>CONTENT STRATEGY</span><span>VISUAL STORYTELLING</span><span>CREATOR-LED CONTENT</span><span>UGC</span></div>
+    <section class="film-work" id="portfolio-gallery" aria-labelledby="film-work-heading">
+      <div class="film-page-index film-page-index-dark"><span>02 / SELECTED WORK</span><span>CREATIVE PROJECTS &amp; PORTFOLIO</span></div>
+      <div class="film-work-intro film-reveal">
+        <p class="film-overline">A SELECTION OF WORK</p>
+        <h2 id="film-work-heading"><span>SELECTED</span><em>PROJECTS.</em></h2>
+        <p>From beauty and fashion to social content and brand storytelling. A visual archive of things I've created.</p>
       </div>
-    </section>
-
-    <section class="cp-partnerships cp-section" id="portfolio-partnerships" aria-labelledby="cp-partnerships-heading">
-      <div class="shell">
-        <div class="cp-partnerships-heading">
-          <div>
-            <p class="cp-overline">03 / Creative collaborations</p>
-            <h2 class="cp-heading" id="cp-partnerships-heading">SELECTED <em>collaborations.</em></h2>
-          </div>
-          <p>Brand content should feel like a natural part of the story. Here's a space for my collaborations, campaigns, and creative projects.</p>
-        </div>
-        {% if brand_photos %}
-        <div class="cp-brand-devices">
-          {% for item in brand_photos %}
-          <div class="cp-brand-phone">
-            <div class="cp-brand-phone-head" aria-hidden="true">BETRA ♡ <span>•••</span></div>
-            <div class="cp-brand-phone-screen">
-              <img src="{{ item.image.url }}" alt="{{ item.alt_text|default:item.title }}" loading="lazy">
-            </div>
-            <div class="cp-brand-phone-caption">{{ item.title }}</div>
-          </div>
-          {% endfor %}
-        </div>
-        {% else %}
-        <div class="cp-brand-empty">
-          <div class="cp-brand-empty-art" aria-hidden="true">LET'S CREATE<br><em>something beautiful.</em></div>
-          <div><h3>Collaboration work, curated here.</h3><p>As brand projects are added in Django Admin under <strong>Portfolio items → Brand Content</strong>, the finished visuals will appear in this section automatically.</p></div>
-        </div>
-        {% endif %}
-        <div class="cp-partnerships-foot"><span>CONTENT CREATION / UGC / MODELING / CREATIVE CONCEPTS</span><a class="cp-text-link" href="/media-kit/">View media kit ↗</a></div>
+      {% if portfolio_items %}
+      <div class="film-gallery-menu portfolio-filter" role="group" aria-label="Filter portfolio projects">
+        <button type="button" id="all" class="filter-btn active" aria-pressed="true" data-filter="all">All work</button>
+        <button type="button" id="beauty" class="filter-btn" aria-pressed="false" data-filter="beauty">Beauty</button>
+        <button type="button" id="fashion" class="filter-btn" aria-pressed="false" data-filter="fashion">Fashion</button>
+        <button type="button" id="lifestyle" class="filter-btn" aria-pressed="false" data-filter="lifestyle">Lifestyle</button>
+        <button type="button" id="brand" class="filter-btn" aria-pressed="false" data-filter="brand">Brand work</button>
       </div>
-    </section>
-
-    <section class="cp-skills cp-section" id="portfolio-skills" aria-labelledby="cp-skills-heading">
-      <div class="shell">
-        <div class="cp-skills-intro"><p class="cp-overline">04 / What I bring to the table</p><h2 class="cp-heading" id="cp-skills-heading">TOOLS OF <em>the trade.</em></h2><p>My creative toolkit for planning, producing, and sharing content that feels intentional.</p></div>
-        <div class="cp-skill-grid">
-          <div class="cp-skill-card"><span>01</span><strong>Social media<br>content</strong><small>CREATION</small></div>
-          <div class="cp-skill-card"><span>02</span><strong>Short-form<br>video</strong><small>STORYTELLING</small></div>
-          <div class="cp-skill-card"><span>03</span><strong>Visual<br>editing</strong><small>PHOTO &amp; VIDEO</small></div>
-          <div class="cp-skill-card"><span>04</span><strong>Brand<br>storytelling</strong><small>CREATIVE CONCEPTS</small></div>
-          <div class="cp-skill-card"><span>05</span><strong>Creator-led<br>campaigns</strong><small>UGC</small></div>
-          <div class="cp-skill-card"><span>06</span><strong>Editorial<br>imagery</strong><small>BEAUTY &amp; LIFESTYLE</small></div>
-          <div class="cp-skill-card"><span>07</span><strong>Audience<br>engagement</strong><small>COMMUNITY</small></div>
-          <div class="cp-skill-card"><span>08</span><strong>Content<br>planning</strong><small>STRATEGY</small></div>
-        </div>
-        <p class="cp-skills-note">Skills &amp; creative services — not a list of formal certifications.</p>
-      </div>
-    </section>
-
-    <section class="cp-gallery cp-section" id="portfolio-gallery" aria-labelledby="cp-gallery-heading">
-      <div class="shell">
-        <div class="cp-gallery-heading"><div><p class="cp-overline">05 / My selected work</p><h2 class="cp-heading" id="cp-gallery-heading">SELECTED <em>projects.</em></h2></div><p>A look at the photos, videos and moments that make up my creative world.</p></div>
-        {% if portfolio_items %}
-        <div class="portfolio-filter cp-filters" role="group" aria-label="Filter portfolio projects">
-          <button class="filter-btn active" id="all" type="button" data-filter="all" aria-pressed="true">All projects</button>
-          <button class="filter-btn" id="beauty" type="button" data-filter="beauty" aria-pressed="false">Beauty</button>
-          <button class="filter-btn" id="fashion" type="button" data-filter="fashion" aria-pressed="false">Fashion</button>
-          <button class="filter-btn" id="lifestyle" type="button" data-filter="lifestyle" aria-pressed="false">Lifestyle</button>
-          <button class="filter-btn" id="brand" type="button" data-filter="brand" aria-pressed="false">Brand Content</button>
-        </div>
-        <div class="portfolio-masonry cp-masonry cinematic-project-grid">
+      <div class="film-gallery portfolio-masonry">
             {% for item in portfolio_items %}
               {% if item.video %}
               <div
@@ -281,11 +131,14 @@
               </div>
               {% endif %}
             {% endfor %}
-        </div>
-        {% else %}
-        <div class="cp-gallery-empty"><h3>More projects, coming soon.</h3><p>I'm putting together a collection of beauty, fashion, lifestyle and brand work.</p><a class="cp-text-link" href="/inquire/">Create something together ↗</a></div>
-        {% endif %}
       </div>
+      {% else %}
+      <div class="film-gallery-empty">
+        <p>YOUR NEXT FAVORITE VISUAL STORY</p>
+        <h3>Coming <em>soon.</em></h3>
+        <a class="film-text-link" href="/inquire/">LET'S MAKE IT TOGETHER ↗</a>
+      </div>
+      {% endif %}
     </section>
     <div class="portfolio-lightbox" id="portfolioLightbox" role="dialog" aria-modal="true" aria-label="Portfolio media viewer" aria-hidden="true">
       <div class="portfolio-lightbox-dialog">
@@ -297,11 +150,82 @@
 
 
 
-    <section class="cp-connect cp-section" id="portfolio-connect" aria-labelledby="cp-connect-heading">
-      <div class="shell cp-connect-grid">
-        <div><p class="cp-overline">06 / Work with me</p><h2 class="cp-heading" id="cp-connect-heading">LET'S MAKE <em>something good.</em></h2><p>{% if portfolio_content %}{{ portfolio_content.collab_title_prefix }} {{ portfolio_content.collab_title_emphasis }}{% else %}Let's make something that feels like you.{% endif %}</p><a class="cp-primary-cta" href="/inquire/">{% if portfolio_content %}{{ portfolio_content.button_text }}{% else %}Start a project{% endif %} <span aria-hidden="true">↗</span></a><a class="cp-email-link" href="mailto:{% if portfolio_content %}{{ portfolio_content.work_email }}{% else %}workwithbetra@gmail.com{% endif %}">{% if portfolio_content %}{{ portfolio_content.work_email }}{% else %}workwithbetra@gmail.com{% endif %}</a></div>
-        <div class="cp-connect-art" aria-hidden="true"><span>BETRA</span><i>♡</i></div>
+
+    <section class="film-editorial" id="portfolio-showcase" aria-labelledby="film-editorial-heading">
+      <div class="film-page-index"><span>03 / STORIES IN MOTION</span><span>SHORT-FORM VIDEO &amp; DIGITAL CONTENT</span></div>
+      <div class="film-editorial-layout">
+        <div class="film-editorial-copy film-reveal">
+          <span class="film-overline">THE ART OF MOVEMENT</span>
+          <h2 id="film-editorial-heading">STORIES<br>MADE TO <em>MOVE.</em></h2>
+          <p>Social-first content with a cinematic eye. Scroll-stopping moments, striking visuals, and authentic stories.</p>
+          <a href="/media-kit/" class="film-text-link">EXPLORE MY MEDIA KIT <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="film-reel-stage film-reveal" aria-label="Selected moving content">
+          {% if showcase_video %}
+          <video class="film-feature-video" data-film-video autoplay muted loop playsinline controls preload="metadata"
+            {% if showcase_video.image %}poster="{{ showcase_video.image.url }}"{% endif %}
+            aria-label="{{ showcase_video.alt_text|default:showcase_video.title }}">
+            <source src="{{ showcase_video.video.url }}">
+            Your browser doesn't support this video.
+          </video>
+          {% elif showcase_tiktok %}
+          <iframe class="film-feature-embed" title="{{ showcase_tiktok.title }} TikTok"
+            src="https://www.tiktok.com/player/v1/{{ showcase_tiktok.video_id }}?autoplay=1&amp;muted=1&amp;loop=1&amp;controls=1&amp;description=0&amp;music_info=0"
+            loading="lazy" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          {% elif showcase_photos %}
+          <div class="film-motion-stills" data-film-stills aria-label="Animated slideshow of selected work">
+            {% for photo in showcase_photos %}
+            <img src="{{ photo.image.url }}" alt="{{ photo.alt_text|default:photo.title }}" class="film-motion-still{% if forloop.first %} is-current{% endif %}"
+                 aria-hidden="{% if forloop.first %}false{% else %}true{% endif %}" loading="lazy">
+            {% endfor %}
+          </div>
+          {% else %}<div class="film-reel-empty" aria-label="Video projects coming soon"><span>BETRA</span><em>AMARE.</em></div>{% endif %}
+          <div class="film-reel-label" aria-hidden="true">REEL / SELECTED MOMENTS <span>▶</span></div>
+        </div>
       </div>
+      <div class="film-editorial-foot"><span>CONTENT CREATION</span><span>MODEL WORK</span><span>STORYTELLING</span><span>CAMPAIGNS</span></div>
+    </section>
+
+    <section class="film-brands" id="portfolio-partnerships" aria-labelledby="film-brands-heading">
+      <div class="film-page-index"><span>04 / COLLABORATIONS</span><span>BRAND &amp; CREATOR PROJECTS</span></div>
+      <div class="film-brands-top film-reveal"><h2 id="film-brands-heading">BRAND<br><em>WORK.</em></h2><p>Thoughtful creative partnerships that bring a brand's story into focus. Every visual should feel intentional and true to its audience.</p></div>
+      {% if brand_photos %}
+      <div class="film-brands-grid">
+        {% for item in brand_photos %}
+        <article class="film-brand-card film-reveal">
+          <div class="film-brand-image"><img src="{{ item.image.url }}" alt="{{ item.alt_text|default:item.title }}" loading="lazy"></div>
+          <div class="film-brand-label"><span>{{ item.title }}</span><span>{{ item.get_category_display }}</span></div>
+        </article>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="film-brands-quiet film-reveal">
+        <span>CREATIVE COLLABORATIONS / UGC / BRAND CONTENT</span>
+        <p>Selected brand projects will appear here as they are published.</p>
+      </div>
+      {% endif %}
+      <a class="film-text-link film-brands-link" href="/inquire/">LET'S COLLABORATE <span aria-hidden="true">↗</span></a>
+    </section>
+
+    <section class="film-skills" id="portfolio-skills" aria-labelledby="film-skills-heading">
+      <div class="film-page-index film-page-index-dark"><span>05 / THE PRACTICE</span><span>WHAT GOES INTO THE WORK</span></div>
+      <div class="film-skills-layout">
+        <h2 id="film-skills-heading" class="film-reveal">CREATIVE<br><em>PRACTICE.</em></h2>
+        <div class="film-skills-list film-reveal">
+          <div><span>01</span><strong>Creative Direction</strong><small>Concept / Visuals</small></div>
+          <div><span>02</span><strong>Social Content</strong><small>Short-form / UGC</small></div>
+          <div><span>03</span><strong>Beauty &amp; Fashion</strong><small>Editorial / Lifestyle</small></div>
+          <div><span>04</span><strong>Digital Storytelling</strong><small>Idea / Execution</small></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="film-contact" id="portfolio-connect" aria-labelledby="film-contact-heading">
+      <p class="film-overline">06 / NEXT CHAPTER</p>
+      <h2 id="film-contact-heading" class="film-reveal">LET'S MAKE<br><em>SOMETHING.</em></h2>
+      <p>{% if portfolio_content %}{{ portfolio_content.collab_title_prefix }} {{ portfolio_content.collab_title_emphasis }}{% else %}Have a project in mind? Let's create something worth remembering.{% endif %}</p>
+      <a href="/inquire/" class="film-contact-cta">{% if portfolio_content %}{{ portfolio_content.button_text }}{% else %}START A PROJECT{% endif %}<span aria-hidden="true">↗</span></a>
+      <a class="film-contact-email" href="mailto:{% if portfolio_content %}{{ portfolio_content.work_email }}{% else %}workwithbetra@gmail.com{% endif %}">{% if portfolio_content %}{{ portfolio_content.work_email }}{% else %}workwithbetra@gmail.com{% endif %}</a>
     </section>
   </main>
   <footer class="site-footer">
@@ -310,7 +234,8 @@
   </footer>
   <script src="/script.js"></script>
   <script src="/static/js/portfolio.js" defer></script>
-  <script src="/static/js/portfolio-reel.js" defer></script>
-  <script src="/static/js/portfolio-cinematic.js" defer></script>
+  <script src="/static/js/portfolio-film.js" defer></script>
+
+  <script src="/static/js/portfolio-film.js" defer></script>
 </body>
 </html>
