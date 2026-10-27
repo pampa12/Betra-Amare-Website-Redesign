@@ -96,20 +96,77 @@
             <p>From creator-led visuals to campaign-ready content, I love making things that feel polished without losing their personality.</p>
             <a class="cp-text-link" href="#portfolio-gallery">Explore my content ↗</a>
           </div>
-          <div class="cp-device-display" aria-label="Selected social media content">
-            {% if showcase_photos %}
-              {% for photo in showcase_photos %}
-              <div class="cp-phone cp-phone-{{ forloop.counter }}">
-                <div class="cp-phone-top" aria-hidden="true"><span>● ● ●</span><span>•••</span></div>
-                <div class="cp-phone-screen">
-                  <img src="{{ photo.image.url }}" alt="{{ photo.alt_text|default:photo.title }}" loading="lazy">
+          <div class="cp-device-display" aria-label="Moving portfolio content displayed inside a realistic smartphone">
+            <div class="cp-phone-scene">
+              <div class="cp-phone-backdrop" aria-hidden="true"></div>
+              <div class="cp-iphone" data-portfolio-phone data-mode="{% if showcase_video %}video{% elif showcase_tiktok %}tiktok{% else %}photos{% endif %}">
+                <span class="cp-device-edge-button cp-device-edge-button-left" aria-hidden="true"></span>
+                <span class="cp-device-edge-button cp-device-edge-button-right" aria-hidden="true"></span>
+                <div class="cp-iphone-bezel">
+                  <div class="cp-iphone-screen">
+                    {% if showcase_video %}
+                      <video class="cp-phone-video" data-portfolio-reel autoplay muted loop playsinline controls preload="metadata" aria-label="{{ showcase_video.alt_text|default:showcase_video.title }}"
+                        {% if showcase_video.image %}poster="{{ showcase_video.image.url }}"{% endif %}>
+                        <source src="{{ showcase_video.video.url }}">
+                        Your browser does not support this video.
+                      </video>
+                    {% elif showcase_tiktok %}
+                      <iframe
+                        class="cp-phone-tiktok"
+                        src="https://www.tiktok.com/player/v1/{{ showcase_tiktok.video_id }}?autoplay=1&amp;muted=1&amp;loop=1&amp;controls=1&amp;description=0&amp;music_info=0"
+                        title="{{ showcase_tiktok.title }} — TikTok video"
+                        loading="lazy"
+                        allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        allowfullscreen></iframe>
+                    {% elif showcase_photos %}
+                      <div class="cp-reel-gallery" data-phone-slideshow aria-label="Animated selected portfolio photos">
+                        {% for photo in showcase_photos %}
+                          <img class="cp-reel-image{% if forloop.first %} is-active{% endif %}" src="{{ photo.image.url }}" alt="{{ photo.alt_text|default:photo.title }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" aria-hidden="{% if forloop.first %}false{% else %}true{% endif %}">
+                        {% endfor %}
+                      </div>
+                    {% else %}
+                      <div class="cp-reel-empty">
+                        <strong>BETRA<br><em>AMARE.</em></strong>
+                        <span>Creative films &amp; visuals</span>
+                      </div>
+                    {% endif %}
+                    {% if not showcase_tiktok %}
+                      <div class="cp-reel-scrim" aria-hidden="true"></div>
+                      <div class="cp-screen-story">
+                        <span class="cp-screen-story-label">BETRA AMARE <span aria-hidden="true">✦</span> CREATIVE STUDIO</span>
+                        <span class="cp-screen-story-caption">
+                          {% if showcase_video %}{{ showcase_video.title }}{% else %}Beauty. Stories. Real moments.{% endif %}
+                        </span>
+                      </div>
+                    {% endif %}
+                    <div class="cp-device-statusbar" aria-hidden="true">
+                      <span>9:41</span>
+                      <span class="cp-device-status-icons">
+                        <svg viewBox="0 0 22 14" width="19" height="13" aria-hidden="true" focusable="false"><rect x="1" y="9" width="3" height="4" rx=".5"/><rect x="6" y="6" width="3" height="7" rx=".5"/><rect x="11" y="3" width="3" height="10" rx=".5"/><rect x="16" y="1" width="3" height="12" rx=".5"/></svg>
+                        <svg viewBox="0 0 20 14" width="17" height="13" aria-hidden="true" focusable="false"><path d="M1 4Q10 -3 19 4L16 7Q10 2 4 7ZM7 10Q10 7 13 10L10 13Z"/></svg>
+                        <svg viewBox="0 0 28 14" width="25" height="13" aria-hidden="true" focusable="false"><rect x="1" y="2" width="23" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3.5" y="4.3" width="17" height="6.2" rx="1"/><path d="M26 6v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                      </span>
+                    </div>
+                    <div class="cp-dynamic-island" aria-hidden="true"><span></span></div>
+                    <div class="cp-home-indicator" aria-hidden="true"></div>
+                  </div>
                 </div>
-                <div class="cp-phone-bottom"><span>♡</span><span>{{ photo.get_category_display }}</span><span>↗</span></div>
               </div>
-              {% endfor %}
-            {% else %}
-              <div class="cp-mockup-empty"><span aria-hidden="true">✳</span><h3>Social-first storytelling</h3><p>Selected projects will appear here as they are added in Django Admin.</p></div>
-            {% endif %}
+              <div class="cp-phone-meta">
+                <span class="cp-phone-meta-line">VERTICAL CONTENT / 9:16</span>
+                {% if showcase_video %}
+                  <button class="cp-motion-button" data-phone-motion-button type="button" aria-pressed="false">Pause video</button>
+                {% elif showcase_tiktok %}
+                  <a href="{{ showcase_tiktok.tiktok_url }}" target="_blank" rel="noopener noreferrer" class="cp-motion-link">Open original TikTok ↗</a>
+                {% elif showcase_photos %}
+                  <button class="cp-motion-button" data-phone-motion-button type="button" aria-pressed="false">Pause slideshow</button>
+                {% endif %}
+              </div>
+              {% if not showcase_video and not showcase_tiktok and showcase_photos %}
+                <p class="cp-phone-fallback-note">Photos move automatically. Add a video under Portfolio items in Django Admin to play a real reel here.</p>
+              {% endif %}
+            </div>
           </div>
         </div>
         <div class="cp-showcase-notes"><span>CONTENT STRATEGY</span><span>VISUAL STORYTELLING</span><span>CREATOR-LED CONTENT</span><span>UGC</span></div>
@@ -256,5 +313,6 @@
   </footer>
   <script src="/script.js"></script>
   <script src="/static/js/portfolio.js" defer></script>
+  <script src="/static/js/portfolio-reel.js" defer></script>
 </body>
 </html>

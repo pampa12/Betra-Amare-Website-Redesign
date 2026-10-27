@@ -2,6 +2,7 @@
 from django.test import TestCase
 from django.urls import reverse
 
+from website.featured_tiktok import FeaturedTikTok
 from website.models import AboutContent, PortfolioItem
 
 
@@ -40,8 +41,10 @@ class CreativePortfolioTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Beauty campaign")
         self.assertContains(response, "Fashion portrait")
-        self.assertContains(response, "cp-phone cp-phone-1")
-        self.assertContains(response, "cp-phone cp-phone-2")
+        self.assertContains(response, 'class="cp-iphone"')
+        self.assertContains(response, 'data-phone-slideshow')
+        self.assertContains(response, 'class="cp-reel-image is-active"')
+        self.assertContains(response, "portfolio-reel.js")
         self.assertContains(response, "about/intro-photo")
         self.assertContains(response, 'data-filter="beauty"')
         self.assertContains(response, 'aria-pressed="false"')
@@ -85,3 +88,56 @@ class CreativePortfolioTests(TestCase):
         self.assertContains(response, 'data-media-type="image"')
         self.assertContains(response, 'id="portfolioLightbox"')
         self.assertContains(response, "portfolio.js")
+
+    def test_real_cloudinary_video_takes_priority_over_photos(self):
+        PortfolioItem.objects.create(
+            title="Campaign photograph", category="beauty",
+            image="portfolio/campaign-photo", active=True,
+        )
+        PortfolioItem.objects.create(
+            title="Selected film", category="brand",
+            image="portfolio/video-poster",
+            video="portfolio/videos/film.mp4", featured=True, active=True,
+        )
+        response = self.client.get(reverse("website:portfolio"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'data-mode="video"')
+        self.assertContains(response, "data-portfolio-reel")
+        self.assertContains(response, "autoplay muted loop playsinline controls")
+        self.assertContains(response, "portfolio/videos/film.mp4")
+        self.assertContains(response, "Pause video")
+        self.assertNotContains(response, "data-phone-slideshow")
+
+    def test_active_tiktok_embeds_as_video_fallback_when_no_uploaded_video(self):
+        FeaturedTikTok.objects.create(
+            title="Own UGC reel",
+            tiktok_url="https://www.tiktok.com/@creator/video/7543219876543210987",
+            active=True,
+        )
+        PortfolioItem.objects.create(
+            title="Photo", category="beauty", image="portfolio/photo", active=True
+        )
+        response = self.client.get(reverse("website:portfolio"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'data-mode="tiktok"')
+        self.assertContains(response, "www.tiktok.com/player/v1/7543219876543210987?autoplay=1")
+        self.assertContains(response, "Open original TikTok")
+        self.assertNotContains(response, "data-portfolio-reel")
+        self.assertNotContains(response, "data-phone-slideshow")
+
+    def test_inactive_video_and_tiktok_do_not_appear(self):
+        PortfolioItem.objects.create(
+            title="Unpublished film", category="brand",
+            video="portfolio/videos/private.mp4", active=False,
+        )
+        FeaturedTikTok.objects.create(
+            title="Unpublished TikTok",
+            tiktok_url="https://www.tiktok.com/@creator/video/7543219876543210987",
+            active=False,
+        )
+        response = self.client.get(reverse("website:portfolio"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'data-mode="photos"')
+        self.assertContains(response, "Creative films")
+        self.assertNotContains(response, "private.mp4")
+        self.assertNotContains(response, "www.tiktok.com/player/")
