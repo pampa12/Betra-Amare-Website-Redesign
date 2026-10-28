@@ -15,7 +15,7 @@
         <div class="tiktok-showcase-player">
           <iframe
             src="{{ item.embed_url }}"
-            title="{{ item.title }} — TikTok video"
+            title="{{ item.title }} — {{ item.platform_label|default:'TikTok' }} video"
             loading="lazy"
             allow="encrypted-media; picture-in-picture; fullscreen"
             allowfullscreen
@@ -23,10 +23,10 @@
           ></iframe>
         </div>
         <div class="tiktok-showcase-meta">
-          {% if item.brand_name %}<p class="tiktok-showcase-kicker">Brand content · {{ item.brand_name }}</p>{% else %}<p class="tiktok-showcase-kicker">Featured TikTok</p>{% endif %}
+          {% if item.brand_name %}<p class="tiktok-showcase-kicker">Brand content · {{ item.brand_name }}</p>{% else %}<p class="tiktok-showcase-kicker">Featured {{ item.platform_label|default:"video" }}</p>{% endif %}
           <h3>{{ item.title }}</h3>
           {% if item.description %}<p>{{ item.description }}</p>{% endif %}
-          <a class="arrow-link" href="{{ item.tiktok_url }}" target="_blank" rel="noopener">View on TikTok</a>
+          <a class="arrow-link" href="{{ item.tiktok_url }}" target="_blank" rel="noopener">View on {{ item.platform_label|default:"TikTok" }}</a>
         </div>
       </article>
       {% endfor %}

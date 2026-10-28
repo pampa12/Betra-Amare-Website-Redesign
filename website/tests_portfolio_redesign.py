@@ -1,4 +1,7 @@
 """Regression tests for the cinematic editorial portfolio and managed media."""
+from unittest import mock
+
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.urls import reverse
 
@@ -77,7 +80,7 @@ class FilmPortfolioTests(TestCase):
             image="portfolio/posters/featured", featured=True, active=True,
         )
         response = self.get_page()
-        self.assertContains(response, 'class="film-feature-video"')
+        self.assertContains(response, 'class="film-feature-video film-reel-native"')
         self.assertContains(response, "data-film-video")
         self.assertContains(response, "autoplay muted loop playsinline controls")
         self.assertContains(response, "portfolio/videos/featured.mp4")
@@ -109,6 +112,46 @@ class FilmPortfolioTests(TestCase):
         self.assertNotContains(response, "www.tiktok.com/player/")
         self.assertContains(response, "film-reel-empty")
 
+    def test_tiktoks_and_reels_fill_a_filterable_video_strip(self):
+        FeaturedTikTok.objects.create(
+            title="Glow routine", category="beauty",
+            tiktok_url="https://www.tiktok.com/@betraamarey/video/7629417669174807821",
+            sort_order=1,
+        )
+        FeaturedTikTok.objects.create(
+            title="Weekend fit", category="lifestyle",
+            tiktok_url="https://www.instagram.com/reel/Ddo7hnHBPcr/?igsh=abc",
+            sort_order=2,
+        )
+        response = self.get_page()
+        self.assertContains(response, "film-editorial--reels")
+        self.assertContains(response, "data-reel-track")
+        self.assertContains(response, 'data-src="https://www.tiktok.com/player/v1/7629417669174807821')
+        self.assertContains(response, 'data-src="https://www.instagram.com/reel/Ddo7hnHBPcr/embed/"')
+        self.assertContains(response, "film-reel-phone--instagram")
+        self.assertContains(response, 'data-reel-filter="beauty"')
+        self.assertContains(response, 'data-reel-filter="lifestyle"')
+        self.assertNotContains(response, 'data-reel-filter="fashion"')
+        self.assertContains(response, "portfolio-reels.js")
+        # Embeds load lazily from data-src, never eagerly.
+        self.assertNotRegex(response.content.decode(), r'(?<!data-)src="https://www\.tiktok\.com/player/')
+
+    def test_brand_videos_move_to_brand_work_without_duplicates(self):
+        FeaturedTikTok.objects.create(
+            title="Wavy Talk collab", category="brand", brand_name="Wavy Talk",
+            tiktok_url="https://www.tiktok.com/@betraamarey/video/7597429740336647479",
+        )
+        FeaturedTikTok.objects.create(
+            title="Glow routine", category="beauty",
+            tiktok_url="https://www.tiktok.com/@betraamarey/video/7629417669174807821",
+        )
+        response = self.get_page()
+        html = response.content.decode()
+        self.assertEqual(html.count("player/v1/7597429740336647479"), 1)
+        self.assertContains(response, "film-brands-reels")
+        self.assertContains(response, "Collab · Wavy Talk")
+        self.assertNotContains(response, "Selected brand projects will appear here")
+
     def test_collaborations_are_derived_from_active_brand_content(self):
         PortfolioItem.objects.create(
             title="Actual collaboration", category="brand",
@@ -128,3 +171,31 @@ class FilmPortfolioTests(TestCase):
         self.assertContains(response, 'class="film-brand-card')
         self.assertNotContains(response, "Unpublished collaboration")
         self.assertNotContains(response, "portfolio/draft-campaign")
+
+
+class FeaturedVideoLinkTests(TestCase):
+    def test_instagram_reel_links_are_accepted(self):
+        post = FeaturedTikTok(title="Reel", tiktok_url="https://www.instagram.com/reel/DaIpBL_Rba_/?vrfl=x")
+        post.full_clean()
+        self.assertEqual(post.platform, "instagram")
+        self.assertEqual(post.embed_url, "https://www.instagram.com/reel/DaIpBL_Rba_/embed/")
+
+    def test_tiktok_share_links_are_expanded_on_save(self):
+        post = FeaturedTikTok(title="Share link", tiktok_url="https://www.tiktok.com/t/ZTfprFgNQ/")
+        resolved = "https://www.tiktok.com/@betraamarey/video/7629417669174807821"
+        with mock.patch("website.featured_tiktok.resolve_tiktok_short_link", return_value=resolved):
+            post.full_clean()
+        self.assertEqual(post.tiktok_url, resolved)
+        self.assertEqual(post.video_id, "7629417669174807821")
+
+    def test_unreachable_share_link_explains_what_to_paste(self):
+        post = FeaturedTikTok(title="Share link", tiktok_url="https://vm.tiktok.com/ZMabc123/")
+        with mock.patch("website.featured_tiktok.resolve_tiktok_short_link", side_effect=OSError):
+            with self.assertRaises(ValidationError) as ctx:
+                post.full_clean()
+        self.assertIn("/video/", str(ctx.exception))
+
+    def test_other_links_are_rejected(self):
+        post = FeaturedTikTok(title="Nope", tiktok_url="https://www.youtube.com/watch?v=abc")
+        with self.assertRaises(ValidationError):
+            post.full_clean()

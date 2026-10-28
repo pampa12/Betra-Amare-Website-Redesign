@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="/static/css/portfolio-story.css">
   <link rel="stylesheet" href="/static/css/portfolio-cinematic.css">
   <link rel="stylesheet" href="/static/css/portfolio-film.css">
+  <link rel="stylesheet" href="/static/css/portfolio-reels.css">
 </head>
 <body>
   <header class="site-header">
@@ -151,8 +152,40 @@
 
 
 
-    <section class="film-editorial" id="portfolio-showcase" aria-labelledby="film-editorial-heading">
+    <section class="film-editorial{% if motion_reels %} film-editorial--reels{% endif %}" id="portfolio-showcase" aria-labelledby="film-editorial-heading">
       <div class="film-page-index"><span>03 / STORIES IN MOTION</span><span>SHORT-FORM VIDEO &amp; DIGITAL CONTENT</span></div>
+      {% if motion_reels %}
+      <div class="film-reels" data-film-reels>
+        <div class="film-reels-head">
+          <div class="film-reels-copy">
+            <span class="film-overline">THE ART OF MOVEMENT</span>
+            <h2 id="film-editorial-heading" class="film-reels-heading"><span class="film-reels-line">STORIES</span><span class="film-reels-line">MADE TO <em>MOVE.</em></span></h2>
+            <p>Social-first content with a cinematic eye. Scroll-stopping moments, striking visuals, and authentic stories.</p>
+          </div>
+          <div class="film-reels-controls">
+            {% if reel_categories|length > 1 %}
+            <div class="film-reels-filters" role="group" aria-label="Filter videos">
+              <button type="button" class="film-reels-filter is-active" data-reel-filter="all" aria-pressed="true">All</button>
+              {% for value, label in reel_categories %}
+              <button type="button" class="film-reels-filter" data-reel-filter="{{ value }}" aria-pressed="false">{{ label }}</button>
+              {% endfor %}
+            </div>
+            {% endif %}
+            <div class="film-reels-arrows">
+              <button type="button" class="film-reels-arrow" data-reel-step="-1" aria-label="Previous videos">←</button>
+              <button type="button" class="film-reels-arrow" data-reel-step="1" aria-label="Next videos">→</button>
+            </div>
+          </div>
+        </div>
+        <div class="film-reels-track" data-reel-track tabindex="0" aria-label="Videos. Scroll sideways to see more.">
+          {% for reel in motion_reels %}
+            {% include "includes/portfolio_reel_card.html" with reel=reel index=forloop.counter0 %}
+          {% endfor %}
+        </div>
+        <div class="film-reels-progress" aria-hidden="true"><span data-reel-progress></span></div>
+        <a href="/media-kit/" class="film-text-link film-reels-kit">EXPLORE MY MEDIA KIT <span aria-hidden="true">↗</span></a>
+      </div>
+      {% else %}
       <div class="film-editorial-layout">
         <div class="film-editorial-copy film-reveal">
           <span class="film-overline">THE ART OF MOVEMENT</span>
@@ -161,18 +194,7 @@
           <a href="/media-kit/" class="film-text-link">EXPLORE MY MEDIA KIT <span aria-hidden="true">↗</span></a>
         </div>
         <div class="film-reel-stage film-reveal" aria-label="Selected moving content">
-          {% if showcase_video %}
-          <video class="film-feature-video" data-film-video autoplay muted loop playsinline controls preload="metadata"
-            {% if showcase_video.image %}poster="{{ showcase_video.image.url }}"{% endif %}
-            aria-label="{{ showcase_video.alt_text|default:showcase_video.title }}">
-            <source src="{{ showcase_video.video.url }}">
-            Your browser doesn't support this video.
-          </video>
-          {% elif showcase_tiktok %}
-          <iframe class="film-feature-embed" title="{{ showcase_tiktok.title }} TikTok"
-            src="https://www.tiktok.com/player/v1/{{ showcase_tiktok.video_id }}?autoplay=1&amp;muted=1&amp;loop=1&amp;controls=1&amp;description=0&amp;music_info=0"
-            loading="lazy" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-          {% elif showcase_photos %}
+          {% if showcase_photos %}
           <div class="film-motion-stills" data-film-stills aria-label="Animated slideshow of selected work">
             {% for photo in showcase_photos %}
             <img src="{{ photo.image.url }}" alt="{{ photo.alt_text|default:photo.title }}" class="film-motion-still{% if forloop.first %} is-current{% endif %}"
@@ -183,12 +205,22 @@
           <div class="film-reel-label" aria-hidden="true">REEL / SELECTED MOMENTS <span>▶</span></div>
         </div>
       </div>
+      {% endif %}
       <div class="film-editorial-foot"><span>CONTENT CREATION</span><span>MODEL WORK</span><span>STORYTELLING</span><span>CAMPAIGNS</span></div>
     </section>
 
     <section class="film-brands" id="portfolio-partnerships" aria-labelledby="film-brands-heading">
       <div class="film-page-index"><span>04 / COLLABORATIONS</span><span>BRAND &amp; CREATOR PROJECTS</span></div>
       <div class="film-brands-top film-reveal"><h2 id="film-brands-heading">BRAND<br><em>WORK.</em></h2><p>Thoughtful creative partnerships that bring a brand's story into focus. Every visual should feel intentional and true to its audience.</p></div>
+      {% if brand_reels %}
+      <div class="film-brands-reels" data-film-reels>
+        <div class="film-reels-track film-reels-track--brands" data-reel-track tabindex="0" aria-label="Brand videos">
+          {% for reel in brand_reels %}
+            {% include "includes/portfolio_reel_card.html" with reel=reel index=forloop.counter0 %}
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
       {% if brand_photos %}
       <div class="film-brands-grid">
         {% for item in brand_photos %}
@@ -198,7 +230,7 @@
         </article>
         {% endfor %}
       </div>
-      {% else %}
+      {% elif not brand_reels %}
       <div class="film-brands-quiet film-reveal">
         <span>CREATIVE COLLABORATIONS / UGC / BRAND CONTENT</span>
         <p>Selected brand projects will appear here as they are published.</p>
@@ -235,7 +267,6 @@
   <script src="/script.js"></script>
   <script src="/static/js/portfolio.js" defer></script>
   <script src="/static/js/portfolio-film.js" defer></script>
-
-  <script src="/static/js/portfolio-film.js" defer></script>
+  <script src="/static/js/portfolio-reels.js" defer></script>
 </body>
 </html>

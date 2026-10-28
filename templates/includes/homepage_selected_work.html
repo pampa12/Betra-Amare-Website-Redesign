@@ -23,7 +23,7 @@
     {% endif %}
 
     {% for tiktok in homepage_tiktoks %}
-    <a class="selected-card selected-vertical-card selected-tiktok-card reveal" href="{{ tiktok.tiktok_url }}" target="_blank" rel="noopener" aria-label="Open {{ tiktok.title }} on TikTok">
+    <a class="selected-card selected-vertical-card selected-tiktok-card reveal" href="{{ tiktok.tiktok_url }}" target="_blank" rel="noopener" aria-label="Open {{ tiktok.title }} on {{ tiktok.platform_label|default:'TikTok' }}">
       <img src="{{ tiktok.thumbnail.url }}" alt="{{ tiktok.title }} TikTok thumbnail" loading="lazy">
       <span class="selected-tiktok-mark" aria-hidden="true">♪</span>
       <span class="selected-card-badge">TikTok</span>

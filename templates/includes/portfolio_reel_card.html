@@ -1,0 +1,27 @@
+<article class="film-reel-card" data-category="{{ reel.category }}" style="--reel-i: {{ index|default:0 }}">
+  <div class="film-reel-phone film-reel-phone--{{ reel.platform|default:'upload' }}">
+    {% if reel.kind == "video" %}
+    <video class="film-feature-video film-reel-native" data-film-video data-reel-video autoplay muted loop playsinline controls preload="metadata"
+      {% if reel.poster_url %}poster="{{ reel.poster_url }}"{% endif %}
+      aria-label="{{ reel.alt }}">
+      <source src="{{ reel.video_url }}">
+      Your browser doesn't support this video.
+    </video>
+    {% else %}
+    <iframe class="film-reel-embed"
+      data-src="{{ reel.embed_url }}"
+      title="{{ reel.title }} — {{ reel.platform_label }} video"
+      allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allowfullscreen
+      scrolling="no"></iframe>
+    <noscript><a class="film-reel-fallback" href="{{ reel.public_url }}" target="_blank" rel="noopener">Watch on {{ reel.platform_label }}</a></noscript>
+    <div class="film-reel-loading" aria-hidden="true"><span></span></div>
+    {% endif %}
+  </div>
+  <div class="film-reel-caption">
+    <span class="film-reel-tag">{{ reel.tag }}</span>
+    {% if reel.public_url %}<a class="film-reel-link" href="{{ reel.public_url }}" target="_blank" rel="noopener">{{ reel.platform_label }} <span aria-hidden="true">↗</span></a>{% endif %}
+  </div>
+  <p class="film-reel-title">{{ reel.title }}</p>
+</article>

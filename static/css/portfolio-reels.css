@@ -1,0 +1,83 @@
+/* Stories in Motion: a sideways strip of phone-framed videos (TikTok, Instagram
+ * Reels and uploaded clips). Embeds load only as they approach the viewport.
+ */
+.film-editorial--reels{padding-left:0;padding-right:0;overflow:hidden}
+.film-editorial--reels>.film-page-index,
+.film-editorial--reels>.film-editorial-foot{margin-left:clamp(24px,6vw,120px);margin-right:clamp(24px,6vw,120px)}
+
+.film-reels{--reel-w:clamp(230px,22vw,300px);--reel-gutter:clamp(24px,6vw,120px)}
+.film-reels-head{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;flex-wrap:wrap;padding:0 var(--reel-gutter);margin-bottom:clamp(34px,4vw,56px)}
+.film-reels-copy .film-overline{display:block;color:#826576;margin:0 0 26px}
+.film-reels-copy p{font-size:.97rem;line-height:1.9;max-width:455px;color:#675963;margin:0}
+.film-reels-heading{font:600 clamp(3.2rem,6vw,7rem)/.95 'DM Sans',Arial,sans-serif;letter-spacing:-.075em;margin:0 0 30px}
+.film-reels-heading em{font:400 1.13em/.85 'Cormorant Garamond',Georgia,serif;color:#a8788f;letter-spacing:-.06em}
+.film-reels-line{display:block;overflow:hidden;padding-bottom:.06em}
+
+.film-reels-controls{display:flex;flex-direction:column;align-items:flex-end;gap:18px}
+.film-reels-filters{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px}
+.film-reels-filter{border:1px solid rgba(28,21,27,.25);background:transparent;color:#1d171e;border-radius:999px;padding:9px 16px;font:700 .6rem/1 'DM Sans',Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.film-reels-filter:hover{border-color:#1d171e}
+.film-reels-filter.is-active{background:#1d171e;border-color:#1d171e;color:#fff}
+.film-reels-arrows{display:flex;gap:8px}
+.film-reels-arrow{width:46px;height:46px;border-radius:50%;border:1px solid #1d171e;background:transparent;color:#1d171e;font-size:1rem;cursor:pointer;transition:background .2s,color .2s,opacity .2s}
+.film-reels-arrow:hover:not(:disabled){background:#1d171e;color:#fff}
+.film-reels-arrow:disabled{opacity:.25;cursor:default}
+
+.film-reels-track{display:flex;gap:clamp(16px,2vw,28px);overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-padding-inline:var(--reel-gutter);padding:10px var(--reel-gutter) 26px;scrollbar-width:none;cursor:grab;outline:none}
+.film-reels-track::-webkit-scrollbar{display:none}
+.film-reels-track.is-dragging{cursor:grabbing;scroll-snap-type:none}
+.film-reels-track.is-dragging iframe,.film-reels-track.is-dragging video{pointer-events:none}
+.film-reels-track:focus-visible{outline:3px solid #d995b6;outline-offset:-3px}
+
+.film-reel-card{flex:0 0 var(--reel-w);scroll-snap-align:start;margin:0}
+.film-reel-card.is-hidden{display:none}
+.film-reel-phone{position:relative;aspect-ratio:9/16;border-radius:28px;overflow:hidden;background:#151218;box-shadow:0 0 0 7px #151218,0 30px 50px -24px rgba(28,21,27,.55);transition:transform .45s cubic-bezier(.2,.7,.1,1)}
+.film-reel-card:hover .film-reel-phone{transform:translateY(-8px) rotate(-.7deg)}
+.film-reel-card:nth-child(even):hover .film-reel-phone{transform:translateY(-8px) rotate(.7deg)}
+.film-reel-phone iframe,.film-reel-phone video{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+.film-reel-phone video{object-fit:cover;background:#151218}
+.film-reel-embed{opacity:0;transition:opacity .5s ease}
+.film-reel-phone.is-loaded .film-reel-embed{opacity:1}
+/* Instagram's embed shows the video in a 4:5 box between a header and a likes
+ * footer. Scale it (16/9 ÷ 5/4 ≈ 1.4222) so the video fills the 9:16 phone and
+ * the header and footer fall outside the frame. */
+.film-reel-phone--instagram{background:#151218}
+.film-reel-phone--instagram .film-reel-embed{height:calc(100% + 400px);transform-origin:50% 0;transform:translateY(-77px) scale(1.4222)}
+
+.film-reel-loading{position:absolute;inset:0;display:grid;place-items:center;transition:opacity .4s}
+.film-reel-loading span{width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,.18);border-top-color:#c797ae;animation:film-reel-spin .9s linear infinite}
+.film-reel-phone.is-loaded .film-reel-loading{opacity:0;pointer-events:none}
+@keyframes film-reel-spin{to{transform:rotate(360deg)}}
+.film-reel-fallback{position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase}
+
+.film-reel-caption{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:20px;font:700 .58rem/1.3 'DM Sans',Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase}
+.film-reel-tag{color:#a8788f}
+.film-reel-link{color:#1d171e;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:2px;white-space:nowrap}
+.film-reel-link:hover{color:#a8788f}
+.film-reel-title{margin:8px 0 0;font:400 clamp(1.3rem,1.8vw,1.65rem)/1.1 'Cormorant Garamond',Georgia,serif;font-style:italic;color:#302630}
+
+.film-reels-progress{position:relative;height:1px;margin:6px var(--reel-gutter) 0;background:rgba(28,21,27,.18)}
+.film-reels-progress span{position:absolute;left:0;top:-1px;height:3px;width:20%;background:#1d171e;transition:transform .12s linear}
+.film-reels-kit{margin:40px var(--reel-gutter) 0}
+
+/* Brand Work: the same phone cards on the light section */
+.film-brands-reels{--reel-w:clamp(230px,22vw,300px);--reel-gutter:0px;margin:0 0 60px}
+.film-reels-track--brands{padding-left:8px;padding-right:8px;scroll-padding-inline:8px}
+
+/* Motion: kinetic heading lines rise, cards arrive in a staggered wave. */
+@media(prefers-reduced-motion:no-preference){
+  .film-reels.is-armed .film-reels-line{transition:transform 1s cubic-bezier(.2,.7,.1,1),opacity 1s ease}
+  .film-reels.is-armed:not(.is-visible) .film-reels-line{transform:translateY(55%);opacity:0}
+  .film-reels.is-armed .film-reels-line+.film-reels-line{transition-delay:.12s}
+  .film-reels.is-armed .film-reel-card{transition:transform 1s cubic-bezier(.2,.7,.1,1),opacity .85s ease;transition-delay:calc(var(--reel-i,0)*90ms + 180ms)}
+  .film-reels.is-armed:not(.is-visible) .film-reel-card{transform:translate3d(60px,40px,0) rotate(2deg);opacity:0}
+}
+
+@media(max-width:760px){
+  .film-reels{--reel-w:70vw;--reel-gutter:24px}
+  .film-reels-head{align-items:flex-start}
+  .film-reels-controls{align-items:flex-start}
+  .film-reels-filters{justify-content:flex-start}
+  .film-reels-arrows{display:none}
+  .film-brands-reels{--reel-w:70vw}
+}

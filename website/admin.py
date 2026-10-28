@@ -195,17 +195,22 @@ class MediaKitContentAdmin(CloudinaryPickerAdminMixin, SingletonContentAdmin):
 @admin.register(FeaturedTikTok)
 class FeaturedTikTokAdmin(CloudinaryPickerAdminMixin, admin.ModelAdmin):
     form = FeaturedTikTokAdminForm
-    list_display = ("title", "brand_name", "show_on_homepage", "active", "sort_order", "updated_at")
-    list_filter = ("show_on_homepage", "active")
+    list_display = ("title", "category", "brand_name", "show_on_homepage", "active", "sort_order", "updated_at")
+    list_editable = ("category", "active", "sort_order")
+    list_filter = ("category", "show_on_homepage", "active")
     search_fields = ("title", "brand_name", "description", "tiktok_url")
     fieldsets = (
         (
-            "TikTok post",
+            "Video post",
             {
-                "fields": ("title", "brand_name", "tiktok_url", "thumbnail", "reuse_thumbnail", "description"),
+                "fields": (
+                    "title", "category", "brand_name", "tiktok_url",
+                    "thumbnail", "reuse_thumbnail", "description",
+                ),
                 "description": (
-                    "Paste the full TikTok URL. For homepage display, upload a clean still-frame thumbnail; "
-                    "the Media Kit can continue using the live TikTok player."
+                    "Paste a TikTok link (share links like tiktok.com/t/... work) or an Instagram Reel link. "
+                    "Active videos play in the portfolio's Stories in Motion strip; Brand Content videos "
+                    "appear under Brand Work. For homepage display, upload a clean still-frame thumbnail."
                 ),
             },
         ),

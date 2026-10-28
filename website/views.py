@@ -302,6 +302,39 @@ def home(request):
     )
 
 
+def _reel_from_upload(item):
+    """Describe an uploaded portfolio video for the phone-frame reel strip."""
+    return {
+        "kind": "video",
+        "title": item.title,
+        "category": item.category,
+        "category_label": item.get_category_display(),
+        "tag": item.get_category_display(),
+        "video_url": item.video.url,
+        "poster_url": item.image.url if item.image else "",
+        "alt": item.alt_text or item.title,
+        "platform": "",
+        "platform_label": "",
+        "public_url": "",
+    }
+
+
+def _reel_from_post(post):
+    """Describe a TikTok or Instagram Reel for the phone-frame reel strip."""
+    return {
+        "kind": "embed",
+        "title": post.title,
+        "category": post.category,
+        "category_label": post.get_category_display(),
+        "tag": f"Collab · {post.brand_name}" if post.brand_name else post.get_category_display(),
+        "embed_url": post.embed_url,
+        "platform": post.platform,
+        "platform_label": post.platform_label,
+        "public_url": post.tiktok_url,
+        "alt": post.title,
+    }
+
+
 def portfolio(request):
     """Render the creative portfolio with existing admin-managed Cloudinary media."""
     portfolio_items = list(PortfolioItem.objects.filter(active=True))
@@ -313,12 +346,17 @@ def portfolio(request):
     showcase_video = next((item for item in showcase_videos if item.featured), None)
     if not showcase_video and showcase_videos:
         showcase_video = showcase_videos[0]
-    showcase_tiktok = None
-    if not showcase_video:
-        showcase_tiktok = next(
-            (post for post in FeaturedTikTok.objects.filter(active=True) if post.video_id),
-            None,
-        )
+    # Stories in Motion: uploaded videos first, then active TikToks and Instagram Reels.
+    # Brand Content videos are shown under Brand Work instead, so nothing appears twice.
+    social_videos = [post for post in FeaturedTikTok.objects.filter(active=True) if post.embed_url]
+    motion_reels = [_reel_from_upload(item) for item in showcase_videos if item.category != "brand"]
+    motion_reels += [_reel_from_post(post) for post in social_videos if post.category != "brand"]
+    brand_reels = [_reel_from_upload(item) for item in showcase_videos if item.category == "brand"]
+    brand_reels += [_reel_from_post(post) for post in social_videos if post.category == "brand"]
+    reel_categories = []
+    for value, label in PortfolioItem.Category.choices:
+        if any(reel["category"] == value for reel in motion_reels):
+            reel_categories.append((value, label))
     # Only label actual brand-category work as brand partnerships.
     # A project appears here after it is approved as an active Brand Content item.
     brand_photos = [item for item in portfolio_items if item.category == "brand" and item.image][:5]
@@ -332,7 +370,9 @@ def portfolio(request):
             "portfolio_items": portfolio_items,
             "showcase_photos": showcase_photos,
             "showcase_video": showcase_video,
-            "showcase_tiktok": showcase_tiktok,
+            "motion_reels": motion_reels,
+            "reel_categories": reel_categories,
+            "brand_reels": brand_reels,
             "brand_photos": brand_photos,
             "portfolio_content": portfolio_content,
             "about_content": about_content,
