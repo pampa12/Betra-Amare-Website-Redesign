@@ -27,7 +27,7 @@ class FilmPortfolioTests(TestCase):
         self.assertNotContains(response, 'class="portfolio-item')
         self.assertNotContains(response, 'class="film-gallery-menu')
 
-    def test_existing_cloudinary_images_fill_about_and_selected_work(self):
+    def test_existing_cloudinary_images_fill_selected_work_without_about_section(self):
         AboutContent.objects.create(story_image="about/intro-photo")
         PortfolioItem.objects.create(
             title="Beauty portrait", category="beauty",
@@ -44,8 +44,10 @@ class FilmPortfolioTests(TestCase):
         )
         response = self.get_page()
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'class="film-about-portrait')
-        self.assertContains(response, "about/intro-photo")
+        # The portfolio no longer repeats the About page.
+        self.assertNotContains(response, 'class="film-about')
+        self.assertNotContains(response, "about/intro-photo")
+        self.assertContains(response, 'href="#portfolio-gallery"')
         self.assertContains(response, 'class="film-gallery portfolio-masonry"')
         self.assertContains(response, "Beauty portrait")
         self.assertContains(response, "Fashion portrait")

@@ -361,7 +361,6 @@ def portfolio(request):
     # A project appears here after it is approved as an active Brand Content item.
     brand_photos = [item for item in portfolio_items if item.category == "brand" and item.image][:5]
     portfolio_content = PortfolioPageContent.objects.first()
-    about_content = AboutContent.objects.first()
     contact_content = ContactContent.objects.first()
     response = render(
         request,
@@ -375,7 +374,6 @@ def portfolio(request):
             "brand_reels": brand_reels,
             "brand_photos": brand_photos,
             "portfolio_content": portfolio_content,
-            "about_content": about_content,
             "contact_content": contact_content,
         },
     )
