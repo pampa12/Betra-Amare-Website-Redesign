@@ -1,5 +1,5 @@
 .tiktok-showcase-section {
-  background: linear-gradient(135deg, #f7eff3 0%, #fffafc 100%);
+  background: linear-gradient(135deg, #f5f2f1 0%, #fffafc 100%);
   border-block: 1px solid var(--line);
 }
 
@@ -41,13 +41,13 @@
   overflow: hidden;
   border: 1px solid var(--line);
   background: #fffdfd;
-  box-shadow: 0 18px 50px rgba(69, 48, 58, .08);
+  box-shadow: 0 18px 50px rgba(88,29,47,.08);
 }
 
 .tiktok-showcase-player {
   aspect-ratio: 9 / 16;
   overflow: hidden;
-  background: #211a1e;
+  background: #2c121a;
 }
 
 .tiktok-showcase-player iframe {
@@ -55,7 +55,7 @@
   width: 100%;
   height: 100%;
   border: 0;
-  background: #211a1e;
+  background: #2c121a;
 }
 
 .tiktok-showcase-meta {
@@ -64,7 +64,7 @@
 
 .tiktok-showcase-kicker {
   margin: 0 0 8px;
-  color: #b36f89;
+  color: #9b3050;
   font-size: .58rem;
   font-weight: 700;
   letter-spacing: .14em;

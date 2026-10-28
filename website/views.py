@@ -46,8 +46,8 @@ ACCESSIBILITY_STYLES = """
       z-index: 10000;
       padding: 11px 16px;
       background: #fff;
-      color: #4a2435;
-      border: 2px solid #4a2435;
+      color: #481e2a;
+      border: 2px solid #481e2a;
       border-radius: 4px;
       font: 700 0.78rem/1.2 'DM Sans', Arial, sans-serif;
       text-decoration: none;
@@ -62,7 +62,7 @@ ACCESSIBILITY_STYLES = """
     textarea:focus-visible,
     select:focus-visible,
     [tabindex]:focus-visible {
-      outline: 3px solid #a65477;
+      outline: 3px solid #882744;
       outline-offset: 4px;
     }
 

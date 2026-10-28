@@ -1,14 +1,14 @@
 /* Editorial, cinematic refinement inspired by an independent portfolio reference.
    Scoped to the Betra Amare portfolio, retaining the site's plum / blush palette. */
 .creative-portfolio{
-  --cinematic-plum:#2c1722;--cinematic-plum-soft:#4a2435;
-  --cinematic-paper:#fff9fb;--cinematic-blush:#d982a3;
-  --cinematic-ink:#3b2530;--cinematic-muted:#896873;
+  --cinematic-plum:#32141d;--cinematic-plum-soft:#481e2a;
+  --cinematic-paper:#fff9fb;--cinematic-blush:#d6859d;
+  --cinematic-ink:#481d2a;--cinematic-muted:#7f2a43;
   overflow:clip;
 }
 .cinematic-cover{
   position:relative;
-  background:#2a1822;
+  background:#31141d;
   color:#fff9fb;
   min-height:min(830px,89vh);
 }
@@ -17,7 +17,7 @@
 .cinematic-meta,.cinematic-hero-bottom{
   display:flex;justify-content:space-between;align-items:center;gap:20px;
   font:600 .64rem/1.5 'DM Sans',Arial,sans-serif;
-  color:#d6b3c3;letter-spacing:.18em;text-transform:uppercase;
+  color:#d8b1bd;letter-spacing:.18em;text-transform:uppercase;
 }
 .cinematic-meta{border-bottom:1px solid rgba(255,255,255,.18);padding-bottom:22px}
 .cinematic-hero-bottom{border-top:1px solid rgba(255,255,255,.18);padding-top:24px}
@@ -28,7 +28,7 @@
   padding:clamp(50px,6vw,95px) 0;
 }
 .cinematic-hero-copy{position:relative;z-index:2}
-.cinematic-sequence{display:block;margin-bottom:35px;font-size:.67rem;font-weight:700;letter-spacing:.2em;color:#cba4b5}
+.cinematic-sequence{display:block;margin-bottom:35px;font-size:.67rem;font-weight:700;letter-spacing:.2em;color:#cda2af}
 .cinematic-cover .cinematic-title{
   font-family:'DM Sans',Arial,sans-serif;font-size:clamp(5rem,8.8vw,10rem);
   letter-spacing:-.105em;line-height:.82;font-weight:600;color:#fff9fb;margin:0 0 36px;
@@ -37,27 +37,27 @@
 .cinematic-cover .cinematic-title em{
   display:block;font-family:'Cormorant Garamond',Georgia,serif;
   font-size:1.08em;letter-spacing:-.075em;font-weight:400;line-height:.95;
-  color:#e1a6c2;transform:translateX(5%);
+  color:#e1a6b8;transform:translateX(5%);
 }
-.cinematic-hero-copy p{max-width:500px;color:#e2cbd6;font-size:1rem;line-height:1.75;margin-bottom:35px}
+.cinematic-hero-copy p{max-width:500px;color:#ddd0d3;font-size:1rem;line-height:1.75;margin-bottom:35px}
 .cinematic-text-cta{display:inline-flex;align-items:center;gap:50px;border-bottom:1px solid rgba(255,255,255,.6);
   padding:10px 0;text-transform:uppercase;letter-spacing:.14em;text-decoration:none;color:#fff;
   font-weight:700;font-size:.68rem}
-.cinematic-text-cta:hover{color:#f2bbd1}
+.cinematic-text-cta:hover{color:#e6c7cd}
 .cinematic-text-cta span{font-size:1.1rem}
 .cinematic-hero-art{
-  position:relative;width:100%;aspect-ratio:4/5;max-height:560px;background:#472b3b;
+  position:relative;width:100%;aspect-ratio:4/5;max-height:560px;background:#561c2e;
   overflow:hidden;box-shadow:22px 22px 0 rgba(255,255,255,.055);
 }
 .cinematic-hero-art::after{content:"";position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(180deg,transparent 68%,rgba(20,10,17,.65))}
+  background:linear-gradient(180deg,transparent 68%,rgba(22,9,13,.65))}
 .cinematic-hero-art>img{width:100%;height:100%;object-fit:cover;object-position:center}
 .cinematic-art-label{position:absolute;left:24px;right:24px;bottom:22px;z-index:2;display:flex;
   justify-content:space-between;align-items:center;gap:10px;color:#fff;
   font-size:.52rem;letter-spacing:.17em;font-weight:700;text-transform:uppercase}
 .cinematic-hero-placeholder{height:100%;display:grid;align-content:center;text-align:center}
 .cinematic-hero-placeholder span{font:500 clamp(3rem,7vw,8rem)/.9 'Cormorant Garamond',Georgia,serif;letter-spacing:.04em}
-.cinematic-hero-placeholder em{font:400 clamp(2rem,4vw,5rem) 'Cormorant Garamond',Georgia,serif;color:#e7c0d0}
+.cinematic-hero-placeholder em{font:400 clamp(2rem,4vw,5rem) 'Cormorant Garamond',Georgia,serif;color:#dec9cd}
 .cp-section-nav{top:90px;background:rgba(255,249,251,.96)}
 .cp-section-nav-inner{gap:32px}
 .cp-section-nav a{font-size:.65rem;padding:20px 0}
@@ -67,50 +67,50 @@
 .creative-portfolio .cp-heading em{font-size:1.03em;font-style:italic;font-weight:400;letter-spacing:-.045em}
 .cp-about{background:#fff9fb}
 .cp-about-grid{grid-template-columns:1fr .85fr;gap:clamp(42px,9vw,140px)}
-.cp-about-copy>p:not(.cp-overline){color:#725564;font-size:1rem;max-width:515px}
-.cp-about-visual{box-shadow:none;transform:none;padding:0;background:#f1d8e2;aspect-ratio:4/4.65}
+.cp-about-copy>p:not(.cp-overline){color:#682338;font-size:1rem;max-width:515px}
+.cp-about-visual{box-shadow:none;transform:none;padding:0;background:#ebdee0;aspect-ratio:4/4.65}
 .cp-about-photo-caption{left:-12px;bottom:18px;background:#fff9fb;padding:11px 14px;transform:none}
-.cp-showcase{background:#f8eff2}
+.cp-showcase{background:#f6f3f1}
 .cp-showcase-grid{grid-template-columns:1.03fr .97fr;gap:clamp(35px,8vw,120px)}
 .cp-showcase .cp-heading{font-size:clamp(3rem,5.4vw,6rem);max-width:620px}
 .cp-showcase .cp-heading em{font-size:1.08em}
-.cp-showcase-copy>p:not(.cp-overline){font-size:.98rem;max-width:500px;color:#755969}
+.cp-showcase-copy>p:not(.cp-overline){font-size:.98rem;max-width:500px;color:#6c243a}
 .cp-device-display{background:none;min-height:690px}
-.cp-phone-backdrop{background:radial-gradient(ellipse,#efc6d6,transparent 70%)}
-.cp-iphone{filter:drop-shadow(0 22px 17px rgba(35,19,29,.12))}
-.cp-showcase-notes{color:#8a6375}
+.cp-phone-backdrop{background:radial-gradient(ellipse,#e6cfd4,transparent 70%)}
+.cp-iphone{filter:drop-shadow(0 22px 17px rgba(40,16,24,.12))}
+.cp-showcase-notes{color:#7c2942}
 .cp-partnerships{background:#fff9fb}
-.cp-partnerships-heading>p{font-size:.96rem;max-width:420px;color:#776272}
+.cp-partnerships-heading>p{font-size:.96rem;max-width:420px;color:#72263d}
 .cp-brand-devices{grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:18px}
-.cp-brand-phone{aspect-ratio:4/5.5;border:0;border-radius:0;background:#e5c6d2;box-shadow:none;overflow:hidden}
+.cp-brand-phone{aspect-ratio:4/5.5;border:0;border-radius:0;background:#decdd0;box-shadow:none;overflow:hidden}
 .cp-brand-phone-head{position:absolute;top:0;left:0;right:0;z-index:1;height:36px;
-  background:linear-gradient(180deg,rgba(28,16,24,.55),transparent);padding:11px 13px}
+  background:linear-gradient(180deg,rgba(33,13,19,.55),transparent);padding:11px 13px}
 .cp-brand-phone-screen{height:calc(100% - 65px)}
-.cp-brand-phone-caption{height:65px;background:#f8ecf1;padding:12px 15px}
-.cp-partnerships-foot{border-top:1px solid rgba(117,65,85,.18)}
-.cp-skills{background:#321b28}
+.cp-brand-phone-caption{height:65px;background:#f5eff0;padding:12px 15px}
+.cp-partnerships-foot{border-top:1px solid rgba(99,33,53,.18)}
+.cp-skills{background:#391722}
 .cp-skills .cp-heading{color:#fff9fb}
 .cp-skills-intro{align-items:flex-start;text-align:left;max-width:760px}
 .cp-skills-intro>p:last-child{margin:0}
 .cp-skill-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.18)}
 .cp-skill-card,.cp-skill-card:nth-child(4n+2),.cp-skill-card:nth-child(4n+3),.cp-skill-card:nth-child(4n+4){
-  min-height:200px;padding:25px;background:#321b28;color:#f6e8ef;transition:background .3s ease}
-.cp-skill-card:hover{transform:none;background:#4a2a3b}
-.cp-skill-card>span{color:#cf9cb2}
-.cp-skill-card small{color:#cbb0bd}
-.cp-skills-note{color:#d1b1c0}
+  min-height:200px;padding:25px;background:#391722;color:#f3ebed;transition:background .3s ease}
+.cp-skill-card:hover{transform:none;background:#571d2e}
+.cp-skill-card>span{color:#d299aa}
+.cp-skill-card small{color:#ceadb7}
+.cp-skills-note{color:#d3afba}
 .cp-gallery{background:#fff9fb}
-.cp-gallery-heading>p{color:#715565}
-.cp-filters{border-bottom:1px solid rgba(117,65,85,.18)}
-.cp-filters .filter-btn{border:0;border-radius:0;background:transparent;color:#7e5d6d;
+.cp-gallery-heading>p{color:#682337}
+.cp-filters{border-bottom:1px solid rgba(99,33,53,.18)}
+.cp-filters .filter-btn{border:0;border-radius:0;background:transparent;color:#73263d;
   border-bottom:1px solid transparent;padding:12px 3px;margin-right:12px;font-weight:700}
 .cp-filters .filter-btn.active,.cp-filters .filter-btn:hover{
-  color:#4a2435;background:transparent;border-color:#4a2435}
+  color:#481e2a;background:transparent;border-color:#481e2a}
 .cinematic-project-grid{
   grid-template-columns:repeat(12,minmax(0,1fr));gap:20px;
 }
 .cinematic-project-grid .portfolio-item{
-  grid-column:span 4;aspect-ratio:4/5.15;background:#ecdde3;box-shadow:none;
+  grid-column:span 4;aspect-ratio:4/5.15;background:#e9e0e2;box-shadow:none;
 }
 .cinematic-project-grid .portfolio-item:nth-child(5n+1){grid-column:span 7;aspect-ratio:1.22}
 .cinematic-project-grid .portfolio-item:nth-child(5n+2){grid-column:span 5;aspect-ratio:.96}
@@ -122,8 +122,8 @@
 .cinematic-project-grid .portfolio-caption{opacity:1;gap:10px;padding:70px 24px 24px}
 .cinematic-project-grid .portfolio-caption strong{font-family:'DM Sans',Arial,sans-serif;
   text-transform:none;font-size:clamp(1.1rem,1.8vw,1.7rem);font-weight:500;letter-spacing:-.03em}
-.cinematic-project-grid .portfolio-item:focus-visible{outline:3px solid #4a2435}
-.cp-connect{background:#e9ccda}
+.cinematic-project-grid .portfolio-item:focus-visible{outline:3px solid #481e2a}
+.cp-connect{background:#e2d3d6}
 .cp-connect .cp-heading{max-width:730px}
 .cp-connect-art span{color:rgba(255,249,251,.5)}
 /* Scroll reveals are progressive enhancement; content remains visible if scripts fail. */
