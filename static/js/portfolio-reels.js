@@ -94,19 +94,47 @@ document.addEventListener('DOMContentLoaded', () => {
       track.scrollTo({ left: centerOf(card) - track.clientWidth / 2, behavior: smooth && !reduced ? 'smooth' : 'auto' });
     };
 
-    // Center mode: pad the track so the first and last videos can sit in the middle.
+    // Two modes. When every video fits on screen, the row stays centered and a
+    // spotlight moves between videos ("fitted"). When there are more than fit,
+    // the row slides so the focused video sits in the middle ("carousel").
+    let fits = false;
+    let activeIndex = 0;
     const layout = () => {
-      const first = visibleCards()[0];
+      const list = visibleCards();
+      const first = list[0];
       if (!first) return;
-      const pad = Math.max(24, (track.clientWidth - first.offsetWidth) / 2);
-      track.style.paddingLeft = `${pad}px`;
-      track.style.paddingRight = `${pad}px`;
+      const gap = parseFloat(getComputedStyle(track).columnGap) || 24;
+      const total = list.reduce((sum, card) => sum + card.offsetWidth, 0) + gap * (list.length - 1);
+      fits = total <= track.clientWidth - 48;
+      root.classList.toggle('is-fitted', fits);
+      if (fits) {
+        track.style.paddingLeft = '';
+        track.style.paddingRight = '';
+        track.scrollLeft = 0;
+        activeIndex = clamp(activeIndex, 0, list.length - 1);
+      } else {
+        const pad = Math.max(24, (track.clientWidth - first.offsetWidth) / 2);
+        track.style.paddingLeft = `${pad}px`;
+        track.style.paddingRight = `${pad}px`;
+      }
+    };
+    const currentIndex = () => (fits ? activeIndex : nearestIndex());
+    const goTo = (index, smooth = true) => {
+      const list = visibleCards();
+      if (!list.length) return;
+      if (fits) {
+        activeIndex = clamp(index, 0, list.length - 1);
+        updateUi();
+        schedule();
+      } else {
+        scrollToIndex(index, smooth);
+      }
     };
 
     // ---- Progress + arrows
     const updateUi = () => {
       const list = visibleCards();
-      const index = nearestIndex();
+      const index = currentIndex();
       if (bar) {
         const share = list.length ? 1 / list.length : 1;
         const progress = list.length > 1 ? index / (list.length - 1) : 0;
@@ -129,19 +157,28 @@ document.addEventListener('DOMContentLoaded', () => {
       frame = 0;
       if (reduced) return;
       const mid = trackCenter();
+      const spot = activeIndex;
       const sectionRect = section.getBoundingClientRect();
       // -1 when the section enters from below, +1 as it leaves at the top
       const pageProgress = clamp((window.innerHeight / 2 - (sectionRect.top + sectionRect.height / 2)) / window.innerHeight, -1.2, 1.2);
       let moving = false;
       visibleCards().forEach((card, i) => {
         const step = card.offsetWidth + 24;
-        const d = clamp((centerOf(card) - mid) / step, -2, 2);
+        const d = fits ? clamp(i - spot, -2, 2) : clamp((centerOf(card) - mid) / step, -2, 2);
         const ad = Math.min(Math.abs(d), 1.4);
-        const target = {
+        const near = Math.min(ad, 1);
+        // Fitted rows stay level and centered: a gentle spotlight, no 3D swing.
+        const target = fits ? {
+          s: 1 - 0.06 * near,
+          ry: clamp(-d * 3, -5, 5),
+          o: 1 - 0.1 * near,
+          b: 1 - 0.25 * near,
+          y: pageProgress * (i % 2 ? -22 : 18) + near * 10,
+        } : {
           s: 1 - 0.14 * ad,
           ry: clamp(-d * 16, -24, 24),
-          o: 1 - 0.22 * Math.min(ad, 1),
-          b: 1 - 0.3 * Math.min(ad, 1),
+          o: 1 - 0.22 * near,
+          b: 1 - 0.3 * near,
           y: pageProgress * (i % 2 ? -28 : 22) + ad * 14,
         };
         const cur = state.get(card);
@@ -169,7 +206,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     window.addEventListener('scroll', () => { if (inView) schedule(); }, { passive: true });
     track.addEventListener('scroll', () => { updateUi(); schedule(); }, { passive: true });
-    window.addEventListener('resize', () => { layout(); updateUi(); schedule(); });
+    window.addEventListener('resize', () => {
+      const index = currentIndex();
+      activeIndex = index;
+      layout();
+      if (!fits) scrollToIndex(index, false);
+      updateUi();
+      schedule();
+    });
 
     // ---- Auto-advance (stops for good once someone interacts)
     let autoTimer = 0;
@@ -181,8 +225,8 @@ document.addEventListener('DOMContentLoaded', () => {
       autoTimer = window.setInterval(() => {
         if (hovering || document.hidden || !inView) return;
         const list = visibleCards();
-        const next = nearestIndex() + 1;
-        scrollToIndex(next >= list.length ? 0 : next);
+        const next = currentIndex() + 1;
+        goTo(next >= list.length ? 0 : next);
       }, AUTO_MS);
     }
     function stopAuto() {
@@ -197,19 +241,31 @@ document.addEventListener('DOMContentLoaded', () => {
     root.addEventListener('focusin', takeOver);
     // Clicking into a TikTok/Instagram player moves focus into its iframe.
     window.addEventListener('blur', () => {
-      window.setTimeout(() => { if (track.contains(document.activeElement)) takeOver(); }, 0);
+      window.setTimeout(() => {
+        const focused = document.activeElement;
+        if (!track.contains(focused)) return;
+        takeOver();
+        const index = visibleCards().findIndex(card => card.contains(focused));
+        if (index >= 0) goTo(index);
+      }, 0);
     });
 
     // ---- Arrows and keys
     arrows.forEach(btn => btn.addEventListener('click', () => {
       takeOver();
-      scrollToIndex(nearestIndex() + Number(btn.dataset.reelStep));
+      goTo(currentIndex() + Number(btn.dataset.reelStep));
+    }));
+    // In a fitted row, pressing a video (or its caption) moves the spotlight to it.
+    cards.forEach(card => card.addEventListener('pointerdown', () => {
+      if (!fits) return;
+      takeOver();
+      goTo(visibleCards().indexOf(card));
     }));
     track.addEventListener('keydown', event => {
       if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
       event.preventDefault();
       takeOver();
-      scrollToIndex(nearestIndex() + (event.key === 'ArrowRight' ? 1 : -1));
+      goTo(currentIndex() + (event.key === 'ArrowRight' ? 1 : -1));
     });
 
     // ---- Mouse drag with momentum, then settle on the nearest video
@@ -222,7 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let lastT = 0;
     let velocity = 0;
     track.addEventListener('pointerdown', event => {
-      if (event.pointerType !== 'mouse' || event.button !== 0) return;
+      if (fits || event.pointerType !== 'mouse' || event.button !== 0) return;
       dragging = true;
       coasting = false;
       moved = false;
@@ -290,8 +346,9 @@ document.addEventListener('DOMContentLoaded', () => {
         card.classList.toggle('is-hidden', !show);
         if (show) loadEmbed(card);
       });
+      activeIndex = 0;
       layout();
-      scrollToIndex(0, false);
+      goTo(0, false);
       updateUi();
       schedule();
     }));
@@ -311,7 +368,8 @@ document.addEventListener('DOMContentLoaded', () => {
     root.classList.add('is-carousel');
     layout();
     const startIndex = visibleCards().length > 2 ? 1 : 0;
-    scrollToIndex(startIndex, false);
+    activeIndex = startIndex;
+    goTo(startIndex, false);
     updateUi();
     schedule();
   });

@@ -27,13 +27,14 @@
 .film-reels-track::-webkit-scrollbar{display:none}
 .film-reels-track.is-dragging{cursor:grabbing;scroll-snap-type:none}
 .film-reels-track.is-dragging iframe,.film-reels-track.is-dragging video{pointer-events:none}
+[data-film-reels].is-fitted .film-reels-track{justify-content:center;scroll-snap-type:none;cursor:default}
 .film-reels-track:focus-visible{outline:3px solid #d995b6;outline-offset:-3px}
 
 .film-reel-card{position:relative;flex:0 0 var(--reel-w);scroll-snap-align:center;margin:0;transform-origin:50% 42%;will-change:transform,opacity;backface-visibility:hidden}
 .film-reel-card.is-hidden{display:none}
 .film-reel-phone{position:relative;aspect-ratio:9/16;border-radius:28px;overflow:hidden;background:#151218;box-shadow:0 0 0 7px #151218,0 18px 34px -22px rgba(28,21,27,.45);transition:box-shadow .6s ease}
-.film-reels.is-carousel .film-reel-phone iframe,.film-reels.is-carousel .film-reel-phone video{filter:brightness(var(--reel-dim,1))}
-.film-reels.is-carousel .film-reel-card.is-active .film-reel-phone{box-shadow:0 0 0 7px #151218,0 46px 70px -30px rgba(28,21,27,.6)}
+[data-film-reels].is-carousel .film-reel-phone iframe,[data-film-reels].is-carousel .film-reel-phone video{filter:brightness(var(--reel-dim,1))}
+[data-film-reels].is-carousel .film-reel-card.is-active .film-reel-phone{box-shadow:0 0 0 7px #151218,0 46px 70px -30px rgba(28,21,27,.6)}
 .film-reel-phone iframe,.film-reel-phone video{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
 .film-reel-phone video{object-fit:cover;background:#151218}
 .film-reel-embed{opacity:0;transition:opacity .5s ease}
@@ -58,8 +59,8 @@
 
 .film-reels-progress{position:relative;height:1px;margin:6px var(--reel-gutter) 0;background:rgba(28,21,27,.18)}
 .film-reels-progress span{position:absolute;left:0;top:-1px;height:3px;width:20%;background:#1d171e;transition:transform .7s cubic-bezier(.2,.7,.1,1),width .4s ease}
-.film-reels.is-carousel .film-reel-card:not(.is-active) .film-reel-caption,
-.film-reels.is-carousel .film-reel-card:not(.is-active) .film-reel-title{opacity:.45}
+[data-film-reels].is-carousel .film-reel-card:not(.is-active) .film-reel-caption,
+[data-film-reels].is-carousel .film-reel-card:not(.is-active) .film-reel-title{opacity:.45}
 .film-reel-title{transition:opacity .5s ease}
 .film-reels-kit{margin:40px var(--reel-gutter) 0}
 
