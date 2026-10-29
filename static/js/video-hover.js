@@ -1,37 +1,73 @@
-/* Hover-to-play for TikTok embeds.
+/* Hover-to-play for TikTok embeds, with sound when the browser allows it.
+ *
  * TikTok's player only starts its control API once playback begins, so each
- * player loads muted with autoplay, is paused as soon as it starts, and then
- * plays while the pointer is over its card. On touch screens (no hover) the
- * video most in view plays instead, one at a time.
- * Markup: a card with [data-hover-card] containing iframe[data-hover-video].
+ * player loads with autoplay (browsers force that to be muted), is paused as
+ * soon as it starts, and then plays while the pointer is over its card.
+ *
+ * Sound: browsers only allow audio after the visitor has clicked, tapped or
+ * pressed a key on the page. Before that, hover previews play muted with a
+ * "Click for sound" hint; clicking the video turns sound on. After any click
+ * on the page, hover previews play with sound.
+ *
+ * On touch screens (no hover) the video most in view plays muted, one at a
+ * time; tapping it turns sound on.
+ * Markup: a card with [data-hover-card] containing iframe[data-hover-video],
+ * a [data-hover-shield] button over the video and an optional .video-sound-hint.
  */
 (() => {
   const noHover = window.matchMedia('(hover: none)');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const frames = () => Array.from(document.querySelectorAll('iframe[data-hover-video]'));
   const cards = () => Array.from(document.querySelectorAll('[data-hover-card]'));
-  const stateOf = frame => frame.hoverState || (frame.hoverState = { ready: false, want: false, playing: false });
+  const stateOf = frame => frame.hoverState || (frame.hoverState = {
+    ready: false, want: false, sound: false, playing: false, muted: true, retried: false,
+  });
+
+  let activated = Boolean(navigator.userActivation && navigator.userActivation.hasBeenActive);
+  const markActivated = () => { activated = true; };
+  ['pointerdown', 'keydown', 'touchstart'].forEach(type => {
+    document.addEventListener(type, markActivated, { capture: true, passive: true });
+  });
 
   const send = (frame, type, value = null) => {
     if (frame.contentWindow) frame.contentWindow.postMessage({ type, value, 'x-tiktok-player': true }, '*');
   };
 
+  const paint = card => {
+    if (!card) return;
+    const frame = card.querySelector('iframe[data-hover-video]');
+    const state = frame ? stateOf(frame) : null;
+    const previewing = Boolean(state && state.want);
+    card.classList.toggle('is-previewing', previewing);
+    card.classList.toggle('is-playing', Boolean(state && state.want && state.playing));
+    card.classList.toggle('is-muted', Boolean(state && state.want && state.muted));
+    card.classList.toggle('has-sound', Boolean(state && state.want && !state.muted));
+  };
+
   const apply = frame => {
     const state = stateOf(frame);
     if (!state.ready) return;
-    send(frame, state.want ? 'play' : 'pause');
+    if (state.want) {
+      send(frame, state.sound && activated ? 'unMute' : 'mute');
+      send(frame, 'play');
+    } else {
+      send(frame, 'pause');
+    }
   };
 
-  const setWant = (card, want) => {
+  const setWant = (card, want, sound = false) => {
     if (!card) return;
     card.querySelectorAll('iframe[data-hover-video]').forEach(frame => {
       const state = stateOf(frame);
-      if (state.want === want) return;
+      if (state.want === want && state.sound === sound) return;
+      const stopping = state.want && !want;
       state.want = want;
-      if (!want && state.ready) send(frame, 'seekTo', 0);
+      state.sound = want && sound;
+      state.retried = false;
+      if (stopping && state.ready) send(frame, 'seekTo', 0);
       apply(frame);
     });
-    card.classList.toggle('is-previewing', want);
+    paint(card);
   };
 
   window.addEventListener('message', event => {
@@ -46,68 +82,90 @@
     const frame = frames().find(f => f.contentWindow === event.source);
     if (!frame) return;
     const state = stateOf(frame);
+    const card = frame.closest('[data-hover-card]');
+
     if (data.type === 'onPlayerReady') {
       state.ready = true;
       apply(frame);
+    } else if (data.type === 'onMute') {
+      state.muted = Boolean(data.value);
     } else if (data.type === 'onStateChange') {
       state.ready = true;
       state.playing = data.value === 1;
-      // Autoplay is only used to wake the player up; hold it until wanted.
-      if (state.playing && !state.want) send(frame, 'pause');
-      const card = frame.closest('[data-hover-card]');
-      if (card) card.classList.toggle('is-playing', state.playing && state.want);
+      if (state.playing && !state.want) {
+        // Autoplay only wakes the player up; hold it until wanted.
+        send(frame, 'pause');
+      } else if (data.value === 2 && state.want && !state.retried) {
+        // Turning sound on can make the browser pause the video once; resume it.
+        state.retried = true;
+        send(frame, 'play');
+      }
     }
+    paint(card);
   });
 
-  // A transparent layer over each video catches the pointer (an iframe would
-  // swallow it). Clicking or tapping it toggles the preview.
+  // The shield over the video catches the pointer (an iframe would swallow it).
+  // Clicking it turns sound on; clicking again while it plays with sound stops it.
   document.addEventListener('click', event => {
     const shield = event.target.closest && event.target.closest('[data-hover-shield]');
     if (!shield) return;
     const card = shield.closest('[data-hover-card]');
-    if (card) setWant(card, !card.classList.contains('is-previewing'));
+    if (!card) return;
+    activated = true;
+    if (card.classList.contains('has-sound') && card.classList.contains('is-playing')) {
+      setWant(card, false);
+    } else {
+      cards().forEach(other => { if (other !== card) setWant(other, false); });
+      setWant(card, true, true);
+    }
   });
 
-  // Pointer hover (mouse and pen)
+  // Mouse and pen hover
+  const hoverAllowed = event => event.pointerType !== 'touch' && !noHover.matches;
   document.addEventListener('pointerover', event => {
-    if (event.pointerType === 'touch' || noHover.matches) return;
+    if (!hoverAllowed(event)) return;
     const card = event.target.closest && event.target.closest('[data-hover-card]');
-    if (card && !card.contains(event.relatedTarget)) setWant(card, true);
+    if (card && !card.contains(event.relatedTarget)) setWant(card, true, activated);
   });
   document.addEventListener('pointerout', event => {
-    if (event.pointerType === 'touch' || noHover.matches) return;
+    if (!hoverAllowed(event)) return;
     const card = event.target.closest && event.target.closest('[data-hover-card]');
     if (card && !card.contains(event.relatedTarget)) setWant(card, false);
   });
   // Safety net for fast pointer moves that skip a pointerout.
   document.addEventListener('pointermove', event => {
-    if (event.pointerType === 'touch' || noHover.matches) return;
+    if (!hoverAllowed(event)) return;
     const over = event.target.closest && event.target.closest('[data-hover-card]');
     cards().forEach(card => {
       if (card !== over && card.classList.contains('is-previewing')) setWant(card, false);
     });
   }, { passive: true });
 
-  // Keyboard users: focusing a card's link previews its video.
+  // Keyboard users: focusing a card previews its video.
   document.addEventListener('focusin', event => {
-    // Only keyboard focus; a mouse click or tap is handled by the click toggle.
     if (!event.target.matches || !event.target.matches(':focus-visible')) return;
     const card = event.target.closest && event.target.closest('[data-hover-card]');
-    cards().forEach(other => { if (other !== card && other.classList.contains('is-previewing') && !other.matches(':hover')) setWant(other, false); });
-    if (card) setWant(card, true);
+    cards().forEach(other => {
+      if (other !== card && other.classList.contains('is-previewing') && !other.matches(':hover')) setWant(other, false);
+    });
+    if (card) setWant(card, true, activated);
   });
 
-  // Touch screens: play the one video most in view.
+  // Touch screens: play the one video most in view (muted until tapped).
   const ratios = new Map();
   const pickForTouch = () => {
-    if (!noHover.matches || reducedMotion.matches || document.hidden) {
-      if (noHover.matches) cards().forEach(card => setWant(card, false));
+    if (!noHover.matches) return;
+    if (reducedMotion.matches || document.hidden) {
+      cards().forEach(card => setWant(card, false));
       return;
     }
     const visible = cards().filter(card => (ratios.get(card) || 0) >= 0.6 && card.querySelector('iframe[data-hover-video]'));
     let chosen = visible.find(card => card.classList.contains('is-active'));
     if (!chosen) chosen = visible.sort((a, b) => (ratios.get(b) || 0) - (ratios.get(a) || 0))[0];
-    cards().forEach(card => setWant(card, card === chosen));
+    cards().forEach(card => {
+      if (card === chosen) setWant(card, true, card.classList.contains('has-sound'));
+      else setWant(card, false);
+    });
   };
   if ('IntersectionObserver' in window) {
     const watch = new IntersectionObserver(entries => {

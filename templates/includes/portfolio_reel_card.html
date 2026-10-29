@@ -18,7 +18,7 @@
       scrolling="no"></iframe>
     <noscript><a class="film-reel-fallback" href="{{ reel.public_url }}" target="_blank" rel="noopener">Watch on {{ reel.platform_label }}</a></noscript>
     <div class="film-reel-loading" aria-hidden="true"><span></span></div>
-    {% if reel.platform == "tiktok" %}<button type="button" class="video-hover-shield" data-hover-shield aria-label="Play or pause {{ reel.title }}"></button>{% endif %}
+    {% if reel.platform == "tiktok" %}<button type="button" class="video-hover-shield" data-hover-shield aria-label="Play {{ reel.title }} with sound"></button><span class="video-sound-hint" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="m23 9-6 6"/><path d="m17 9 6 6"/></svg><span class="video-sound-hint-mouse">Click for sound</span><span class="video-sound-hint-touch">Tap for sound</span></span>{% endif %}
     {% endif %}
   </div>
   <div class="film-reel-caption">

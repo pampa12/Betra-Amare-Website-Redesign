@@ -23,7 +23,7 @@
             allowfullscreen
             referrerpolicy="strict-origin-when-cross-origin"
           ></iframe>
-          {% if item.platform == "tiktok" %}<button type="button" class="video-hover-shield" data-hover-shield aria-label="Play or pause {{ item.title }}"></button>{% endif %}
+          {% if item.platform == "tiktok" %}<button type="button" class="video-hover-shield" data-hover-shield aria-label="Play {{ item.title }} with sound"></button><span class="video-sound-hint" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="m23 9-6 6"/><path d="m17 9 6 6"/></svg><span class="video-sound-hint-mouse">Click for sound</span><span class="video-sound-hint-touch">Tap for sound</span></span>{% endif %}
         </div>
         <div class="tiktok-showcase-meta">
           {% if item.brand_name %}<p class="tiktok-showcase-kicker">Brand content · {{ item.brand_name }}</p>{% else %}<p class="tiktok-showcase-kicker">Featured {{ item.platform_label|default:"video" }}</p>{% endif %}
