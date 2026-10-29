@@ -69,19 +69,14 @@
 .film-gallery-menu .filter-btn{padding:10px 0;margin:0;background:none;border:0;border-bottom:1px solid transparent;letter-spacing:.16em;color:#bf94a1;font-weight:700;font-size:.65rem}
 .film-gallery-menu .filter-btn.active,.film-gallery-menu .filter-btn:hover{color:white;border-bottom-color:#fff;background:none}
 .film-gallery-menu .filter-btn[hidden]{display:none}
-.film-gallery{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:clamp(16px,2.2vw,32px);columns:initial;max-width:1600px;margin:0 auto}
-.film-gallery .portfolio-item,.film-gallery .portfolio-item:nth-child(n){display:block;grid-column:span 6;aspect-ratio:4/4.1;break-inside:auto;margin:0;position:relative;overflow:hidden;background:#481e2a;cursor:pointer}
-.film-gallery .portfolio-item:nth-child(6n+1),.film-gallery .portfolio-item:nth-child(6n+4){grid-column:span 12;aspect-ratio:1.75}
-.film-gallery .portfolio-item:nth-child(6n+2){grid-column:span 5;aspect-ratio:3/4}
-.film-gallery .portfolio-item:nth-child(6n+3){grid-column:span 7;aspect-ratio:5/4}
-.film-gallery .portfolio-item:nth-child(6n+5){grid-column:span 7;aspect-ratio:5/4}
-.film-gallery .portfolio-item:nth-child(6n+6){grid-column:span 5;aspect-ratio:3/4}
+.film-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,360px));justify-content:center;gap:clamp(16px,2vw,28px);columns:initial;max-width:1240px;margin:0 auto}
+.film-gallery .portfolio-item,.film-gallery .portfolio-item:nth-child(n){display:block;grid-column:auto;aspect-ratio:4/5;break-inside:auto;margin:0;position:relative;overflow:hidden;background:#481e2a;cursor:pointer}
 .film-gallery .portfolio-item.is-hidden{display:none}
 .film-gallery .portfolio-item video,.film-gallery .portfolio-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .75s cubic-bezier(.16,1,.3,1)}
 .film-gallery .portfolio-item:hover :is(img,video){transform:scale(1.035)}
 .film-gallery .portfolio-item.reveal{opacity:1;transform:none}
-.film-gallery .portfolio-caption{opacity:1;display:flex;flex-direction:row;justify-content:space-between;align-items:end;padding:85px 36px 30px;background:linear-gradient(transparent,rgba(11,4,6,.7));gap:20px;text-align:left}
-.film-gallery .portfolio-caption strong{font:500 clamp(1.5rem,3.2vw,3.5rem)/1 'Cormorant Garamond',Georgia,serif;letter-spacing:-.03em;text-shadow:0 1px 12px rgba(11,4,6,.45)}
+.film-gallery .portfolio-caption{opacity:1;display:flex;flex-direction:row;justify-content:space-between;align-items:end;padding:70px 22px 20px;background:linear-gradient(transparent,rgba(11,4,6,.7));gap:20px;text-align:left}
+.film-gallery .portfolio-caption strong{font:500 clamp(1.4rem,2vw,2rem)/1 'Cormorant Garamond',Georgia,serif;letter-spacing:-.03em;text-shadow:0 1px 12px rgba(11,4,6,.45)}
 .film-gallery .portfolio-caption span{font-size:.6rem;font-weight:700;letter-spacing:.17em;text-transform:uppercase;white-space:nowrap}
 .film-gallery-empty{margin:45px auto 20px;border-top:1px solid #632135;border-bottom:1px solid #632135;padding:80px 12px;text-align:center}
 .film-gallery-empty>p{font-size:.63rem;font-weight:700;letter-spacing:.2em}
@@ -185,9 +180,7 @@
   .film-work-intro h2{font-size:clamp(3.7rem,11vw,7rem)}
   .film-work-intro h2 em{font-size:1.16em}
   .film-gallery-menu{gap:16px}
-  .film-gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-  .film-gallery .portfolio-item:nth-child(n){grid-column:span 1;aspect-ratio:4/5}
-  .film-gallery .portfolio-item:nth-child(3n+1){grid-column:span 2;aspect-ratio:1.42}
+  .film-gallery{grid-template-columns:repeat(auto-fit,minmax(200px,320px));gap:14px}
   .film-gallery .portfolio-caption{padding:60px 19px 17px}
   .film-gallery .portfolio-caption strong{font-size:clamp(1.45rem,3vw,2.5rem)}
   .film-editorial-layout{gap:30px}
@@ -211,8 +204,7 @@
   .film-about,.film-work,.film-editorial,.film-brands,.film-skills{padding-left:18px;padding-right:18px}
   .film-about-copy h2{font-size:clamp(4.5rem,17vw,6.5rem)}
   .film-work-intro h2{font-size:clamp(3.2rem,12.2vw,5.1rem)}
-  .film-gallery{grid-template-columns:1fr}
-  .film-gallery .portfolio-item:nth-child(n){grid-column:span 1;aspect-ratio:4/5}
+  .film-gallery{grid-template-columns:minmax(0,420px)}
   .film-gallery .portfolio-caption{align-items:flex-start;flex-direction:column;gap:9px}
   .film-brands-grid{grid-template-columns:1fr}
   .film-brands-quiet{display:block}
