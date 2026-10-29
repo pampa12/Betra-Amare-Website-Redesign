@@ -175,7 +175,12 @@ class FeaturedTikTok(models.Model):
         if self.video_id:
             return (
                 f"https://www.tiktok.com/player/v1/{self.video_id}"
-                "?autoplay=0&loop=1&music_info=1&description=0"
+                # Clean player: no controls, captions or overlays. It starts muted
+                # with autoplay so the page script can control it (hover to play).
+                "?controls=0&progress_bar=0&play_button=0&volume_control=0"
+                "&fullscreen_button=0&timestamp=0&music_info=0&description=0"
+                "&rel=0&closed_caption=0&native_context_menu=0"
+                "&loop=1&autoplay=1&muted=1"
             )
         if self.instagram_code:
             return f"https://www.instagram.com/reel/{self.instagram_code}/embed/"

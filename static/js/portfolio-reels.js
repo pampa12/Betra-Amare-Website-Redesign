@@ -145,8 +145,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const dir = Number(btn.dataset.reelStep);
         btn.disabled = list.length < 2 || (dir < 0 ? index === 0 : index === list.length - 1);
       });
+      const previous = cards.find(card => card.classList.contains('is-active'));
       cards.forEach(card => card.classList.remove('is-active'));
       if (list[index]) list[index].classList.add('is-active');
+      if (previous !== list[index]) document.dispatchEvent(new CustomEvent('reels:active'));
     };
 
     // ---- Per-frame focus + parallax, eased toward targets
