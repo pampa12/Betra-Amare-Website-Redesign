@@ -9,6 +9,8 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 
+from website.templatetags.media_tags import cdn
+
 from .featured_tiktok import FeaturedTikTok
 from .forms import InquiryForm
 from .models import (
@@ -311,7 +313,7 @@ def _reel_from_upload(item):
         "category_label": item.get_category_display(),
         "tag": item.get_category_display(),
         "video_url": item.video.url,
-        "poster_url": item.image.url if item.image else "",
+        "poster_url": cdn(item.image.url, 900) if item.image else "",
         "alt": item.alt_text or item.title,
         "platform": "",
         "platform_label": "",

@@ -201,3 +201,21 @@ class FeaturedVideoLinkTests(TestCase):
         post = FeaturedTikTok(title="Nope", tiktok_url="https://www.youtube.com/watch?v=abc")
         with self.assertRaises(ValidationError):
             post.full_clean()
+
+
+class CloudinaryImageFilterTests(TestCase):
+    def test_cloudinary_urls_get_auto_format_quality_and_width(self):
+        from website.templatetags.media_tags import cdn, cdn_srcset
+        url = "https://res.cloudinary.com/demo/image/upload/v1/media/portfolio/shot.jpg"
+        self.assertEqual(
+            cdn(url, 800),
+            "https://res.cloudinary.com/demo/image/upload/f_auto,q_auto,c_limit,w_800/v1/media/portfolio/shot.jpg",
+        )
+        self.assertIn(" 640w", cdn_srcset(url, "640,1100"))
+        self.assertIn("w_1100/", cdn_srcset(url, "640,1100"))
+
+    def test_other_urls_are_unchanged(self):
+        from website.templatetags.media_tags import cdn
+        self.assertEqual(cdn("/media/local.jpg", 800), "/media/local.jpg")
+        already = "https://res.cloudinary.com/demo/image/upload/w_400,c_fill/v1/a.jpg"
+        self.assertEqual(cdn(already, 800), already)

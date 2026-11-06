@@ -1,3 +1,4 @@
+{% load media_tags %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -68,7 +69,7 @@
                 data-media-type="video"
                 data-media-src="{{ item.video.url }}"
                 data-media-alt="{{ item.alt_text|default:item.title }}"
-                {% if item.image %}data-media-poster="{{ item.image.url }}"{% endif %}
+                {% if item.image %}data-media-poster="{{ item.image.url|cdn:1400 }}"{% endif %}
                 role="button"
                 tabindex="0"
                 aria-label="Open {{ item.title }} video"
@@ -81,7 +82,7 @@
                   playsinline
                   preload="metadata"
                   aria-label="{{ item.alt_text|default:item.title }} video"
-                  {% if item.image %}poster="{{ item.image.url }}"{% endif %}
+                  {% if item.image %}poster="{{ item.image.url|cdn:900 }}"{% endif %}
                 >
                   <source src="{{ item.video.url }}">
                   Your browser does not support HTML5 video.
@@ -90,7 +91,7 @@
               </div>
               {% elif item.link_url and item.image %}
               <a class="portfolio-item reveal" data-category="{{ item.category }}" href="{{ item.link_url }}" target="_blank" rel="noopener">
-                <img src="{{ item.image.url }}" alt="{% if item.alt_text %}{{ item.alt_text }}{% else %}{{ item.title }}{% endif %}" loading="lazy">
+                <img src="{{ item.image.url|cdn:800 }}" alt="{% if item.alt_text %}{{ item.alt_text }}{% else %}{{ item.title }}{% endif %}" loading="lazy">
                 <div class="portfolio-caption"><strong>{{ item.title }}</strong><span>{{ item.get_category_display }}</span></div>
               </a>
               {% elif item.image %}
@@ -99,13 +100,13 @@
                 data-category="{{ item.category }}"
                 data-title="{{ item.title }}"
                 data-media-type="image"
-                data-media-src="{{ item.image.url }}"
+                data-media-src="{{ item.image.url|cdn:2000 }}"
                 data-media-alt="{{ item.alt_text|default:item.title }}"
                 role="button"
                 tabindex="0"
                 aria-label="Open {{ item.title }} image"
               >
-                <img src="{{ item.image.url }}" alt="{% if item.alt_text %}{{ item.alt_text }}{% else %}{{ item.title }}{% endif %}" loading="lazy">
+                <img src="{{ item.image.url|cdn:800 }}" alt="{% if item.alt_text %}{{ item.alt_text }}{% else %}{{ item.title }}{% endif %}" loading="lazy">
                 <div class="portfolio-caption"><strong>{{ item.title }}</strong><span>{{ item.get_category_display }}</span></div>
               </div>
               {% endif %}
@@ -175,7 +176,7 @@
           {% if showcase_photos %}
           <div class="film-motion-stills" data-film-stills aria-label="Animated slideshow of selected work">
             {% for photo in showcase_photos %}
-            <img src="{{ photo.image.url }}" alt="{{ photo.alt_text|default:photo.title }}" class="film-motion-still{% if forloop.first %} is-current{% endif %}"
+            <img src="{{ photo.image.url|cdn:1400 }}" alt="{{ photo.alt_text|default:photo.title }}" class="film-motion-still{% if forloop.first %} is-current{% endif %}"
                  aria-hidden="{% if forloop.first %}false{% else %}true{% endif %}" loading="lazy">
             {% endfor %}
           </div>
@@ -203,7 +204,7 @@
       <div class="film-brands-grid">
         {% for item in brand_photos %}
         <article class="film-brand-card film-reveal">
-          <div class="film-brand-image"><img src="{{ item.image.url }}" alt="{{ item.alt_text|default:item.title }}" loading="lazy"></div>
+          <div class="film-brand-image"><img src="{{ item.image.url|cdn:900 }}" alt="{{ item.alt_text|default:item.title }}" loading="lazy"></div>
           <div class="film-brand-label"><span>{{ item.title }}</span><span>{{ item.get_category_display }}</span></div>
         </article>
         {% endfor %}

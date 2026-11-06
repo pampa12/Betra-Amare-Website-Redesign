@@ -1,3 +1,4 @@
+{% load media_tags %}
 {% if homepage_tiktoks %}
 <div class="homepage-tiktok-favorites reveal" aria-label="Featured TikTok favorites">
   {% for tiktok in homepage_tiktoks %}
@@ -9,7 +10,7 @@
       rel="noopener"
       aria-label="Watch {{ tiktok.title }} on TikTok"
     >
-      <img src="{{ tiktok.thumbnail.url }}" alt="{{ tiktok.title }} TikTok thumbnail" loading="lazy">
+      <img src="{{ tiktok.thumbnail.url|cdn:700 }}" alt="{{ tiktok.title }} TikTok thumbnail" loading="lazy">
       <span class="homepage-tiktok-badge" aria-hidden="true">TikTok</span>
       <span class="homepage-tiktok-play" aria-hidden="true"><span></span></span>
     </a>
