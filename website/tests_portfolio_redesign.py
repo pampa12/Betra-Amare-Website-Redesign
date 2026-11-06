@@ -262,24 +262,33 @@ class AdminAddressTests(TestCase):
 
 
 class SkillsSectionTests(TestCase):
-    def test_default_skills_show_without_certifications(self):
+    def test_default_skills_show_without_tabs_or_certifications(self):
         response = self.client.get("/portfolio/")
-        self.assertContains(response, "Skills &amp;")
-        self.assertContains(response, "Expertise</span>")
+        self.assertContains(response, "EXPERTISE.")
         self.assertContains(response, "Creative Direction")
-        self.assertNotContains(response, "sf-list--certs")
-        self.assertContains(response, "sf-monogram")
+        self.assertNotContains(response, 'role="tablist"')
+        self.assertNotContains(response, "sk-laptop")
 
-    def test_certifications_and_tools_render_from_admin_text(self):
+    def test_certifications_add_a_tab_with_credential_links(self):
         from website.models import PortfolioPageContent
         PortfolioPageContent.objects.create(
             skills="Modeling | Editorial / Commercial",
-            tools="CapCut\nCanva",
-            certifications="Example Certificate | Example Academy, 2026",
+            certifications="Example Certificate | Example Academy, 2026 | https://example.com/cert",
         )
         response = self.client.get("/portfolio/")
-        self.assertContains(response, "Certifications</span>")
-        self.assertContains(response, "Example Certificate")
+        self.assertContains(response, "CERTIFICATIONS.")
+        self.assertContains(response, 'role="tablist"')
+        self.assertContains(response, 'id="sk-panel-certs"')
         self.assertContains(response, "Example Academy, 2026")
-        self.assertContains(response, '<span class="sf-app-name">CapCut</span>')
-        self.assertNotContains(response, "Creative Direction")
+        self.assertContains(response, 'href="https://example.com/cert"')
+        self.assertContains(response, "skills-tabs.js")
+
+    def test_tools_show_uploaded_logo_or_letter_tile(self):
+        from website.models import Tool
+        Tool.objects.create(name="CapCut", sort_order=1)
+        Tool.objects.create(name="Canva", logo="tools/canva.png", sort_order=2)
+        Tool.objects.create(name="Hidden app", active=False)
+        response = self.client.get("/portfolio/")
+        self.assertContains(response, '<span class="sk-app-name">CapCut</span>')
+        self.assertContains(response, "sk-app-icon--logo")
+        self.assertNotContains(response, "Hidden app")

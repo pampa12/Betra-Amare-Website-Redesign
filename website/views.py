@@ -21,6 +21,7 @@ from .models import (
     MediaKitContent,
     PortfolioItem,
     PortfolioPageContent,
+    Tool,
 )
 
 
@@ -393,6 +394,7 @@ def portfolio(request):
             "portfolio_content": portfolio_content,
             # Unsaved defaults keep the Skills section filled before the admin row exists.
             "skills_content": portfolio_content or PortfolioPageContent(),
+            "tools": list(Tool.objects.filter(active=True)),
             "contact_content": contact_content,
         },
     )

@@ -8,7 +8,7 @@
   <title>Portfolio | Betra Amare</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@400;500;600;700&family=Dancing+Script:wght@600&family=Anton&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@400;500;600;700&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/static/css/refined.css">
   <link rel="stylesheet" href="/static/css/portfolio-story.css">
@@ -209,51 +209,63 @@
     </section>
 
     {% with sc=skills_content %}
-    {% if sc.skill_rows or sc.certification_rows or sc.tool_list %}
-    <section class="film-skills skills-fun" id="portfolio-skills" aria-labelledby="film-skills-heading">
-      <div class="sf-slide film-reveal">
-        <h2 id="film-skills-heading" class="sf-title">
-          <span class="sf-pop">Skills &amp;</span>
-          <span class="sf-pop">{% if sc.certification_rows %}Certifications{% else %}Expertise{% endif %}</span>
-        </h2>
-
-        <div class="sf-body">
-          <figure class="sf-laptop sf-pop" aria-label="{% if sc.tool_list %}Tools Betra uses{% else %}Betra Amare, model and creator{% endif %}">
-            <div class="sf-screen">
-              {% if sc.tool_list %}
-              <ul class="sf-apps">
-                {% for tool in sc.tool_list %}
-                <li class="sf-app" style="--i:{{ forloop.counter0 }}"><span class="sf-app-icon" aria-hidden="true">{{ tool|slice:":1"|upper }}</span><span class="sf-app-name">{{ tool }}</span></li>
+    {% if sc.skill_rows or sc.certification_rows or tools %}
+    <section class="film-skills" id="portfolio-skills" aria-labelledby="film-skills-heading">
+      <div class="film-skills-layout">
+        <div class="film-skills-intro film-reveal">
+          <h2 id="film-skills-heading">SKILLS &amp;<br><em>{% if sc.certification_rows %}CERTIFICATIONS.{% else %}EXPERTISE.{% endif %}</em></h2>
+          {% if tools %}
+          <figure class="sk-laptop">
+            <div class="sk-screen">
+              <ul class="sk-apps" aria-label="Tools and apps I use">
+                {% for tool in tools %}
+                <li class="sk-app">
+                  {% if tool.logo %}<span class="sk-app-icon sk-app-icon--logo"><img src="{{ tool.logo.url|cdn:160 }}" alt="" loading="lazy"></span>
+                  {% else %}<span class="sk-app-icon" aria-hidden="true">{{ tool.name|slice:":1"|upper }}</span>{% endif %}
+                  <span class="sk-app-name">{{ tool.name }}</span>
+                </li>
                 {% endfor %}
               </ul>
-              {% else %}
-              <div class="sf-monogram"><strong>BA</strong><span>Model · Creator</span></div>
-              {% endif %}
             </div>
-            <div class="sf-base" aria-hidden="true"></div>
+            <div class="sk-base" aria-hidden="true"></div>
+            <figcaption class="sk-caption">Tools &amp; apps I work with</figcaption>
           </figure>
-
-          <div class="sf-lists">
-            {% if sc.skill_rows %}
-            <div class="sf-list sf-pop">
-              <p class="sf-label">Skills</p>
-              <ul>
-                {% for row in sc.skill_rows %}<li>{{ row.name }}{% if row.detail %}<small>{{ row.detail }}</small>{% endif %}</li>{% endfor %}
-              </ul>
-            </div>
-            {% endif %}
-            {% if sc.certification_rows %}
-            <div class="sf-list sf-list--certs sf-pop">
-              <p class="sf-label">Certifications</p>
-              <ul>
-                {% for row in sc.certification_rows %}<li>{{ row.name }}{% if row.detail %}<small>{{ row.detail }}</small>{% endif %}</li>{% endfor %}
-              </ul>
-            </div>
-            {% endif %}
-          </div>
+          {% endif %}
         </div>
-        <span class="sf-sparkle sf-sparkle--a" aria-hidden="true">✦</span>
-        <span class="sf-sparkle sf-sparkle--b" aria-hidden="true">✦</span>
+
+        <div class="film-skills-panel film-reveal" data-skill-tabs>
+          {% if sc.certification_rows and sc.skill_rows %}
+          <div class="sk-tabs" role="tablist" aria-label="Skills and certifications">
+            <button type="button" class="sk-tab is-active" role="tab" id="sk-tab-skills" aria-controls="sk-panel-skills" aria-selected="true">Skills <span>{{ sc.skill_rows|length }}</span></button>
+            <button type="button" class="sk-tab" role="tab" id="sk-tab-certs" aria-controls="sk-panel-certs" aria-selected="false" tabindex="-1">Certifications <span>{{ sc.certification_rows|length }}</span></button>
+          </div>
+          {% endif %}
+
+          {% if sc.skill_rows %}
+          <div class="sk-panel" id="sk-panel-skills" role="tabpanel" aria-labelledby="sk-tab-skills" tabindex="0">
+            <div class="film-skills-list">
+              {% for row in sc.skill_rows %}<div><span>{{ forloop.counter|stringformat:"02d" }}</span><strong>{{ row.name }}</strong>{% if row.detail %}<small>{{ row.detail }}</small>{% endif %}</div>{% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          {% if sc.certification_rows %}
+          <div class="sk-panel" id="sk-panel-certs" role="tabpanel" aria-labelledby="sk-tab-certs" tabindex="0"{% if sc.skill_rows %} hidden{% endif %}>
+            <ul class="sk-certs">
+              {% for row in sc.certification_rows %}
+              <li>
+                <span class="sk-cert-mark" aria-hidden="true"></span>
+                <div>
+                  <strong>{{ row.name }}</strong>
+                  {% if row.detail %}<small>{{ row.detail }}</small>{% endif %}
+                </div>
+                {% if row.link %}<a class="sk-cert-link" href="{{ row.link }}" target="_blank" rel="noopener">View credential <span aria-hidden="true">↗</span></a>{% endif %}
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+        </div>
       </div>
     </section>
     {% endif %}
@@ -275,5 +287,6 @@
   <script src="/static/js/portfolio-film.js" defer></script>
   <script src="/static/js/portfolio-reels.js" defer></script>
   <script src="/static/js/video-hover.js" defer></script>
+  <script src="/static/js/skills-tabs.js" defer></script>
 </body>
 </html>

@@ -284,19 +284,13 @@ class PortfolioPageContent(models.Model):
         ),
         help_text="One skill per line. Add a short detail after a | if you like, e.g. Modeling | Editorial / Commercial",
     )
-    tools = models.TextField(
-        "Tools & platforms",
-        blank=True,
-        default="",
-        help_text="One per line, e.g. CapCut, Canva, Lightroom. Leave empty to hide.",
-    )
     certifications = models.TextField(
         "Certifications",
         blank=True,
         default="",
         help_text=(
-            "One per line: name | who issued it and the year, e.g. "
-            "Content Marketing Certification | HubSpot Academy, 2026. Leave empty to hide."
+            "One per line: name | who issued it and the year | link to the certificate (optional), e.g. "
+            "Content Marketing | HubSpot Academy, 2026 | https://... Leave empty to hide."
         ),
     )
     updated_at = models.DateTimeField(auto_now=True)
@@ -308,8 +302,9 @@ class PortfolioPageContent(models.Model):
             line = line.strip().lstrip("•-* ").strip()
             if not line:
                 continue
-            name, _, detail = line.partition("|")
-            rows.append({"name": name.strip(), "detail": detail.strip()})
+            parts = [part.strip() for part in line.split("|")]
+            link = parts[2] if len(parts) > 2 and parts[2].startswith(("http://", "https://")) else ""
+            rows.append({"name": parts[0], "detail": parts[1] if len(parts) > 1 else "", "link": link})
         return rows
 
     @property
@@ -320,16 +315,36 @@ class PortfolioPageContent(models.Model):
     def certification_rows(self):
         return self._rows(self.certifications)
 
-    @property
-    def tool_list(self):
-        return [row["name"] for row in self._rows(self.tools)]
-
     class Meta:
         verbose_name = "Portfolio page content"
         verbose_name_plural = "Portfolio page content"
 
     def __str__(self):
         return "Portfolio page content"
+
+
+class Tool(models.Model):
+    """An app or platform Betra works with, shown on the portfolio's Skills section."""
+
+    name = models.CharField(max_length=60)
+    logo = models.ImageField(
+        upload_to="tools/",
+        blank=True,
+        help_text=(
+            "Optional. Upload the app's official logo or icon (a square PNG or SVG works best). "
+            "Without one, a letter tile is shown."
+        ),
+    )
+    active = models.BooleanField("Show on site", default=True)
+    sort_order = models.PositiveIntegerField("Order", default=0)
+
+    class Meta:
+        ordering = ["sort_order", "name"]
+        verbose_name = "Tool"
+        verbose_name_plural = "Tools & apps"
+
+    def __str__(self):
+        return self.name
 
 
 class InquiryPageContent(models.Model):

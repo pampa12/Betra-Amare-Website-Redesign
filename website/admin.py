@@ -24,6 +24,7 @@ from .models import (
     MediaKitContent,
     PortfolioItem,
     PortfolioPageContent,
+    Tool,
 )
 
 
@@ -195,11 +196,11 @@ class ContactContentAdmin(SingletonContentAdmin):
 class PortfolioPageContentAdmin(SingletonContentAdmin):
     fieldsets = (
         ("Skills & certifications", {
-            "fields": ("skills", "tools", "certifications"),
+            "fields": ("skills", "certifications"),
             "description": (
                 "The 'Skills & Certifications' section on the portfolio page. "
-                "Only add certifications you have actually earned; the heading says "
-                "'Skills & Expertise' until the first one is added."
+                "Only add certifications you have actually earned; the Certifications tab "
+                "appears once the first one is added. Apps and their logos are under 'Tools & apps'."
             ),
         }),
         ("Page text", {"fields": ("eyebrow", "headline_line1", "headline_emphasis", "intro_text")}),
@@ -350,6 +351,33 @@ class PortfolioItemAdmin(CloudinaryPickerAdminMixin, admin.ModelAdmin):
         return "Photo"
 
 
+class ToolAdminForm(ExistingCloudinaryImageFormMixin, forms.ModelForm):
+    reusable_image_fields = ("logo",)
+    reuse_logo = existing_image_field()
+
+    class Meta:
+        model = Tool
+        fields = "__all__"
+
+
+@admin.register(Tool)
+class ToolAdmin(CloudinaryPickerAdminMixin, admin.ModelAdmin):
+    form = ToolAdminForm
+    list_display = ("logo_thumb", "name", "active", "sort_order")
+    list_display_links = ("logo_thumb", "name")
+    list_editable = ("active", "sort_order")
+    fields = ("name", "logo_preview", "logo", "reuse_logo", "active", "sort_order")
+    readonly_fields = ("logo_preview",)
+
+    @admin.display(description="")
+    def logo_thumb(self, obj):
+        return _image_thumb(obj.logo, 40)
+
+    @admin.display(description="Current logo")
+    def logo_preview(self, obj):
+        return _image_thumb(obj.logo, 80)
+
+
 @admin.register(Inquiry)
 class InquiryAdmin(admin.ModelAdmin):
     list_display = ("name", "email", "company", "status", "created_at")
@@ -370,6 +398,7 @@ ADMIN_MENU_ORDER = [
     "PortfolioItem",
     "FeaturedTikTok",
     "Inquiry",
+    "Tool",
     "HomepageContent",
     "MediaKitContent",
     "AboutContent",
