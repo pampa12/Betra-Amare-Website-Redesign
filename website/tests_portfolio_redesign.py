@@ -313,3 +313,19 @@ class LinkedInLinkTests(TestCase):
                 response = self.client.get(path)
                 self.assertContains(response, f'href="{url}"')
                 self.assertContains(response, f'"{url}"')
+
+
+class HomepageStripTests(TestCase):
+    def test_tiktok_sits_between_photos_in_one_row(self):
+        from website.featured_tiktok import FeaturedTikTok
+        from website.models import PortfolioItem
+        PortfolioItem.objects.create(title="One", category="beauty", image="p/one", featured=True, sort_order=1)
+        PortfolioItem.objects.create(title="Two", category="fashion", image="p/two", featured=True, sort_order=2)
+        FeaturedTikTok.objects.create(
+            title="Clip", tiktok_url="https://www.tiktok.com/@betraamarey/video/7400000000000000000",
+            thumbnail="t/clip", show_on_homepage=True,
+        )
+        html = self.client.get("/").content.decode()
+        self.assertEqual(html.count('class="selected-strip'), 1)
+        one, clip, two = html.index("View One"), html.index("Watch Clip"), html.index("View Two")
+        self.assertTrue(one < clip < two)

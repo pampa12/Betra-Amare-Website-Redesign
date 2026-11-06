@@ -241,3 +241,49 @@
     margin-top: 24px;
   }
 }
+
+/* ---- One row: photos and TikToks share the same height ---- */
+.selected-showcase { width: 100%; container-type: inline-size; }
+.selected-strip {
+  --row-h: min(470px, calc((100cqw - var(--gaps, 0) * 14px) / var(--ratio, 2)));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+}
+.selected-strip .selected-card {
+  flex: 0 0 auto;
+  height: var(--row-h);
+  border-radius: 10px;
+}
+.selected-strip .selected-photo-card { aspect-ratio: 4 / 5; }
+.selected-strip .selected-vertical-card { aspect-ratio: 9 / 16; max-width: none; }
+.selected-strip .selected-card:hover { transform: translateY(-4px); }
+.selected-strip .selected-card { transition: transform .45s cubic-bezier(.2,.7,.1,1), box-shadow .45s ease; }
+.selected-strip .selected-card:hover { box-shadow: 0 26px 44px -26px rgba(31,13,18,.55); }
+.selected-strip .selected-card::after { background: linear-gradient(180deg, rgba(31,13,18,0) 60%, rgba(31,13,18,.42) 100%); }
+.selected-strip .selected-card-label { font-size: .58rem; left: 14px; bottom: 13px; }
+.selected-strip .selected-tiktok-card .selected-play,
+.selected-strip .selected-video-card .selected-play { opacity: .9; }
+.selected-strip .selected-card:hover .selected-play { transform: translate(-50%, -50%) scale(1.08); background: rgba(31,13,18,.66); }
+
+
+@media (max-width: 760px) {
+  /* Phones: one swipeable row, same height for every card. */
+  .selected-strip {
+    --row-h: 400px;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 4px 4.5% 18px;
+    margin: 0 -4.5%;
+    scrollbar-width: none;
+  }
+  .selected-strip::-webkit-scrollbar { display: none; }
+  .selected-strip .selected-card { scroll-snap-align: center; }
+  .selected-strip.count-1, .selected-strip.count-2 { justify-content: center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .selected-strip .selected-card, .selected-strip .selected-card:hover { transition: none; transform: none; }
+}

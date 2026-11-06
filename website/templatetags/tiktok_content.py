@@ -17,45 +17,42 @@ def featured_tiktok_showcase(limit=4):
 
 @register.inclusion_tag("includes/homepage_selected_work.html")
 def homepage_selected_work():
-    """Render only the portfolio media explicitly selected for the homepage."""
+    """Render the photos, video and TikToks selected for the homepage as one row.
+
+    Everything shares the same height, so a tall TikTok sits next to the photos
+    instead of on a line of its own. TikToks are spread between the photos.
+    """
     items = list(
         PortfolioItem.objects.filter(active=True, featured=True).order_by(
             "sort_order", "-created_at"
         )
     )
-
-    video_item = next(
-        (item for item in items if item.video and item.image),
-        None,
-    )
-
-    photo_items = [
-        item
-        for item in items
-        if item.image and not item.video
-    ][:4]
-
-    top_photos = photo_items[:3]
-    bottom_photo = photo_items[3] if len(photo_items) > 3 else None
-
-    homepage_tiktoks = list(
-        FeaturedTikTok.objects.filter(
-            active=True,
-            show_on_homepage=True,
-        )
+    video_item = next((item for item in items if item.video and item.image), None)
+    photos = [item for item in items if item.image and not item.video][:4]
+    tiktoks = list(
+        FeaturedTikTok.objects.filter(active=True, show_on_homepage=True)
         .exclude(thumbnail="")[:2]
     )
 
-    bottom_count = (1 if video_item else 0) + len(homepage_tiktoks) + (
-        1 if bottom_photo else 0
-    )
+    vertical = [("video", video_item)] if video_item else []
+    vertical += [("tiktok", tiktok) for tiktok in tiktoks]
 
+    strip = []
+    photo_cards = [("photo", photo) for photo in photos]
+    # photo, tall, photo, tall, photo... then whatever is left over.
+    while photo_cards or vertical:
+        if photo_cards:
+            strip.append(photo_cards.pop(0))
+        if vertical:
+            strip.append(vertical.pop(0))
+
+    # Width of the whole row measured in "row heights", used to size the row
+    # so it always fits on one line on desktop.
+    ratio = sum(0.8 if kind == "photo" else 0.5625 for kind, _ in strip)
     return {
-        "top_photos": top_photos,
-        "video_item": video_item,
-        "homepage_tiktoks": homepage_tiktoks,
-        "bottom_photo": bottom_photo,
-        "bottom_count": bottom_count,
+        "strip": [{"kind": kind, "item": item} for kind, item in strip],
+        "strip_ratio": f"{ratio:.4f}",
+        "strip_gaps": max(len(strip) - 1, 0),
     }
 
 
