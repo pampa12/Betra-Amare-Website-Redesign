@@ -277,17 +277,23 @@ class PortfolioPageContent(models.Model):
         "Skills",
         blank=True,
         default=(
-            "Creative Direction | Concept / Visuals\n"
-            "Social Content | Short-form / UGC\n"
-            "Beauty & Fashion | Editorial / Lifestyle\n"
-            "Digital Storytelling | Idea / Execution"
+            "Social Media Management\n"
+            "Digital Marketing\n"
+            "Content Creation\n"
+            "Customer Relations\n"
+            "Research Assistance\n"
+            "Written & Verbal Communication"
         ),
         help_text="One skill per line. Add a short detail after a | if you like, e.g. Modeling | Editorial / Commercial",
     )
     certifications = models.TextField(
         "Certifications",
         blank=True,
-        default="",
+        default=(
+            "Job Spot Certification\n"
+            "LeadState | South Dakota State University\n"
+            "HubSpot Certified | HubSpot Academy"
+        ),
         help_text=(
             "One per line: name | who issued it and the year | link to the certificate (optional), e.g. "
             "Content Marketing | HubSpot Academy, 2026 | https://... Leave empty to hide."

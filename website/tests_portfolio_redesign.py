@@ -262,14 +262,23 @@ class AdminAddressTests(TestCase):
 
 
 class SkillsSectionTests(TestCase):
-    def test_default_skills_show_without_tabs_or_certifications(self):
+    def test_default_skills_and_certifications_show_with_tabs(self):
         response = self.client.get("/portfolio/")
-        self.assertContains(response, "EXPERTISE.")
-        self.assertContains(response, "Creative Direction")
-        self.assertNotContains(response, 'role="tablist"')
+        self.assertContains(response, "CERTIFICATIONS.")
+        self.assertContains(response, "Social Media Management")
+        self.assertContains(response, "Written &amp; Verbal Communication")
+        self.assertContains(response, "HubSpot Certified")
+        self.assertContains(response, 'role="tablist"')
         self.assertContains(response, "sk-laptop")
         self.assertContains(response, "sk-sticker")
         self.assertContains(response, "a few things I")
+
+    def test_skills_only_hides_the_tabs(self):
+        from website.models import PortfolioPageContent
+        PortfolioPageContent.objects.create(skills="Modeling", certifications="")
+        response = self.client.get("/portfolio/")
+        self.assertContains(response, "EXPERTISE.")
+        self.assertNotContains(response, 'role="tablist"')
 
     def test_certifications_add_a_tab_with_credential_links(self):
         from website.models import PortfolioPageContent
