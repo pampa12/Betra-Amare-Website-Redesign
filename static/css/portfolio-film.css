@@ -29,15 +29,11 @@
 .film-portfolio-word{font-size:clamp(4.1rem,14.15vw,15.3rem);font-weight:700;white-space:nowrap;color:#f7f4f3}
 .film-title-period{color:var(--film-rose)}
 .film-intro-subtitle{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(1.3rem,2vw,2rem);letter-spacing:.01em;color:#d0b2bb;margin:0 0 26px}
-.film-hero-action{display:inline-flex;align-items:center;gap:24px;color:#e6dfe1;border-bottom:1px solid #c29aa6;padding:11px 0;text-decoration:none;letter-spacing:.17em;text-transform:uppercase;font-size:.65rem;font-weight:700}
-.film-hero-action:hover{color:#fff}
-.film-hero-action span{font-size:1.1rem}
 @media(prefers-reduced-motion:no-preference){
   .film-intro-prelude{animation:film-rise .8s .1s both}
   .film-name{animation:film-title-reveal 1.15s .42s both}
   .film-portfolio-word{animation:film-title-reveal 1.25s .7s both}
   .film-intro-subtitle{animation:film-rise 1s 1s both}
-  .film-hero-action{animation:film-rise .85s 1.2s both}
   @keyframes film-title-reveal{from{opacity:0;transform:translate3d(0,80px,0) scale(.89);letter-spacing:-.16em;filter:blur(14px)}to{opacity:1;transform:none;letter-spacing:inherit;filter:blur(0)}}
   @keyframes film-rise{from{opacity:0;transform:translate3d(0,24px,0)}to{opacity:1;transform:none}}
 }
