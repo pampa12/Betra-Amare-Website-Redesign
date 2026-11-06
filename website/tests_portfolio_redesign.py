@@ -267,7 +267,9 @@ class SkillsSectionTests(TestCase):
         self.assertContains(response, "EXPERTISE.")
         self.assertContains(response, "Creative Direction")
         self.assertNotContains(response, 'role="tablist"')
-        self.assertNotContains(response, "sk-laptop")
+        self.assertContains(response, "sk-laptop")
+        self.assertContains(response, "sk-sticker")
+        self.assertContains(response, "a few things I")
 
     def test_certifications_add_a_tab_with_credential_links(self):
         from website.models import PortfolioPageContent

@@ -395,6 +395,8 @@ def portfolio(request):
             # Unsaved defaults keep the Skills section filled before the admin row exists.
             "skills_content": portfolio_content or PortfolioPageContent(),
             "tools": list(Tool.objects.filter(active=True)),
+            # A real photo for the laptop screen until tools are added.
+            "skills_photo": next((item.image for item in portfolio_items if item.image), None),
             "contact_content": contact_content,
         },
     )

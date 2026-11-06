@@ -210,13 +210,18 @@
 
     {% with sc=skills_content %}
     {% if sc.skill_rows or sc.certification_rows or tools %}
-    <section class="film-skills" id="portfolio-skills" aria-labelledby="film-skills-heading">
+    <section class="film-skills sk-fun" id="portfolio-skills" aria-labelledby="film-skills-heading">
+      <span class="sk-sparkle sk-sparkle--a" aria-hidden="true">✦</span>
+      <span class="sk-sparkle sk-sparkle--b" aria-hidden="true">✦</span>
+      <span class="sk-sparkle sk-sparkle--c" aria-hidden="true">✦</span>
       <div class="film-skills-layout">
         <div class="film-skills-intro film-reveal">
           <h2 id="film-skills-heading">SKILLS &amp;<br><em>{% if sc.certification_rows %}CERTIFICATIONS.{% else %}EXPERTISE.{% endif %}</em></h2>
-          {% if tools %}
+          <p class="sk-note">a few things I'm great at ♡</p>
+
           <figure class="sk-laptop">
-            <div class="sk-screen">
+            <div class="sk-screen{% if not tools %} sk-screen--photo{% endif %}">
+              {% if tools %}
               <ul class="sk-apps" aria-label="Tools and apps I use">
                 {% for tool in tools %}
                 <li class="sk-app">
@@ -226,11 +231,17 @@
                 </li>
                 {% endfor %}
               </ul>
+              {% elif skills_photo %}
+              <img class="sk-screen-photo" src="{{ skills_photo.url|cdn:900 }}" alt="" loading="lazy">
+              <span class="sk-screen-chip" aria-hidden="true"><i></i><i></i><i></i> betra_amare</span>
+              <span class="sk-screen-tag" aria-hidden="true">Model · Creator</span>
+              {% else %}
+              <span class="sk-screen-tag sk-screen-tag--center" aria-hidden="true">Model · Creator</span>
+              {% endif %}
             </div>
             <div class="sk-base" aria-hidden="true"></div>
-            <figcaption class="sk-caption">Tools &amp; apps I work with</figcaption>
+            {% if tools %}<figcaption class="sk-caption">Tools &amp; apps I work with</figcaption>{% endif %}
           </figure>
-          {% endif %}
         </div>
 
         <div class="film-skills-panel film-reveal" data-skill-tabs>
@@ -243,22 +254,26 @@
 
           {% if sc.skill_rows %}
           <div class="sk-panel" id="sk-panel-skills" role="tabpanel" aria-labelledby="sk-tab-skills" tabindex="0">
-            <div class="film-skills-list">
-              {% for row in sc.skill_rows %}<div><span>{{ forloop.counter|stringformat:"02d" }}</span><strong>{{ row.name }}</strong>{% if row.detail %}<small>{{ row.detail }}</small>{% endif %}</div>{% endfor %}
-            </div>
+            <ul class="sk-stickers">
+              {% for row in sc.skill_rows %}
+              <li class="sk-sticker" style="--i:{{ forloop.counter0 }}">
+                <span class="sk-sticker-num">{{ forloop.counter|stringformat:"02d" }}</span>
+                <strong>{{ row.name }}</strong>
+                {% if row.detail %}<small>{{ row.detail }}</small>{% endif %}
+              </li>
+              {% endfor %}
+            </ul>
           </div>
           {% endif %}
 
           {% if sc.certification_rows %}
           <div class="sk-panel" id="sk-panel-certs" role="tabpanel" aria-labelledby="sk-tab-certs" tabindex="0"{% if sc.skill_rows %} hidden{% endif %}>
-            <ul class="sk-certs">
+            <ul class="sk-stickers sk-stickers--certs">
               {% for row in sc.certification_rows %}
-              <li>
-                <span class="sk-cert-mark" aria-hidden="true"></span>
-                <div>
-                  <strong>{{ row.name }}</strong>
-                  {% if row.detail %}<small>{{ row.detail }}</small>{% endif %}
-                </div>
+              <li class="sk-sticker" style="--i:{{ forloop.counter0 }}">
+                <span class="sk-badge" aria-hidden="true">✓</span>
+                <strong>{{ row.name }}</strong>
+                {% if row.detail %}<small>{{ row.detail }}</small>{% endif %}
                 {% if row.link %}<a class="sk-cert-link" href="{{ row.link }}" target="_blank" rel="noopener">View credential <span aria-hidden="true">↗</span></a>{% endif %}
               </li>
               {% endfor %}

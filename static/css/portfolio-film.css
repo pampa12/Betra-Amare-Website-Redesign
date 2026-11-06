@@ -292,3 +292,51 @@
 .film-skills-panel .film-skills-list>div{grid-template-columns:35px minmax(0,1fr) auto}
 .film-skills-panel .film-skills-list small{white-space:nowrap}
 @media(max-width:760px){.film-skills-panel .film-skills-list>div{grid-template-columns:30px minmax(0,1fr)}.film-skills-panel .film-skills-list small{white-space:normal}}
+
+/* ---- Skills: playful stickers, gingham laptop, sparkles ---- */
+.sk-fun{position:relative;overflow:hidden}
+.sk-fun .sk-note{margin:clamp(20px,2.4vw,30px) 0 0;font:600 clamp(1.5rem,2.4vw,2.1rem)/1.1 'Dancing Script',cursive;color:#f2a9c4;transform:rotate(-4deg);transform-origin:left center}
+.sk-fun .sk-laptop{margin-top:clamp(34px,4vw,54px)}
+.sk-fun .sk-screen{position:relative;background-color:#fde3ec;background-image:linear-gradient(90deg,rgba(228,141,176,.42) 50%,transparent 50%),linear-gradient(rgba(228,141,176,.42) 50%,transparent 50%);background-size:30px 30px}
+.sk-fun .sk-app-name{color:#4a1426;background:rgba(255,255,255,.8);padding:3px 8px;border-radius:999px}
+.sk-screen--photo{padding:0!important}
+.sk-screen-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.sk-screen-chip{position:absolute;top:12px;left:12px;display:inline-flex;align-items:center;gap:5px;padding:6px 11px 6px 9px;border-radius:999px;background:rgba(255,255,255,.88);color:#4a1426;font:700 .62rem/1 'DM Sans',Arial,sans-serif;letter-spacing:.04em}
+.sk-screen-chip i{width:7px;height:7px;border-radius:50%;background:#e48db0}
+.sk-screen-chip i:nth-child(2){background:#f3c06b}.sk-screen-chip i:nth-child(3){background:#9fd3a5;margin-right:4px}
+.sk-screen-tag{position:absolute;right:14px;bottom:14px;padding:8px 14px;border-radius:999px;background:#e48db0;color:#2d121a;font:700 .64rem/1 'DM Sans',Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;transform:rotate(3deg);box-shadow:0 8px 18px -8px rgba(0,0,0,.5)}
+.sk-screen-tag--center{position:static;justify-self:center;align-self:center}
+
+.sk-stickers{list-style:none;margin:0;padding:6px 0 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(14px,1.8vw,22px)}
+.sk-sticker{position:relative;display:grid;align-content:start;gap:8px;padding:clamp(20px,2.2vw,28px);border-radius:22px;background:#fbe4ec;color:#3a1020;box-shadow:0 18px 30px -18px rgba(0,0,0,.7);transform:rotate(var(--r,-1.6deg));transition:transform .45s cubic-bezier(.2,.8,.2,1.35),box-shadow .45s ease}
+.sk-sticker:nth-child(4n+2){--r:1.4deg;background:#7d1f3f;color:#fbf4f6}
+.sk-sticker:nth-child(4n+3){--r:1.2deg;background:#f7efe9;color:#3a1020}
+.sk-sticker:nth-child(4n+4){--r:-1.3deg;background:#e48db0;color:#2d121a}
+.sk-sticker:hover{transform:rotate(0) translateY(-8px) scale(1.02);box-shadow:0 30px 40px -20px rgba(0,0,0,.75)}
+.sk-sticker-num{font:italic 400 clamp(1.8rem,2.6vw,2.4rem)/1 'Cormorant Garamond',Georgia,serif;opacity:.75}
+.sk-sticker strong{font:600 clamp(1.2rem,1.7vw,1.5rem)/1.2 'DM Sans',Arial,sans-serif;letter-spacing:-.02em}
+.sk-sticker small{font:700 .66rem/1.3 'DM Sans',Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;opacity:.8}
+.sk-badge{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#2d121a;color:#fbe4ec;font:700 1rem/1 'DM Sans',sans-serif;transform:rotate(-8deg)}
+.sk-sticker:nth-child(4n+2) .sk-badge{background:#fbe4ec;color:#7d1f3f}
+.sk-stickers--certs .sk-cert-link{justify-self:start;margin-top:6px;color:inherit}
+
+.sk-sparkle{position:absolute;color:#e48db0;line-height:1;pointer-events:none;z-index:0}
+.sk-sparkle--a{top:9%;left:47%;font-size:2rem}
+.sk-sparkle--b{bottom:12%;left:6%;font-size:1.3rem;color:#f2a9c4}
+.sk-sparkle--c{top:16%;right:4%;font-size:1.1rem;color:#f7efe9}
+.sk-fun .film-skills-layout{position:relative;z-index:1}
+
+@media(prefers-reduced-motion:no-preference){
+  .sk-sparkle{animation:sk-twinkle 3s ease-in-out infinite}
+  .sk-sparkle--b{animation-delay:1s}.sk-sparkle--c{animation-delay:2s}
+  .film-portfolio.film-motion-ready .film-skills-panel.film-enter:not(.film-visible) .sk-sticker{opacity:0;transform:translateY(30px) rotate(-6deg) scale(.94)}
+  .film-portfolio.film-motion-ready .film-skills-panel .sk-sticker{transition:transform .7s cubic-bezier(.2,.8,.2,1.3),opacity .5s ease,box-shadow .45s ease;transition-delay:calc(var(--i,0)*90ms)}
+  .film-portfolio.film-motion-ready .film-skills-panel .sk-sticker:hover{transition-delay:0s}
+}
+@keyframes sk-twinkle{0%,100%{opacity:.45;transform:scale(.85) rotate(0)}50%{opacity:1;transform:scale(1.15) rotate(20deg)}}
+@media(max-width:560px){
+  .sk-stickers{grid-template-columns:minmax(0,1fr)}
+  .sk-sticker{--r:-.8deg}.sk-sticker:nth-child(even){--r:.8deg}
+  .sk-sparkle--a{left:auto;right:8%;top:4%}
+}
+@media(prefers-reduced-motion:reduce){.sk-sticker,.sk-sticker:hover{transform:none}}
