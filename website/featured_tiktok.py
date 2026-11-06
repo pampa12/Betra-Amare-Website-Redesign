@@ -101,12 +101,12 @@ class FeaturedTikTok(models.Model):
         default="",
         help_text="Optional short note about the concept, product, or deliverable.",
     )
-    active = models.BooleanField(default=True)
+    active = models.BooleanField("Show on site", default=True)
     show_on_homepage = models.BooleanField(
         default=False,
         help_text="Show this TikTok as a clean thumbnail card inside the homepage 'A few favorites' section.",
     )
-    sort_order = models.PositiveIntegerField(default=0)
+    sort_order = models.PositiveIntegerField("Order", default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

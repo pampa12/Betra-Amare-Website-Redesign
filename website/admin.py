@@ -3,7 +3,11 @@ from uuid import uuid4
 
 from django import forms
 from django.contrib import admin
+from django.contrib.auth.models import Group
+from django.utils.html import format_html
 from django.utils.text import slugify
+
+from .templatetags.media_tags import cdn
 
 from .admin_cloudinary import (
     CloudinaryPickerAdminMixin,
@@ -21,6 +25,30 @@ from .models import (
     PortfolioItem,
     PortfolioPageContent,
 )
+
+
+FRIENDLY_LABELS = {
+    "active": "Show on site",
+    "sort_order": "Order",
+}
+FRIENDLY_HELP = {
+    "active": "Uncheck to hide this from the website without deleting it.",
+    "sort_order": "Lower numbers show first. Use 10, 20, 30… so you can slot items in between later.",
+}
+
+
+def _image_thumb(field_file, size=72):
+    """A small preview of an uploaded photo for admin lists and forms."""
+    if not field_file:
+        return "—"
+    try:
+        url = field_file.url
+    except ValueError:
+        return "—"
+    return format_html(
+        '<img src="{}" alt="" style="width:{}px;height:{}px;object-fit:cover;border-radius:6px;display:block">',
+        cdn(url, size * 3), size, int(size * 1.25),
+    )
 
 
 def _give_new_upload_clean_name(field_file, title):
@@ -81,6 +109,8 @@ class FeaturedTikTokAdminForm(ExistingCloudinaryImageFormMixin, forms.ModelForm)
     class Meta:
         model = FeaturedTikTok
         fields = "__all__"
+        labels = FRIENDLY_LABELS
+        help_texts = FRIENDLY_HELP
 
 
 class PortfolioItemAdminForm(ExistingCloudinaryImageFormMixin, forms.ModelForm):
@@ -106,6 +136,8 @@ class PortfolioItemAdminForm(ExistingCloudinaryImageFormMixin, forms.ModelForm):
     class Meta:
         model = PortfolioItem
         fields = "__all__"
+        labels = {**FRIENDLY_LABELS, "link_url": "Link (optional)"}
+        help_texts = FRIENDLY_HELP
 
     def clean(self):
         cleaned_data = super().clean()
@@ -195,23 +227,30 @@ class MediaKitContentAdmin(CloudinaryPickerAdminMixin, SingletonContentAdmin):
 @admin.register(FeaturedTikTok)
 class FeaturedTikTokAdmin(CloudinaryPickerAdminMixin, admin.ModelAdmin):
     form = FeaturedTikTokAdminForm
-    list_display = ("title", "category", "brand_name", "show_on_homepage", "active", "sort_order", "updated_at")
-    list_editable = ("category", "active", "sort_order")
+    list_display = ("title", "platform_name", "category", "brand_name", "show_on_homepage", "active", "sort_order")
+    list_display_links = ("title",)
+    list_editable = ("category", "show_on_homepage", "active", "sort_order")
+    readonly_fields = ("thumbnail_preview",)
     list_filter = ("category", "show_on_homepage", "active")
     search_fields = ("title", "brand_name", "description", "tiktok_url")
     fieldsets = (
         (
             "Video post",
             {
-                "fields": (
-                    "title", "category", "brand_name", "tiktok_url",
-                    "thumbnail", "reuse_thumbnail", "description",
-                ),
+                "fields": ("title", "tiktok_url", "category", "brand_name", "description"),
                 "description": (
                     "Paste a TikTok link (share links like tiktok.com/t/... work) or an Instagram Reel link. "
-                    "Active videos play in the portfolio's Stories in Motion strip; Brand Content videos "
-                    "appear under Brand Work. For homepage display, upload a clean still-frame thumbnail."
+                    "Videos play in the portfolio's Stories in Motion strip and on the Media Kit. "
+                    "Brand Content videos appear under Brand Work."
                 ),
+            },
+        ),
+        (
+            "Homepage thumbnail (optional)",
+            {
+                "classes": ("collapse",),
+                "fields": ("thumbnail_preview", "thumbnail", "reuse_thumbnail"),
+                "description": "Only needed if you check 'Show on homepage' below.",
             },
         ),
         (
@@ -227,25 +266,37 @@ class FeaturedTikTokAdmin(CloudinaryPickerAdminMixin, admin.ModelAdmin):
     )
 
 
+    @admin.display(description="Platform")
+    def platform_name(self, obj):
+        return obj.platform_label or "—"
+
+    @admin.display(description="Current thumbnail")
+    def thumbnail_preview(self, obj):
+        return _image_thumb(obj.thumbnail, 120)
+
+
 @admin.register(PortfolioItem)
 class PortfolioItemAdmin(CloudinaryPickerAdminMixin, admin.ModelAdmin):
     form = PortfolioItemAdminForm
     list_display = (
+        "photo",
         "title",
         "category",
         "media_type",
-        "show_on_homepage_status",
+        "featured",
         "active",
         "sort_order",
-        "updated_at",
     )
+    list_display_links = ("photo", "title")
+    list_editable = ("category", "featured", "active", "sort_order")
+    readonly_fields = ("photo_preview",)
     list_filter = ("category", "featured", "active")
     search_fields = ("title", "alt_text")
     fieldsets = (
         (
             "Portfolio media",
             {
-                "fields": ("title", "category", "image", "reuse_image", "video", "alt_text", "link_url"),
+                "fields": ("title", "category", "photo_preview", "image", "reuse_image", "video", "alt_text", "link_url"),
                 "description": (
                     "Add a photo, a video, or both. If both are added, the photo is used as the video's poster image. "
                     "Alt text is required so every portfolio item is accessible and search-friendly."
@@ -269,9 +320,13 @@ class PortfolioItemAdmin(CloudinaryPickerAdminMixin, admin.ModelAdmin):
         _give_new_upload_clean_name(obj.video, obj.title)
         super().save_model(request, obj, form, change)
 
-    @admin.display(boolean=True, description="Show on homepage")
-    def show_on_homepage_status(self, obj):
-        return obj.featured
+    @admin.display(description="")
+    def photo(self, obj):
+        return _image_thumb(obj.image, 56)
+
+    @admin.display(description="Current photo")
+    def photo_preview(self, obj):
+        return _image_thumb(obj.image, 140)
 
     @admin.display(description="Media")
     def media_type(self, obj):
@@ -285,6 +340,7 @@ class PortfolioItemAdmin(CloudinaryPickerAdminMixin, admin.ModelAdmin):
 @admin.register(Inquiry)
 class InquiryAdmin(admin.ModelAdmin):
     list_display = ("name", "email", "company", "status", "created_at")
+    list_editable = ("status",)
     list_filter = ("status", "created_at")
     search_fields = ("name", "email", "company", "message")
     readonly_fields = ("created_at",)
@@ -292,4 +348,44 @@ class InquiryAdmin(admin.ModelAdmin):
 
 admin.site.site_header = "Betra Amare Administration"
 admin.site.site_title = "Betra Amare Admin"
-admin.site.index_title = "Website management"
+admin.site.index_title = "What would you like to update?"
+# More room for lists; the menu is one click away on the home screen.
+admin.site.enable_nav_sidebar = False
+
+# Show the things Betra edits most at the top of the admin menu.
+ADMIN_MENU_ORDER = [
+    "PortfolioItem",
+    "FeaturedTikTok",
+    "Inquiry",
+    "HomepageContent",
+    "MediaKitContent",
+    "AboutContent",
+    "PortfolioPageContent",
+    "ContactContent",
+    "InquiryPageContent",
+]
+_default_get_app_list = admin.site.get_app_list
+
+
+def _ordered_app_list(request, app_label=None):
+    app_list = _default_get_app_list(request, app_label)
+    for app in app_list:
+        if app.get("app_label") == "website":
+            app["name"] = "Website"
+            app["models"].sort(
+                key=lambda m: ADMIN_MENU_ORDER.index(m["object_name"])
+                if m["object_name"] in ADMIN_MENU_ORDER else len(ADMIN_MENU_ORDER)
+            )
+    # Put the Website section before Users/Groups.
+    app_list.sort(key=lambda app: 0 if app.get("app_label") == "website" else 1)
+    return app_list
+
+
+admin.site.get_app_list = _ordered_app_list
+
+
+# Betra manages the site alone; permission groups only add clutter.
+try:
+    admin.site.unregister(Group)
+except admin.sites.NotRegistered:
+    pass

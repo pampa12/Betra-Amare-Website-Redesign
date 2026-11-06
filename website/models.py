@@ -411,9 +411,9 @@ class PortfolioItem(models.Model):
         default="",
         help_text="Optional. Leave blank if the photo should not open another page.",
     )
-    featured = models.BooleanField(default=False)
-    active = models.BooleanField(default=True)
-    sort_order = models.PositiveIntegerField(default=0)
+    featured = models.BooleanField("Show on homepage", default=False)
+    active = models.BooleanField("Show on site", default=True)
+    sort_order = models.PositiveIntegerField("Order", default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -450,6 +450,8 @@ class Inquiry(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+        verbose_name = "Inquiry"
+        verbose_name_plural = "Inquiries"
 
     def __str__(self):
         return f"{self.name} — {self.email}"
