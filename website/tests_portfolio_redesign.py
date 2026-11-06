@@ -259,3 +259,26 @@ class AdminAddressTests(TestCase):
                 clear_url_caches()
         importlib.reload(config.urls)
         clear_url_caches()
+
+
+class SkillsSectionTests(TestCase):
+    def test_default_skills_show_without_certifications(self):
+        response = self.client.get("/portfolio/")
+        self.assertContains(response, "SKILLS &amp;")
+        self.assertContains(response, "EXPERTISE.")
+        self.assertContains(response, "Creative Direction")
+        self.assertNotContains(response, 'class="film-certs"')
+
+    def test_certifications_and_tools_render_from_admin_text(self):
+        from website.models import PortfolioPageContent
+        PortfolioPageContent.objects.create(
+            skills="Modeling | Editorial / Commercial",
+            tools="CapCut\nCanva",
+            certifications="Example Certificate | Example Academy, 2026",
+        )
+        response = self.client.get("/portfolio/")
+        self.assertContains(response, "CERTIFICATIONS.")
+        self.assertContains(response, "Example Certificate")
+        self.assertContains(response, "Example Academy, 2026")
+        self.assertContains(response, "<li>CapCut</li>")
+        self.assertNotContains(response, "Creative Direction")

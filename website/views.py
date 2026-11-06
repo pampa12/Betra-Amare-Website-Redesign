@@ -391,6 +391,8 @@ def portfolio(request):
             "brand_reels": brand_reels,
             "brand_photos": brand_photos,
             "portfolio_content": portfolio_content,
+            # Unsaved defaults keep the Skills section filled before the admin row exists.
+            "skills_content": portfolio_content or PortfolioPageContent(),
             "contact_content": contact_content,
         },
     )

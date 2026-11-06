@@ -208,17 +208,41 @@
       <a class="film-text-link film-brands-link" href="/inquire/">LET'S COLLABORATE <span aria-hidden="true">↗</span></a>
     </section>
 
+    {% with sc=skills_content %}
+    {% if sc.skill_rows or sc.certification_rows or sc.tool_list %}
     <section class="film-skills" id="portfolio-skills" aria-labelledby="film-skills-heading">
       <div class="film-skills-layout">
-        <h2 id="film-skills-heading" class="film-reveal">CREATIVE<br><em>PRACTICE.</em></h2>
-        <div class="film-skills-list film-reveal">
-          <div><span>01</span><strong>Creative Direction</strong><small>Concept / Visuals</small></div>
-          <div><span>02</span><strong>Social Content</strong><small>Short-form / UGC</small></div>
-          <div><span>03</span><strong>Beauty &amp; Fashion</strong><small>Editorial / Lifestyle</small></div>
-          <div><span>04</span><strong>Digital Storytelling</strong><small>Idea / Execution</small></div>
+        <div class="film-skills-intro film-reveal">
+          <h2 id="film-skills-heading">SKILLS &amp;<br><em>{% if sc.certification_rows %}CERTIFICATIONS.{% else %}EXPERTISE.{% endif %}</em></h2>
+          {% if sc.tool_list %}
+          <div class="film-skills-tools">
+            <p class="film-skills-label">Tools &amp; platforms</p>
+            <ul>{% for tool in sc.tool_list %}<li>{{ tool }}</li>{% endfor %}</ul>
+          </div>
+          {% endif %}
+        </div>
+        <div class="film-skills-groups film-reveal">
+          {% if sc.skill_rows %}
+          <div class="film-skills-group">
+            <p class="film-skills-label">Skills</p>
+            <div class="film-skills-list">
+              {% for row in sc.skill_rows %}<div><span>{{ forloop.counter|stringformat:"02d" }}</span><strong>{{ row.name }}</strong>{% if row.detail %}<small>{{ row.detail }}</small>{% endif %}</div>{% endfor %}
+            </div>
+          </div>
+          {% endif %}
+          {% if sc.certification_rows %}
+          <div class="film-skills-group">
+            <p class="film-skills-label">Certifications</p>
+            <ul class="film-certs">
+              {% for row in sc.certification_rows %}<li><span class="film-cert-mark" aria-hidden="true"></span><strong>{{ row.name }}</strong>{% if row.detail %}<small>{{ row.detail }}</small>{% endif %}</li>{% endfor %}
+            </ul>
+          </div>
+          {% endif %}
         </div>
       </div>
     </section>
+    {% endif %}
+    {% endwith %}
 
     <section class="film-contact" id="portfolio-connect" aria-labelledby="film-contact-heading">
       <h2 id="film-contact-heading" class="film-reveal">LET'S MAKE<br><em>SOMETHING.</em></h2>

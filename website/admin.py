@@ -193,7 +193,20 @@ class ContactContentAdmin(SingletonContentAdmin):
 
 @admin.register(PortfolioPageContent)
 class PortfolioPageContentAdmin(SingletonContentAdmin):
-    pass
+    fieldsets = (
+        ("Skills & certifications", {
+            "fields": ("skills", "tools", "certifications"),
+            "description": (
+                "The 'Skills & Certifications' section on the portfolio page. "
+                "Only add certifications you have actually earned; the heading says "
+                "'Skills & Expertise' until the first one is added."
+            ),
+        }),
+        ("Page text", {"fields": ("eyebrow", "headline_line1", "headline_emphasis", "intro_text")}),
+        ("Closing call to action", {"fields": (
+            "collab_eyebrow", "collab_title_prefix", "collab_title_emphasis", "button_text", "work_email",
+        )}),
+    )
 
 
 @admin.register(InquiryPageContent)

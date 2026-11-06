@@ -273,7 +273,56 @@ class PortfolioPageContent(models.Model):
     collab_title_emphasis = models.CharField(max_length=120, default="like you.")
     button_text = models.CharField(max_length=80, default="Start a project")
     work_email = models.EmailField(default="workwithbetra@gmail.com")
+    skills = models.TextField(
+        "Skills",
+        blank=True,
+        default=(
+            "Creative Direction | Concept / Visuals\n"
+            "Social Content | Short-form / UGC\n"
+            "Beauty & Fashion | Editorial / Lifestyle\n"
+            "Digital Storytelling | Idea / Execution"
+        ),
+        help_text="One skill per line. Add a short detail after a | if you like, e.g. Modeling | Editorial / Commercial",
+    )
+    tools = models.TextField(
+        "Tools & platforms",
+        blank=True,
+        default="",
+        help_text="One per line, e.g. CapCut, Canva, Lightroom. Leave empty to hide.",
+    )
+    certifications = models.TextField(
+        "Certifications",
+        blank=True,
+        default="",
+        help_text=(
+            "One per line: name | who issued it and the year, e.g. "
+            "Content Marketing Certification | HubSpot Academy, 2026. Leave empty to hide."
+        ),
+    )
     updated_at = models.DateTimeField(auto_now=True)
+
+    @staticmethod
+    def _rows(text):
+        rows = []
+        for line in (text or "").splitlines():
+            line = line.strip().lstrip("•-* ").strip()
+            if not line:
+                continue
+            name, _, detail = line.partition("|")
+            rows.append({"name": name.strip(), "detail": detail.strip()})
+        return rows
+
+    @property
+    def skill_rows(self):
+        return self._rows(self.skills)
+
+    @property
+    def certification_rows(self):
+        return self._rows(self.certifications)
+
+    @property
+    def tool_list(self):
+        return [row["name"] for row in self._rows(self.tools)]
 
     class Meta:
         verbose_name = "Portfolio page content"
