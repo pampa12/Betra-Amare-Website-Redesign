@@ -176,6 +176,23 @@
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', observeAll);
     else observeAll();
   }
+  // Uploaded videos on cards marked [data-hover-native]: play while hovered.
+  document.querySelectorAll('[data-hover-native]').forEach(card => {
+    const clip = card.querySelector('video');
+    if (!clip) return;
+    const start = () => { clip.play().then(() => card.classList.add('is-playing')).catch(() => {}); };
+    const stop = () => { clip.pause(); card.classList.remove('is-playing'); };
+    card.addEventListener('pointerenter', event => { if (event.pointerType !== 'touch') start(); });
+    card.addEventListener('pointerleave', stop);
+    card.addEventListener('focus', start);
+    card.addEventListener('blur', stop);
+    if (noHover.matches && !reducedMotion.matches && 'IntersectionObserver' in window) {
+      new IntersectionObserver(entries => entries.forEach(entry => {
+        if (entry.intersectionRatio >= 0.6) start(); else stop();
+      }), { threshold: [0, 0.6] }).observe(card);
+    }
+  });
+
   // Load players that wait in data-src once they come near the screen.
   const loadLater = () => {
     const waiting = frames().filter(frame => frame.dataset.src && !frame.getAttribute('src') && !frame.closest('[data-film-reels]'));

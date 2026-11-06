@@ -130,7 +130,7 @@ class PortfolioItemAdminForm(ExistingCloudinaryImageFormMixin, forms.ModelForm):
         label="Show on homepage",
         help_text=(
             "Check this to include the photo or video in the homepage 'A few favorites' section. "
-            "For a video, also upload an image to use as its homepage thumbnail/poster."
+            "Videos get their cover picture from the video automatically, or from the photo if you add one."
         ),
     )
 
@@ -140,14 +140,6 @@ class PortfolioItemAdminForm(ExistingCloudinaryImageFormMixin, forms.ModelForm):
         labels = {**FRIENDLY_LABELS, "link_url": "Link (optional)"}
         help_texts = FRIENDLY_HELP
 
-    def clean(self):
-        cleaned_data = super().clean()
-        if cleaned_data.get("featured") and cleaned_data.get("video") and not cleaned_data.get("image"):
-            self.add_error(
-                "image",
-                "Add an image/poster before showing this video on the homepage.",
-            )
-        return cleaned_data
 
 
 class SingletonContentAdmin(admin.ModelAdmin):

@@ -27,7 +27,7 @@ def homepage_selected_work():
             "sort_order", "-created_at"
         )
     )
-    video_item = next((item for item in items if item.video and item.image), None)
+    video_item = next((item for item in items if item.video), None)
     photos = [item for item in items if item.image and not item.video][:4]
     tiktoks = list(
         FeaturedTikTok.objects.filter(active=True, show_on_homepage=True)

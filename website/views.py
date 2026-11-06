@@ -335,7 +335,7 @@ def _reel_from_upload(item):
         "category_label": item.get_category_display(),
         "tag": item.get_category_display(),
         "video_url": item.video.url,
-        "poster_url": cdn(item.image.url, 900) if item.image else "",
+        "poster_url": item.poster_url,
         "alt": item.alt_text or item.title,
         "platform": "",
         "platform_label": "",

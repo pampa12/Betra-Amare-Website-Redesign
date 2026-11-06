@@ -9,8 +9,8 @@
       <span class="selected-card-label">{{ item.get_category_display }}</span>
     </a>
     {% elif card.kind == "video" %}
-    <a class="selected-card selected-vertical-card selected-video-card reveal" href="/portfolio/" aria-label="View {{ item.title }} video in the portfolio">
-      <img src="{{ item.image.url|cdn:700 }}" alt="{{ item.alt_text|default:item.title }}" loading="lazy">
+    <a class="selected-card selected-vertical-card selected-video-card reveal" href="/portfolio/" aria-label="View {{ item.title }} video in the portfolio" data-hover-native>
+      <video class="selected-video" muted loop playsinline preload="none" poster="{{ item.poster_url }}" aria-hidden="true"><source src="{{ item.video.url }}"></video>
       <span class="selected-play" aria-hidden="true"><i></i></span>
       <span class="selected-card-badge">Video</span>
       <span class="selected-card-label">{{ item.get_category_display }}</span>

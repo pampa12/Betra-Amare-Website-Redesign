@@ -308,3 +308,8 @@
 .selected-strip [data-hover-card].is-previewing.is-muted .video-sound-hint { opacity: 1; transform: none; }
 .selected-strip .video-sound-hint-touch { display: none; }
 @media (hover: none) { .selected-strip .video-sound-hint-touch { display: inline; } .selected-strip .video-sound-hint-mouse { display: none; } }
+
+/* Uploaded homepage video: cover frame, plays on hover */
+.selected-strip .selected-video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.selected-video-card .selected-play { transition: opacity .3s ease, transform .2s ease; }
+.selected-video-card.is-playing .selected-play { opacity: 0; }

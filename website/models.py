@@ -1,3 +1,4 @@
+import re
 from io import BytesIO
 from pathlib import Path
 
@@ -20,6 +21,19 @@ class BrowserCompatibleCloudinaryVideoStorage(VideoMediaCloudinaryStorage):
         if marker in url and "f_mp4" not in url:
             return url.replace(marker, f"{marker}f_mp4,vc_h264,q_auto/")
         return url
+
+
+def video_frame_url(url, width=900):
+    """A still JPEG from one second into a Cloudinary video, used as its cover."""
+    marker = "/video/upload/"
+    if not url or "res.cloudinary.com" not in url or marker not in url:
+        return ""
+    head, tail = url.split(marker, 1)
+    first = tail.split("/", 1)[0]
+    if "," in first or first.startswith(("f_", "q_", "vc_", "so_", "w_", "c_")):
+        tail = tail.split("/", 1)[1]
+    tail = re.sub(r"\.(mp4|mov|m4v|webm)$", "", tail, flags=re.I)
+    return f"{head}{marker}so_1,f_jpg,q_auto,c_limit,w_{int(width)}/{tail}.jpg"
 
 
 def portfolio_video_storage():
@@ -499,6 +513,16 @@ class PortfolioItem(models.Model):
     def save(self, *args, **kwargs):
         _optimize_new_upload(self.image)
         super().save(*args, **kwargs)
+
+    @property
+    def poster_url(self):
+        """The cover picture: the uploaded photo, or a frame taken from the video."""
+        if self.image:
+            from website.templatetags.media_tags import cdn
+            return cdn(self.image.url, 900)
+        if self.video:
+            return video_frame_url(self.video.url)
+        return ""
 
     def __str__(self):
         return self.title

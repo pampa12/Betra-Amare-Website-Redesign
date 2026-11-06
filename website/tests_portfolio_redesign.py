@@ -332,3 +332,16 @@ class HomepageStripTests(TestCase):
         self.assertIn('data-src="https://www.tiktok.com/player/v1/7400000000000000000', html)
         self.assertIn("data-hover-card", html)
         self.assertIn("video-hover.js", html)
+
+    def test_featured_video_without_photo_shows_on_homepage(self):
+        from website.admin import PortfolioItemAdminForm
+        from website.models import PortfolioItem, video_frame_url
+        form = PortfolioItemAdminForm(data={"title": "Clip", "category": "brand", "alt_text": "Clip", "featured": "on", "active": "on", "sort_order": 0})
+        form.is_valid()
+        self.assertNotIn("image", form.errors)
+        PortfolioItem.objects.create(title="Fall Fashion", category="brand", video="portfolio/videos/fall.mp4", featured=True)
+        self.assertContains(self.client.get("/"), 'aria-label="View Fall Fashion video in the portfolio" data-hover-native')
+        self.assertEqual(
+            video_frame_url("https://res.cloudinary.com/x/video/upload/f_mp4,vc_h264,q_auto/v1/media/portfolio/videos/fall"),
+            "https://res.cloudinary.com/x/video/upload/so_1,f_jpg,q_auto,c_limit,w_900/v1/media/portfolio/videos/fall.jpg",
+        )

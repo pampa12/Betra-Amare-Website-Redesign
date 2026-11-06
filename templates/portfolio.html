@@ -61,7 +61,7 @@
                 data-media-type="video"
                 data-media-src="{{ item.video.url }}"
                 data-media-alt="{{ item.alt_text|default:item.title }}"
-                {% if item.image %}data-media-poster="{{ item.image.url|cdn:1400 }}"{% endif %}
+                {% if item.poster_url %}data-media-poster="{{ item.poster_url }}"{% endif %}
                 role="button"
                 tabindex="0"
                 aria-label="Open {{ item.title }} video"
@@ -74,7 +74,7 @@
                   playsinline
                   preload="metadata"
                   aria-label="{{ item.alt_text|default:item.title }} video"
-                  {% if item.image %}poster="{{ item.image.url|cdn:900 }}"{% endif %}
+                  {% if item.poster_url %}poster="{{ item.poster_url }}"{% endif %}
                 >
                   <source src="{{ item.video.url }}">
                   Your browser does not support HTML5 video.
