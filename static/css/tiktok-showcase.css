@@ -104,18 +104,32 @@
     gap: 22px;
   }
 
+  .tiktok-showcase-section { overflow-x: clip; }
+
+  /* Phones: one swipeable row instead of a long stack of full-height videos */
   .tiktok-showcase-grid,
   .tiktok-showcase-grid.count-1,
   .tiktok-showcase-grid.count-2,
   .tiktok-showcase-grid.count-3 {
-    grid-template-columns: minmax(0, 1fr);
-    justify-content: stretch;
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 22px;
+    margin-inline: calc(50% - 50vw);
+    padding: 6px 22px 20px;
+    scrollbar-width: none;
   }
+  .tiktok-showcase-grid::-webkit-scrollbar { display: none; }
+  .tiktok-showcase-grid.count-1 { justify-content: center; }
 
   .tiktok-showcase-card {
-    width: min(100%, 390px);
-    justify-self: center;
+    flex: 0 0 min(74vw, 320px);
+    width: auto;
+    scroll-snap-align: start;
   }
+  .tiktok-showcase-card.is-previewing { transform: none; }
 }
 
 /* Clean players: Instagram's embed is cropped to just the video (its 4:5 video

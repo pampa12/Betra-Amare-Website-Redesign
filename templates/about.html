@@ -36,12 +36,12 @@
     </section>
 
     <section class="section about-page-section">
-      <div class="shell about-story-grid">
+      <div class="shell about-story-grid{% if not about_content or not about_content.story_image %} about-story-grid--text{% endif %}">
+        {% if about_content and about_content.story_image %}
         <div class="about-story-image reveal">
-          {% if about_content and about_content.story_image %}
           <img src="{{ about_content.story_image.url|cdn:1400 }}" srcset="{{ about_content.story_image.url|cdn_srcset:'640,1000,1400' }}" sizes="(max-width: 760px) 100vw, 50vw" alt="Portrait of Betra Amare, model and digital creator" loading="eager">
-          {% endif %}
         </div>
+        {% endif %}
         <div class="about-story-copy reveal">
           <p class="eyebrow">{% if about_content %}{{ about_content.story_eyebrow }}{% else %}My story{% endif %}</p>
           <h2 class="display-title">{% if about_content %}{{ about_content.story_title }}{% else %}Hi, I'm Betra.{% endif %}</h2>
