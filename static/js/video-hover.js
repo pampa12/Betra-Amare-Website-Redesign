@@ -176,6 +176,24 @@
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', observeAll);
     else observeAll();
   }
+  // Load players that wait in data-src once they come near the screen.
+  const loadLater = () => {
+    const waiting = frames().filter(frame => frame.dataset.src && !frame.getAttribute('src') && !frame.closest('[data-film-reels]'));
+    if (!waiting.length) return;
+    const load = frame => { if (!frame.getAttribute('src')) frame.src = frame.dataset.src; };
+    if (!('IntersectionObserver' in window)) { waiting.forEach(load); return; }
+    const near = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        load(entry.target);
+        near.unobserve(entry.target);
+      });
+    }, { rootMargin: '300px' });
+    waiting.forEach(frame => near.observe(frame));
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', loadLater);
+  else loadLater();
+
   document.addEventListener('reels:active', pickForTouch);
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) cards().forEach(card => setWant(card, false));

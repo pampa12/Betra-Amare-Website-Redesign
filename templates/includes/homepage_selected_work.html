@@ -15,6 +15,19 @@
       <span class="selected-card-badge">Video</span>
       <span class="selected-card-label">{{ item.get_category_display }}</span>
     </a>
+    {% elif item.platform == "tiktok" %}
+    <div class="selected-card selected-vertical-card selected-tiktok-card selected-tiktok-live reveal" data-hover-card>
+      <img class="selected-tiktok-poster" src="{{ item.thumbnail.url|cdn:700 }}" alt="{{ item.title }}" loading="lazy">
+      <iframe class="selected-tiktok-frame" data-src="{{ item.embed_url }}" data-hover-video
+        title="{{ item.title }} — TikTok video" tabindex="-1"
+        allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+        referrerpolicy="strict-origin-when-cross-origin" scrolling="no"></iframe>
+      <button type="button" class="video-hover-shield" data-hover-shield aria-label="Play {{ item.title }} with sound"></button>
+      <span class="selected-play" aria-hidden="true"><i></i></span>
+      <span class="video-sound-hint" aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="m23 9-6 6"/><path d="m17 9 6 6"/></svg><span class="video-sound-hint-mouse">Click for sound</span><span class="video-sound-hint-touch">Tap for sound</span></span>
+      <a class="selected-card-badge selected-card-badge--link" href="{{ item.tiktok_url }}" target="_blank" rel="noopener" aria-label="Open {{ item.title }} on TikTok">TikTok <span aria-hidden="true">↗</span></a>
+      {% if item.brand_name %}<span class="selected-card-label">Collab · {{ item.brand_name }}</span>{% else %}<span class="selected-card-label">{{ item.get_category_display }}</span>{% endif %}
+    </div>
     {% else %}
     <a class="selected-card selected-vertical-card selected-tiktok-card reveal" href="{{ item.tiktok_url }}" target="_blank" rel="noopener" aria-label="Watch {{ item.title }} on {{ item.platform_label|default:'TikTok' }}">
       <img src="{{ item.thumbnail.url|cdn:700 }}" alt="{{ item.title }}" loading="lazy">

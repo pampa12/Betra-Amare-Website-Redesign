@@ -287,3 +287,22 @@
 @media (prefers-reduced-motion: reduce) {
   .selected-strip .selected-card, .selected-strip .selected-card:hover { transition: none; transform: none; }
 }
+
+/* ---- Homepage TikTok: plays on hover (video-hover.js) ---- */
+.selected-tiktok-live { cursor: pointer; }
+.selected-tiktok-frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; z-index: 0; background: #1f0d12; }
+.selected-tiktok-live .selected-tiktok-poster { position: absolute; inset: 0; z-index: 1; transition: opacity .45s ease, transform .45s cubic-bezier(.2,.65,.3,1); }
+.selected-tiktok-live.is-playing .selected-tiktok-poster { opacity: 0; }
+.selected-tiktok-live::after { z-index: 1; }
+.selected-tiktok-live .selected-play { transition: opacity .3s ease, transform .2s ease; }
+.selected-tiktok-live.is-playing .selected-play { opacity: 0; }
+.selected-tiktok-live .selected-card-label { transition: opacity .3s ease; }
+.selected-tiktok-live.is-previewing.is-muted .selected-card-label { opacity: 0; }
+.selected-card-badge--link { z-index: 4; text-decoration: none; transition: background .2s ease, color .2s ease; }
+.selected-card-badge--link:hover { background: #1f0d12; color: #fff; }
+.selected-strip .video-hover-shield { position: absolute; inset: 0; z-index: 2; display: block; width: 100%; height: 100%; padding: 0; margin: 0; border: 0; background: transparent; cursor: pointer; }
+.selected-strip .video-hover-shield:focus-visible { outline: 3px solid #b8577a; outline-offset: -3px; }
+.selected-strip .video-sound-hint { position: absolute; left: 12px; bottom: 12px; z-index: 3; display: inline-flex; align-items: center; gap: 7px; padding: 7px 11px; border-radius: 999px; background: rgba(28,10,16,.74); color: #fff; font: 700 .58rem/1 'DM Sans', Arial, sans-serif; letter-spacing: .12em; text-transform: uppercase; pointer-events: none; opacity: 0; transform: translateY(4px); transition: opacity .3s ease, transform .3s ease; }
+.selected-strip [data-hover-card].is-previewing.is-muted .video-sound-hint { opacity: 1; transform: none; }
+.selected-strip .video-sound-hint-touch { display: none; }
+@media (hover: none) { .selected-strip .video-sound-hint-touch { display: inline; } .selected-strip .video-sound-hint-mouse { display: none; } }
