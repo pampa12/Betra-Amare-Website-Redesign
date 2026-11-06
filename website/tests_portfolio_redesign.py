@@ -264,10 +264,11 @@ class AdminAddressTests(TestCase):
 class SkillsSectionTests(TestCase):
     def test_default_skills_show_without_certifications(self):
         response = self.client.get("/portfolio/")
-        self.assertContains(response, "SKILLS &amp;")
-        self.assertContains(response, "EXPERTISE.")
+        self.assertContains(response, "Skills &amp;")
+        self.assertContains(response, "Expertise</span>")
         self.assertContains(response, "Creative Direction")
-        self.assertNotContains(response, 'class="film-certs"')
+        self.assertNotContains(response, "sf-list--certs")
+        self.assertContains(response, "sf-monogram")
 
     def test_certifications_and_tools_render_from_admin_text(self):
         from website.models import PortfolioPageContent
@@ -277,8 +278,8 @@ class SkillsSectionTests(TestCase):
             certifications="Example Certificate | Example Academy, 2026",
         )
         response = self.client.get("/portfolio/")
-        self.assertContains(response, "CERTIFICATIONS.")
+        self.assertContains(response, "Certifications</span>")
         self.assertContains(response, "Example Certificate")
         self.assertContains(response, "Example Academy, 2026")
-        self.assertContains(response, "<li>CapCut</li>")
+        self.assertContains(response, '<span class="sf-app-name">CapCut</span>')
         self.assertNotContains(response, "Creative Direction")
