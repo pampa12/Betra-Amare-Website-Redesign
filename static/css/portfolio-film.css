@@ -58,7 +58,7 @@
 .film-about-aside{display:block;margin-top:70px;padding-top:14px;border-top:1px solid #cdacb6;font-weight:700;font-size:.56rem;letter-spacing:.19em}
 
 /* Stage 2 — dramatic dark selected-work section and large imagery like case studies. */
-.film-work{background:#230e15;color:#f5f2f1;min-height:100vh;padding:clamp(48px,6vw,90px) clamp(22px,6vw,120px) clamp(100px,11vw,160px)}
+.film-work{background:#230e15;color:#f5f2f1;padding:clamp(48px,6vw,90px) clamp(22px,6vw,120px) clamp(100px,11vw,160px)}
 .film-work-intro{max-width:1330px;margin:0 auto clamp(48px,7vw,100px)}
 .film-work-intro .film-overline{color:#c9a5b0;margin-bottom:25px}
 .film-work-intro h2{font:600 clamp(4rem,9.7vw,11rem)/.88 'DM Sans',Arial,sans-serif;letter-spacing:-.1em;margin:0 0 32px}

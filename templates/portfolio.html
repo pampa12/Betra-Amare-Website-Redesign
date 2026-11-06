@@ -41,16 +41,9 @@
         <p class="film-intro-subtitle">A collection of stories, content, and creative work.</p>
         <a class="film-hero-action" href="#portfolio-gallery">Discover the work <span aria-hidden="true">↘</span></a>
       </div>
-      <div class="film-intro-bottom"><span>VISUAL STORIES • CREATIVE PARTNERSHIPS • UGC</span><a href="#portfolio-gallery">SCROLL TO EXPLORE <span aria-hidden="true">↓</span></a></div>
     </section>
 
-    <section class="film-work" id="portfolio-gallery" aria-labelledby="film-work-heading">
-      <div class="film-page-index film-page-index-dark"><span>01 / SELECTED WORK</span><span>CREATIVE PROJECTS &amp; PORTFOLIO</span></div>
-      <div class="film-work-intro film-reveal">
-        <p class="film-overline">A SELECTION OF WORK</p>
-        <h2 id="film-work-heading"><span>SELECTED</span><em>PROJECTS.</em></h2>
-        <p>From beauty and fashion to social content and brand storytelling. A visual archive of things I've created.</p>
-      </div>
+    <section class="film-work" id="portfolio-gallery" aria-label="Selected work">
       {% if portfolio_items %}
       <div class="film-gallery-menu portfolio-filter" role="group" aria-label="Filter portfolio projects">
         <button type="button" id="all" class="filter-btn active" aria-pressed="true" data-filter="all">All work</button>
@@ -132,7 +125,6 @@
 
 
     <section class="film-editorial{% if motion_reels %} film-editorial--reels{% endif %}" id="portfolio-showcase" aria-labelledby="film-editorial-heading">
-      <div class="film-page-index"><span>02 / STORIES IN MOTION</span><span>SHORT-FORM VIDEO &amp; DIGITAL CONTENT</span></div>
       {% if motion_reels %}
       <div class="film-reels" data-film-reels>
         <div class="film-reels-head">
@@ -185,11 +177,9 @@
         </div>
       </div>
       {% endif %}
-      <div class="film-editorial-foot"><span>CONTENT CREATION</span><span>MODEL WORK</span><span>STORYTELLING</span><span>CAMPAIGNS</span></div>
     </section>
 
     <section class="film-brands" id="portfolio-partnerships" aria-labelledby="film-brands-heading">
-      <div class="film-page-index"><span>03 / COLLABORATIONS</span><span>BRAND &amp; CREATOR PROJECTS</span></div>
       <div class="film-brands-top film-reveal"><h2 id="film-brands-heading">BRAND<br><em>WORK.</em></h2><p>Thoughtful creative partnerships that bring a brand's story into focus. Every visual should feel intentional and true to its audience.</p></div>
       {% if brand_reels %}
       <div class="film-brands-reels" data-film-reels>
@@ -219,7 +209,6 @@
     </section>
 
     <section class="film-skills" id="portfolio-skills" aria-labelledby="film-skills-heading">
-      <div class="film-page-index film-page-index-dark"><span>04 / THE PRACTICE</span><span>WHAT GOES INTO THE WORK</span></div>
       <div class="film-skills-layout">
         <h2 id="film-skills-heading" class="film-reveal">CREATIVE<br><em>PRACTICE.</em></h2>
         <div class="film-skills-list film-reveal">
@@ -232,7 +221,6 @@
     </section>
 
     <section class="film-contact" id="portfolio-connect" aria-labelledby="film-contact-heading">
-      <p class="film-overline">05 / NEXT CHAPTER</p>
       <h2 id="film-contact-heading" class="film-reveal">LET'S MAKE<br><em>SOMETHING.</em></h2>
       <p>{% if portfolio_content %}{{ portfolio_content.collab_title_prefix }} {{ portfolio_content.collab_title_emphasis }}{% else %}Have a project in mind? Let's create something worth remembering.{% endif %}</p>
       <a href="/inquire/" class="film-contact-cta">{% if portfolio_content %}{{ portfolio_content.button_text }}{% else %}START A PROJECT{% endif %}<span aria-hidden="true">↗</span></a>
