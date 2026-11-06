@@ -47,7 +47,7 @@ class FilmPortfolioTests(TestCase):
         # The portfolio no longer repeats the About page.
         self.assertNotContains(response, 'class="film-about')
         self.assertNotContains(response, "about/intro-photo")
-        self.assertContains(response, 'href="#portfolio-gallery"')
+        self.assertNotContains(response, 'Discover the work')
         self.assertContains(response, 'class="film-gallery portfolio-masonry"')
         self.assertContains(response, "Beauty portrait")
         self.assertContains(response, "Fashion portrait")
