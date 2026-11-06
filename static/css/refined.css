@@ -606,3 +606,31 @@ body {
     margin-left: -.12em;
   }
 }
+
+/* One dark tone across the site: the deep burgundy-brown of the portfolio page. */
+:root {
+  --night: #1f0d12;
+  --night-2: #2d121a;
+}
+
+.site-footer {
+  background: linear-gradient(135deg, var(--night) 0%, var(--night-2) 100%);
+}
+
+.hero-home {
+  background: var(--night);
+}
+
+@media (min-width: 761px) {
+  .hero-home .hero-shade {
+    background:
+      linear-gradient(90deg, var(--night) 0%, rgba(31,13,18,.55) 14%, rgba(31,13,18,0) 38%),
+      linear-gradient(0deg, rgba(31,13,18,.35), transparent 35%);
+  }
+}
+
+@media (max-width: 760px) {
+  .hero-home .hero-shade {
+    background: linear-gradient(0deg, rgba(31,13,18,.78), rgba(31,13,18,.18) 74%);
+  }
+}
