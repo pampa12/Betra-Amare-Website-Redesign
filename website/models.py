@@ -248,6 +248,7 @@ class ContactContent(models.Model):
     instagram_handle = models.CharField(max_length=80, default="@betra_amare")
     tiktok_url = models.URLField(default="https://www.tiktok.com/@betraamarey")
     tiktok_handle = models.CharField(max_length=80, default="@betraamarey")
+    linkedin_url = models.URLField("LinkedIn link", default="https://www.linkedin.com/in/betra-amare-0a6473352")
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:

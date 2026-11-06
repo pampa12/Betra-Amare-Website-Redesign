@@ -303,3 +303,13 @@ class SkillsSectionTests(TestCase):
         self.assertContains(response, '<span class="sk-app-name">CapCut</span>')
         self.assertContains(response, "sk-app-icon--logo")
         self.assertNotContains(response, "Hidden app")
+
+
+class LinkedInLinkTests(TestCase):
+    def test_linkedin_shows_on_every_page_and_in_profile_data(self):
+        url = "https://www.linkedin.com/in/betra-amare-0a6473352"
+        for path in ("/", "/portfolio/", "/media-kit/", "/about/", "/contact/", "/inquire/"):
+            with self.subTest(path=path):
+                response = self.client.get(path)
+                self.assertContains(response, f'href="{url}"')
+                self.assertContains(response, f'"{url}"')

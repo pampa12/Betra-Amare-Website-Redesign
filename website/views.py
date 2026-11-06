@@ -198,6 +198,12 @@ def _finish_page(request, response, *, title, description, route_name, contact_c
         else "https://www.tiktok.com/@betraamarey"
     )
 
+    linkedin_url = (
+        contact_content.linkedin_url
+        if contact_content and contact_content.linkedin_url
+        else "https://www.linkedin.com/in/betra-amare-0a6473352"
+    )
+
     html = re.sub(r"\s*<title>.*?</title>", "", html, count=1, flags=re.I | re.S)
     html = re.sub(
         r"\s*<meta\s+name=[\"']description[\"'][^>]*>",
@@ -227,7 +233,7 @@ def _finish_page(request, response, *, title, description, route_name, contact_c
                 "name": "Betra Amare",
                 "url": home_url,
                 "jobTitle": "Model and Digital Creator",
-                "sameAs": [instagram_url, tiktok_url],
+                "sameAs": [instagram_url, tiktok_url, linkedin_url],
             },
             {
                 "@type": "WebSite",

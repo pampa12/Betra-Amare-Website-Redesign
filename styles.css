@@ -104,7 +104,7 @@ button, input, textarea, select { font: inherit; }
 .plain-email { font-size: .8rem; }
 
 .social-section { background: var(--paper); }
-.social-links { display: flex; gap: 18px; }
+.social-links { display: flex; flex-wrap: wrap; gap: 18px; }
 .social-links a { text-transform: uppercase; text-decoration: none; font-size: .68rem; font-weight: 700; letter-spacing: .14em; border-bottom: 1px solid currentColor; padding-bottom: 4px; }
 .social-photo-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
 .social-photo { overflow: hidden; aspect-ratio: 1/1.15; background: #e5d7da; }
