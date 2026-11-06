@@ -10,6 +10,10 @@ IS_RENDER = bool(os.environ.get("RENDER"))
 
 DEBUG: bool = config("DEBUG", default=not IS_RENDER, cast=bool)
 
+# Admin address. Set ADMIN_URL in Render (e.g. "studio-x7k2/") so bots that
+# probe /admin/ find nothing. Defaults to "admin/" so nothing breaks before then.
+ADMIN_URL: str = config("ADMIN_URL", default="admin/").strip().strip("/") + "/"
+
 _secret_key = config("SECRET_KEY", default="").strip()
 if _secret_key:
     SECRET_KEY: str = _secret_key

@@ -235,3 +235,27 @@ class SharePreviewTests(TestCase):
         from website.templatetags.media_tags import share_image_url
         url = "https://res.cloudinary.com/demo/image/upload/v1/media/home/hero.jpg"
         self.assertIn("/image/upload/f_jpg,q_auto,c_fill,g_auto,w_1200,h_630/v1/", share_image_url(url))
+
+
+class AdminAddressTests(TestCase):
+    def test_default_admin_address_still_works(self):
+        response = self.client.get("/admin/")
+        self.assertEqual(response.status_code, 302)
+        self.assertIn("/admin/login/", response.url)
+
+    def test_private_admin_address_is_not_published_in_robots(self):
+        import importlib
+        from django.test import override_settings
+        from django.urls import clear_url_caches
+        import config.urls
+        with override_settings(ADMIN_URL="studio-test/"):
+            clear_url_caches()
+            importlib.reload(config.urls)
+            try:
+                self.assertEqual(self.client.get("/admin/").status_code, 404)
+                self.assertEqual(self.client.get("/studio-test/").status_code, 302)
+                self.assertNotContains(self.client.get("/robots.txt"), "studio-test")
+            finally:
+                clear_url_caches()
+        importlib.reload(config.urls)
+        clear_url_caches()

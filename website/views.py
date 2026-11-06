@@ -540,14 +540,12 @@ def privacy(request):
 def robots_txt(request):
     """Tell search engines which parts of the site may be crawled."""
     sitemap_url = request.build_absolute_uri(reverse("website:sitemap"))
-    body = "\n".join(
-        [
-            "User-agent: *",
-            "Allow: /",
-            "Disallow: /admin/",
-            f"Sitemap: {sitemap_url}",
-        ]
-    )
+    lines = ["User-agent: *", "Allow: /"]
+    # Only list the default admin path; a private ADMIN_URL stays unpublished.
+    if settings.ADMIN_URL == "admin/":
+        lines.append("Disallow: /admin/")
+    lines.append(f"Sitemap: {sitemap_url}")
+    body = "\n".join(lines)
     return HttpResponse(body, content_type="text/plain; charset=utf-8")
 
 
