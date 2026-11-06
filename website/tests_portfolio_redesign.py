@@ -345,3 +345,45 @@ class HomepageStripTests(TestCase):
             video_frame_url("https://res.cloudinary.com/x/video/upload/f_mp4,vc_h264,q_auto/v1/media/portfolio/videos/fall"),
             "https://res.cloudinary.com/x/video/upload/so_1,f_jpg,q_auto,c_limit,w_900/v1/media/portfolio/videos/fall.jpg",
         )
+
+
+from django.core import mail
+from django.test import override_settings
+
+
+@override_settings(
+    INQUIRY_ALERTS_ENABLED=True,
+    INQUIRY_ALERT_ASYNC=False,
+    INQUIRY_ALERT_TO=["betra@example.com"],
+    DEFAULT_FROM_EMAIL="site@example.com",
+    EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
+)
+class InquiryAlertTests(TestCase):
+    form = {
+        "name": "Maya Lee", "email": "maya@brand.com", "company": "Glow Co",
+        "project_type": "UGC", "budget": "$500", "message": "We'd love a TikTok for our launch.",
+        "website": "",
+    }
+
+    def test_new_inquiry_emails_betra_with_reply_to_the_sender(self):
+        response = self.client.post("/inquire/", self.form)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(mail.outbox), 1)
+        alert = mail.outbox[0]
+        self.assertEqual(alert.to, ["betra@example.com"])
+        self.assertEqual(alert.reply_to, ["maya@brand.com"])
+        self.assertIn("Maya Lee (Glow Co)", alert.subject)
+        self.assertIn("We'd love a TikTok", alert.body)
+        self.assertIn("/inquiry/", alert.body)
+
+    @override_settings(INQUIRY_ALERTS_ENABLED=False)
+    def test_no_email_until_settings_are_added(self):
+        self.client.post("/inquire/", self.form)
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_mail_failure_still_saves_the_inquiry(self):
+        from unittest import mock
+        from website.models import Inquiry
+        with mock.patch("django.core.mail.EmailMessage.send", side_effect=OSError("smtp down")):
+            self.client.post("/inquire/", self.form)
+        self.assertEqual(Inquiry.objects.count(), 1)

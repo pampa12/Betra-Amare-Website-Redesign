@@ -33,6 +33,25 @@ CSRF_TRUSTED_ORIGINS: list[str] = config(
     cast=lambda value: [item.strip() for item in value.split(",") if item.strip()],
 )
 GA_MEASUREMENT_ID: str = config("GA_MEASUREMENT_ID", default="").strip()
+
+# Inquiry email alerts. Set EMAIL_HOST_USER + EMAIL_HOST_PASSWORD on Render
+# (a Gmail address + its 16-character app password) to switch them on.
+EMAIL_HOST: str = config("EMAIL_HOST", default="smtp.gmail.com").strip()
+EMAIL_PORT: int = config("EMAIL_PORT", default=587, cast=int)
+EMAIL_USE_TLS: bool = config("EMAIL_USE_TLS", default=True, cast=bool)
+EMAIL_HOST_USER: str = config("EMAIL_HOST_USER", default="").strip()
+EMAIL_HOST_PASSWORD: str = config("EMAIL_HOST_PASSWORD", default="").replace(" ", "").strip()
+EMAIL_TIMEOUT = 15
+DEFAULT_FROM_EMAIL: str = config("DEFAULT_FROM_EMAIL", default=EMAIL_HOST_USER or "webmaster@localhost").strip()
+INQUIRY_ALERT_TO: list[str] = config(
+    "INQUIRY_ALERT_TO",
+    default=EMAIL_HOST_USER,
+    cast=lambda value: [item.strip() for item in value.split(",") if item.strip()],
+)
+INQUIRY_ALERTS_ENABLED: bool = bool(EMAIL_HOST_USER and EMAIL_HOST_PASSWORD and INQUIRY_ALERT_TO)
+INQUIRY_ALERT_ASYNC = True
+if not INQUIRY_ALERTS_ENABLED:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 CLOUDINARY_URL: str = config("CLOUDINARY_URL", default="").strip()
 USE_CLOUDINARY: bool = config(
     "USE_CLOUDINARY",

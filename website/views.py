@@ -13,6 +13,7 @@ from website.templatetags.media_tags import cdn, default_share_image, share_imag
 
 from .featured_tiktok import FeaturedTikTok
 from .forms import InquiryForm
+from .notifications import send_inquiry_alert
 from .models import (
     AboutContent,
     ContactContent,
@@ -476,7 +477,8 @@ def inquire(request):
                     "That was submitted very recently. Please wait a moment before sending another inquiry.",
                 )
             else:
-                form.save()
+                inquiry = form.save()
+                send_inquiry_alert(inquiry, request)
                 request.session["last_inquiry_submit_at"] = now
                 form = InquiryForm()
                 success = True
