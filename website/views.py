@@ -9,7 +9,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 
-from website.templatetags.media_tags import cdn
+from website.templatetags.media_tags import cdn, default_share_image, share_image_url
 
 from .featured_tiktok import FeaturedTikTok
 from .forms import InquiryForm
@@ -139,7 +139,7 @@ def _optimize_image_tag(match):
     return f"{tag[:-1]} {' '.join(additions)}>"
 
 
-def _finish_page(request, response, *, title, description, route_name, contact_content=None):
+def _finish_page(request, response, *, title, description, route_name, contact_content=None, share_image=None):
     """Normalize links and add SEO, accessibility, privacy, and performance enhancements."""
     html = response.content.decode("utf-8").replace(GITHUB_PAGES_BASE, "")
 
@@ -252,6 +252,20 @@ def _finish_page(request, response, *, title, description, route_name, contact_c
     safe_description = html_escape(description, quote=True)
     safe_canonical = html_escape(canonical_url, quote=True)
 
+    # Link previews (iMessage, LinkedIn, email): a 1200x630 crop of a current photo.
+    image_url = ""
+    if share_image:
+        try:
+            image_url = share_image.url
+        except (AttributeError, ValueError):
+            image_url = ""
+    if not image_url:
+        image_url = default_share_image()
+    image_url = share_image_url(image_url) or DEFAULT_SOCIAL_IMAGE
+    if image_url.startswith("/"):
+        image_url = request.build_absolute_uri(image_url)
+    safe_image = html_escape(image_url, quote=True)
+
     seo_tags = f"""
   <title>{safe_title}</title>
   <meta name="description" content="{safe_description}">
@@ -260,11 +274,12 @@ def _finish_page(request, response, *, title, description, route_name, contact_c
   <meta property="og:description" content="{safe_description}">
   <meta property="og:type" content="website">
   <meta property="og:url" content="{safe_canonical}">
-  <meta property="og:image" content="{DEFAULT_SOCIAL_IMAGE}">
+  <meta property="og:image" content="{safe_image}">
+  <meta property="og:image:alt" content="Betra Amare, model and digital creator">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{safe_title}">
   <meta name="twitter:description" content="{safe_description}">
-  <meta name="twitter:image" content="{DEFAULT_SOCIAL_IMAGE}">
+  <meta name="twitter:image" content="{safe_image}">
   <script type="application/ld+json">{structured_json}</script>
 {PERFORMANCE_HINTS}{ACCESSIBILITY_STYLES}{_analytics_tags()}"""
 
@@ -411,6 +426,7 @@ def about(request):
         ),
         route_name="website:about",
         contact_content=contact_content,
+        share_image=about_content.story_image if about_content else None,
     )
 
 
@@ -500,6 +516,7 @@ def media_kit(request):
         ),
         route_name="website:media_kit",
         contact_content=contact_content,
+        share_image=media_kit_content.hero_image if media_kit_content else None,
     )
 
 

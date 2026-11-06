@@ -51,3 +51,26 @@ def cdn_srcset(url, widths="640,1100,1600"):
         if raw.isdigit():
             entries.append(f"{_transform(url, int(raw))} {raw}w")
     return ", ".join(entries)
+
+
+def share_image_url(url):
+    """A 1200×630 JPEG crop, the size link previews (iMessage, LinkedIn, email) expect."""
+    if not url or "res.cloudinary.com" not in url or UPLOAD_SEGMENT not in url:
+        return url
+    head, tail = url.split(UPLOAD_SEGMENT, 1)
+    return f"{head}{UPLOAD_SEGMENT}f_jpg,q_auto,c_fill,g_auto,w_1200,h_630/{tail}"
+
+
+def default_share_image():
+    from website.models import HomepageContent, MediaKitContent
+
+    for model, field in ((HomepageContent, "hero_image"), (MediaKitContent, "hero_image")):
+        content = model.objects.only(field).first()
+        image = getattr(content, field, None) if content else None
+        if image:
+            try:
+                return image.url
+            except ValueError:
+                continue
+    return ""
+

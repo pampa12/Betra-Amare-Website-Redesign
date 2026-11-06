@@ -219,3 +219,19 @@ class CloudinaryImageFilterTests(TestCase):
         self.assertEqual(cdn("/media/local.jpg", 800), "/media/local.jpg")
         already = "https://res.cloudinary.com/demo/image/upload/w_400,c_fill/v1/a.jpg"
         self.assertEqual(cdn(already, 800), already)
+
+
+
+class SharePreviewTests(TestCase):
+    def test_every_public_page_has_a_link_preview_image(self):
+        for path in ["/", "/portfolio/", "/media-kit/", "/about/", "/contact/", "/inquire/", "/privacy/"]:
+            with self.subTest(path=path):
+                response = self.client.get(path)
+                self.assertEqual(response.status_code, 200)
+                self.assertContains(response, 'property="og:image"', count=1)
+                self.assertContains(response, 'property="og:title"', count=1)
+
+    def test_share_image_is_cropped_for_previews(self):
+        from website.templatetags.media_tags import share_image_url
+        url = "https://res.cloudinary.com/demo/image/upload/v1/media/home/hero.jpg"
+        self.assertIn("/image/upload/f_jpg,q_auto,c_fill,g_auto,w_1200,h_630/v1/", share_image_url(url))
