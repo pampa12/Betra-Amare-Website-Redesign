@@ -36,7 +36,7 @@
   <main>
     <section class="hero hero-home">
       {% if home_content and home_content.hero_image %}
-      <img class="hero-photo" src="{{ home_content.hero_image.url|cdn:1600 }}" srcset="{{ home_content.hero_image.url|cdn_srcset:'640,1100,1600,2200' }}" sizes="100vw" fetchpriority="high" alt="Betra Amare, model and digital creator">
+      <img class="hero-photo" src="{{ home_content.hero_image.url|cdn:1600 }}" srcset="{{ home_content.hero_image.url|cdn_srcset:'640,1100,1600,2200' }}" sizes="(max-width: 760px) 100vw, 50vw" fetchpriority="high" alt="Betra Amare, model and digital creator">
       {% endif %}
       <div class="hero-shade"></div>
       <div class="shell hero-content reveal">

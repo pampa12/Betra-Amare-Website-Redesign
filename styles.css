@@ -172,6 +172,16 @@ button, input, textarea, select { font: inherit; }
   .contact-grid, .about-story-grid { gap: 5vw; }
 }
 
+/* Split hero on wider screens: the photo fills the right half, so it is shown
+   closer to its real size (sharper) and with more of the frame visible. */
+@media (min-width: 761px) {
+  .hero-home { background: #3a1220; }
+  .hero-home .hero-photo { left: auto; right: 0; width: 50%; object-position: 50% 22%; }
+  .hero-home .hero-shade { left: auto; right: 0; width: 50%; background: linear-gradient(90deg,#3a1220 0%,rgba(58,18,32,.55) 14%,rgba(58,18,32,0) 38%), linear-gradient(0deg,rgba(58,18,32,.35),transparent 35%); }
+  .hero-home h1 { font-size: clamp(3.6rem,6.2vw,6.6rem); max-width: 9.5em; }
+  .hero-home .hero-copy { max-width: 440px; }
+}
+
 @media (max-width: 760px) {
   .nav-inner { min-height: 74px; grid-template-columns: 1fr auto auto; gap: 12px; }
   .wordmark { font-size: 1.18rem; }
