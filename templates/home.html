@@ -23,13 +23,13 @@
       <a class="wordmark" href="/" aria-label="Betra Amare home">Betra Amare</a>
       <button class="menu-toggle" id="menuToggle" aria-label="Open navigation" aria-expanded="false"><span></span><span></span></button>
       <nav class="main-nav" id="mainNav" aria-label="Main navigation">
-        <a class="active" href="/">Home</a>
-        <a href="/portfolio.html">Portfolio</a>
-        <a href="/media-kit/">Media Kit</a>
-        <a href="/about.html">About</a>
-        <a href="/contact.html">Contact</a>
+        <a href="/" {% if request.resolver_match.url_name == 'home' %}class="active" aria-current="page"{% endif %}>Home</a>
+        <a href="/content-creation/" {% if request.resolver_match.url_name == 'portfolio' or request.resolver_match.url_name == 'legacy_portfolio' %}class="active" aria-current="page"{% endif %}>Content Creation</a>
+        <a href="/modeling/" {% if request.resolver_match.url_name == 'modeling' %}class="active" aria-current="page"{% endif %}>Modeling</a>
+        <a href="/marketing-portfolio/" {% if request.resolver_match.url_name == 'marketing' %}class="active" aria-current="page"{% endif %}>Marketing Portfolio</a>
+        <a href="/contact/" {% if request.resolver_match.url_name == 'contact' %}class="active" aria-current="page"{% endif %}>Contact</a>
       </nav>
-      <a class="nav-cta" href="/inquire.html">Inquire</a>
+      
     </div>
   </header>
 
@@ -43,26 +43,14 @@
         <p class="eyebrow light">{% if home_content %}{{ home_content.eyebrow }}{% else %}Model · Creator · Storyteller{% endif %}</p>
         <h1>{% if home_content %}{{ home_content.headline_line1 }}<br>{{ home_content.headline_line2 }} <em>{{ home_content.headline_emphasis }}</em>{% else %}Beauty, style &amp;<br>the moments <em>in between.</em>{% endif %}</h1>
         <p class="hero-copy">{% if home_content %}{{ home_content.intro_text }}{% else %}I create confident, feminine visuals across beauty, fashion, and lifestyle — with a polished eye and a personal point of view.{% endif %}</p>
-        <a class="arrow-link light-link" href="/portfolio.html">{% if home_content %}{{ home_content.cta_text }}{% else %}Explore my work{% endif %}</a>
+        <a class="arrow-link light-link" href="/content-creation/">{% if home_content %}{{ home_content.cta_text }}{% else %}Explore my work{% endif %}</a>
       </div>
       <a class="scroll-cue" href="#selected-work-home">Selected work <span>↓</span></a>
     </section>
 
     <section class="discipline-band" aria-label="Creative categories">
       <div class="shell discipline-list">
-        <span>Beauty</span><i>•</i><span>Fashion</span><i>•</i><span>Lifestyle</span><i>•</i><span>Brand Content</span>
-      </div>
-    </section>
-
-    <section class="section selected-work" id="selected-work-home">
-      <div class="shell">
-        <div class="section-heading selected-work-heading reveal">
-          <div>
-            <p class="eyebrow">{% if home_content %}{{ home_content.selected_eyebrow }}{% else %}Selected work{% endif %}</p>
-            <h2 class="display-title">{% if home_content %}{{ home_content.selected_title }}{% else %}A few favorites.{% endif %}</h2>
-          </div>
-        </div>
-        {% homepage_selected_work %}
+        <span>Content Creation</span><i>•</i><span>Modeling</span><i>•</i><span>Marketing Portfolio</span>
       </div>
     </section>
 
@@ -87,6 +75,18 @@
       </div>
     </section>
 
+    <section class="section selected-work" id="selected-work-home">
+      <div class="shell">
+        <div class="section-heading selected-work-heading reveal">
+          <div>
+            <p class="eyebrow">{% if home_content %}{{ home_content.selected_eyebrow }}{% else %}Selected work{% endif %}</p>
+            <h2 class="display-title">{% if home_content %}{{ home_content.selected_title }}{% else %}A few favorites.{% endif %}</h2>
+          </div>
+        </div>
+        {% homepage_selected_work %}
+      </div>
+    </section>
+
     <section class="section section-cream" id="world">
       <div class="shell">
         <div class="intro-grid reveal">
@@ -98,19 +98,19 @@
         </div>
 
         <div class="category-grid">
-          <a class="category-card reveal" href="/portfolio.html#beauty">
+          <a class="category-card reveal" href="/content-creation/#beauty">
             <div class="media-frame tall">
               {% if home_content and home_content.category_1_image %}<img src="{{ home_content.category_1_image.url|cdn:900 }}" alt="Beauty content by Betra Amare" loading="lazy">{% endif %}
             </div>
             <div class="card-caption"><h3>{% if home_content %}{{ home_content.category_1_title }}{% else %}Beauty{% endif %}</h3><span>{% if home_content %}{{ home_content.category_1_subtitle }}{% else %}Glow · Detail · Confidence{% endif %}</span></div>
           </a>
-          <a class="category-card offset reveal" href="/portfolio.html#fashion">
+          <a class="category-card offset reveal" href="/modeling/">
             <div class="media-frame tallest">
               {% if home_content and home_content.category_2_image %}<img src="{{ home_content.category_2_image.url|cdn:900 }}" alt="Fashion editorial content by Betra Amare" loading="lazy">{% endif %}
             </div>
             <div class="card-caption"><h3>{% if home_content %}{{ home_content.category_2_title }}{% else %}Fashion{% endif %}</h3><span>{% if home_content %}{{ home_content.category_2_subtitle }}{% else %}Style · Editorial · Mood{% endif %}</span></div>
           </a>
-          <a class="category-card reveal" href="/portfolio.html#lifestyle">
+          <a class="category-card reveal" href="/content-creation/#lifestyle">
             <div class="media-frame medium">
               {% if home_content and home_content.category_3_image %}<img src="{{ home_content.category_3_image.url|cdn:900 }}" alt="Lifestyle content by Betra Amare" loading="lazy">{% endif %}
             </div>
@@ -149,7 +149,7 @@
   <footer class="site-footer">
     <div class="shell footer-top">
       <p class="footer-wordmark">Betra Amare</p>
-      <div class="footer-nav"><a href="/portfolio.html">Portfolio</a><a href="/media-kit/">Media Kit</a><a href="/about.html">About</a><a href="/contact.html">Contact</a><a href="/inquire.html">Inquire</a><a href="{% if contact_content %}{{ contact_content.instagram_url }}{% else %}https://www.instagram.com/betra_amare{% endif %}" target="_blank" rel="noopener">Instagram</a><a href="{% if contact_content %}{{ contact_content.tiktok_url }}{% else %}https://www.tiktok.com/@betraamarey{% endif %}" target="_blank" rel="noopener">TikTok</a><a href="{% if contact_content %}{{ contact_content.linkedin_url }}{% else %}https://www.linkedin.com/in/betra-amare-0a6473352{% endif %}" target="_blank" rel="noopener">LinkedIn</a></div>
+      <div class="footer-nav"><a href="/content-creation/">Content Creation</a><a href="/modeling/">Modeling</a><a href="/marketing-portfolio/">Marketing Portfolio</a><a href="/media-kit/">Media Kit</a><a href="/about.html">About</a><a href="/contact.html">Contact</a><a href="/inquire.html">Inquire</a><a href="{% if contact_content %}{{ contact_content.instagram_url }}{% else %}https://www.instagram.com/betra_amare{% endif %}" target="_blank" rel="noopener">Instagram</a><a href="{% if contact_content %}{{ contact_content.tiktok_url }}{% else %}https://www.tiktok.com/@betraamarey{% endif %}" target="_blank" rel="noopener">TikTok</a><a href="{% if contact_content %}{{ contact_content.linkedin_url }}{% else %}https://www.linkedin.com/in/betra-amare-0a6473352{% endif %}" target="_blank" rel="noopener">LinkedIn</a></div>
     </div>
     <div class="shell footer-bottom"><span>© <span data-year></span> Betra Amare. All rights reserved.</span><a href="#">Back to top ↑</a></div>
   </footer>
