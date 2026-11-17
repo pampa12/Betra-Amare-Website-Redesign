@@ -181,3 +181,6 @@ if not DEBUG:
     SECURE_CONTENT_TYPE_NOSNIFF = True
     SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
     X_FRAME_OPTIONS = "DENY"
+
+# Public résumé PDF URL, optional; set in Render environment.
+MARKETING_RESUME_URL = config("MARKETING_RESUME_URL", default="")

@@ -362,7 +362,7 @@ def _reel_from_post(post):
 
 def portfolio(request):
     """Render the creative portfolio with existing admin-managed Cloudinary media."""
-    portfolio_items = list(PortfolioItem.objects.filter(active=True))
+    portfolio_items = list(PortfolioItem.objects.filter(active=True).exclude(category="fashion"))
     showcase_photos = [item for item in portfolio_items if item.image][:3]
     # Prefer real Cloudinary-hosted video to make the phone demo actually play.
     # If a video hasn't been uploaded, use an already-approved TikTok post.
@@ -373,7 +373,7 @@ def portfolio(request):
         showcase_video = showcase_videos[0]
     # Stories in Motion: uploaded videos first, then active TikToks and Instagram Reels.
     # Brand Content videos are shown under Brand Work instead, so nothing appears twice.
-    social_videos = [post for post in FeaturedTikTok.objects.filter(active=True) if post.embed_url]
+    social_videos = [post for post in FeaturedTikTok.objects.filter(active=True).exclude(category="fashion") if post.embed_url]
     motion_reels = [_reel_from_upload(item) for item in showcase_videos if item.category != "brand"]
     motion_reels += [_reel_from_post(post) for post in social_videos if post.category != "brand"]
     brand_reels = [_reel_from_upload(item) for item in showcase_videos if item.category == "brand"]
@@ -410,7 +410,7 @@ def portfolio(request):
     return _finish_page(
         request,
         response,
-        title="Portfolio | Betra Amare — Beauty, Fashion & Lifestyle",
+        title="Content Creation | Betra Amare",
         description=(
             "Explore Betra Amare's selected modeling and creator work across beauty, "
             "fashion, lifestyle, editorial, and brand content."
@@ -418,6 +418,32 @@ def portfolio(request):
         route_name="website:portfolio",
         contact_content=contact_content,
     )
+
+
+def modeling(request):
+    contact_content = ContactContent.objects.first()
+    response = render(request, "modeling.html", {
+        "portfolio_items": PortfolioItem.objects.filter(active=True, category="fashion"),
+        "contact_content": contact_content,
+    })
+    return _finish_page(request, response, title="Modeling | Betra Amare",
+                        description="Fashion and editorial modeling portfolio.",
+                        route_name="website:modeling", contact_content=contact_content)
+
+
+def marketing(request):
+    contact_content = ContactContent.objects.first()
+    portfolio_content = PortfolioPageContent.objects.first()
+    response = render(request, "marketing.html", {
+        "skills_content": portfolio_content or PortfolioPageContent(),
+        "tools": list(Tool.objects.filter(active=True)),
+        "skills_photo": next((item.image for item in PortfolioItem.objects.filter(active=True) if item.image), None),
+        "resume_url": getattr(settings, "MARKETING_RESUME_URL", ""),
+        "contact_content": contact_content,
+    })
+    return _finish_page(request, response, title="Marketing Portfolio | Betra Amare",
+                        description="Marketing skills, certifications and professional opportunities.",
+                        route_name="website:marketing", contact_content=contact_content)
 
 
 def about(request):
@@ -568,6 +594,8 @@ def sitemap_xml(request):
     route_names = [
         "website:home",
         "website:portfolio",
+        "website:modeling",
+        "website:marketing",
         "website:about",
         "website:contact",
         "website:inquire",

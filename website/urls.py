@@ -7,7 +7,10 @@ app_name = "website"
 
 urlpatterns = [
     path("", views.home, name="home"),
-    path("portfolio/", views.portfolio, name="portfolio"),
+    path("content-creation/", views.portfolio, name="portfolio"),
+    path("portfolio/", views.portfolio, name="legacy_portfolio"),
+    path("modeling/", views.modeling, name="modeling"),
+    path("marketing-portfolio/", views.marketing, name="marketing"),
     path("about/", views.about, name="about"),
     path("contact/", views.contact, name="contact"),
     path("inquire/", views.inquire, name="inquire"),

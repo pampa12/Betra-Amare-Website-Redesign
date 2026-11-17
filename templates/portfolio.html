@@ -22,9 +22,13 @@
       <a class="wordmark" href="/">Betra Amare</a>
       <button class="menu-toggle" id="menuToggle" aria-label="Open navigation" aria-expanded="false"><span></span><span></span></button>
       <nav class="main-nav" id="mainNav" aria-label="Main navigation">
-        <a href="/">Home</a><a class="active" href="/portfolio.html">Portfolio</a><a href="/media-kit/">Media Kit</a><a href="/about.html">About</a><a href="/contact.html">Contact</a>
+        <a href="/" {% if request.resolver_match.url_name == 'home' %}class="active" aria-current="page"{% endif %}>Home</a>
+        <a href="/content-creation/" {% if request.resolver_match.url_name == 'portfolio' or request.resolver_match.url_name == 'legacy_portfolio' %}class="active" aria-current="page"{% endif %}>Content Creation</a>
+        <a href="/modeling/" {% if request.resolver_match.url_name == 'modeling' %}class="active" aria-current="page"{% endif %}>Modeling</a>
+        <a href="/marketing-portfolio/" {% if request.resolver_match.url_name == 'marketing' %}class="active" aria-current="page"{% endif %}>Marketing Portfolio</a>
+        <a href="/contact/" {% if request.resolver_match.url_name == 'contact' %}class="active" aria-current="page"{% endif %}>Contact</a>
       </nav>
-      <a class="nav-cta" href="/inquire.html">Inquire</a>
+      
     </div>
   </header>
 
@@ -32,25 +36,24 @@
     <section class="film-intro" aria-labelledby="film-intro-heading" id="portfolio-top">
       <div class="film-hero-grain" aria-hidden="true"></div>
       <div class="film-intro-top">
-        <span>BETRA AMARE / PORTFOLIO</span>
+        <span>BETRA AMARE / CONTENT CREATION</span>
         <span>INDEPENDENT CREATIVE • MODEL • DIGITAL CREATOR</span>
       </div>
       <div class="film-intro-center">
-        <p class="film-intro-prelude">Who made this creative portfolio?</p>
-        <h1 id="film-intro-heading" class="film-intro-heading"><span class="film-name" data-film-word>BETRA <em>AMARE.</em></span><span class="film-portfolio-word" data-film-word>PORTFOLIO<span class="film-title-period">.</span></span></h1>
-        <p class="film-intro-subtitle">A collection of stories, content, and creative work.</p>
+        <p class="film-intro-prelude">Content creation</p>
+        <h1 id="film-intro-heading" class="film-intro-heading"><span class="film-name" data-film-word>BETRA <em>AMARE.</em></span><span class="film-portfolio-word" data-film-word>CONTENT CREATION<span class="film-title-period">.</span></span></h1>
+        <p class="film-intro-subtitle">Beauty, lifestyle, and brand collaborations.</p>
       </div>
     </section>
 
     <section class="film-work" id="portfolio-gallery" aria-label="Selected work">
-      {% if portfolio_items %}
       <div class="film-gallery-menu portfolio-filter" role="group" aria-label="Filter portfolio projects">
         <button type="button" id="all" class="filter-btn active" aria-pressed="true" data-filter="all">All work</button>
         <button type="button" id="beauty" class="filter-btn" aria-pressed="false" data-filter="beauty">Beauty</button>
-        <button type="button" id="fashion" class="filter-btn" aria-pressed="false" data-filter="fashion">Fashion</button>
         <button type="button" id="lifestyle" class="filter-btn" aria-pressed="false" data-filter="lifestyle">Lifestyle</button>
-        <button type="button" id="brand" class="filter-btn" aria-pressed="false" data-filter="brand">Brand work</button>
+        <button type="button" id="brand" class="filter-btn" aria-pressed="false" data-filter="brand">Brand Collabs</button>
       </div>
+      {% if portfolio_items %}
       <div class="film-gallery portfolio-masonry">
             {% for item in portfolio_items %}
               {% if item.video %}
@@ -207,84 +210,6 @@
       <a class="film-text-link film-brands-link" href="/inquire/">LET'S COLLABORATE <span aria-hidden="true">↗</span></a>
     </section>
 
-    {% with sc=skills_content %}
-    {% if sc.skill_rows or sc.certification_rows or tools %}
-    <section class="film-skills sk-fun" id="portfolio-skills" aria-labelledby="film-skills-heading">
-      <span class="sk-sparkle sk-sparkle--a" aria-hidden="true">✦</span>
-      <span class="sk-sparkle sk-sparkle--b" aria-hidden="true">✦</span>
-      <span class="sk-sparkle sk-sparkle--c" aria-hidden="true">✦</span>
-      <div class="film-skills-layout">
-        <div class="film-skills-intro film-reveal">
-          <h2 id="film-skills-heading">SKILLS &amp;<br><em>{% if sc.certification_rows %}CERTIFICATIONS.{% else %}EXPERTISE.{% endif %}</em></h2>
-          <p class="sk-note">a few things I'm great at ♡</p>
-
-          <figure class="sk-laptop">
-            <div class="sk-screen{% if not tools %} sk-screen--photo{% endif %}">
-              {% if tools %}
-              <ul class="sk-apps" aria-label="Tools and apps I use">
-                {% for tool in tools %}
-                <li class="sk-app">
-                  {% if tool.logo %}<span class="sk-app-icon sk-app-icon--logo"><img src="{{ tool.logo.url|cdn:160 }}" alt="" loading="lazy"></span>
-                  {% else %}<span class="sk-app-icon" aria-hidden="true">{{ tool.name|slice:":1"|upper }}</span>{% endif %}
-                  <span class="sk-app-name">{{ tool.name }}</span>
-                </li>
-                {% endfor %}
-              </ul>
-              {% elif skills_photo %}
-              <img class="sk-screen-photo" src="{{ skills_photo.url|cdn:900 }}" alt="" loading="lazy">
-              <span class="sk-screen-chip" aria-hidden="true"><i></i><i></i><i></i> betra_amare</span>
-              <span class="sk-screen-tag" aria-hidden="true">Model · Creator</span>
-              {% else %}
-              <span class="sk-screen-tag sk-screen-tag--center" aria-hidden="true">Model · Creator</span>
-              {% endif %}
-            </div>
-            <div class="sk-base" aria-hidden="true"></div>
-            {% if tools %}<figcaption class="sk-caption">Tools &amp; apps I work with</figcaption>{% endif %}
-          </figure>
-        </div>
-
-        <div class="film-skills-panel film-reveal" data-skill-tabs>
-          {% if sc.certification_rows and sc.skill_rows %}
-          <div class="sk-tabs" role="tablist" aria-label="Skills and certifications">
-            <button type="button" class="sk-tab is-active" role="tab" id="sk-tab-skills" aria-controls="sk-panel-skills" aria-selected="true">Skills <span>{{ sc.skill_rows|length }}</span></button>
-            <button type="button" class="sk-tab" role="tab" id="sk-tab-certs" aria-controls="sk-panel-certs" aria-selected="false" tabindex="-1">Certifications <span>{{ sc.certification_rows|length }}</span></button>
-          </div>
-          {% endif %}
-
-          {% if sc.skill_rows %}
-          <div class="sk-panel" id="sk-panel-skills" role="tabpanel" aria-labelledby="sk-tab-skills" tabindex="0">
-            <ul class="sk-stickers">
-              {% for row in sc.skill_rows %}
-              <li class="sk-sticker" style="--i:{{ forloop.counter0 }}">
-                <span class="sk-sticker-num">{{ forloop.counter|stringformat:"02d" }}</span>
-                <strong>{{ row.name }}</strong>
-                {% if row.detail %}<small>{{ row.detail }}</small>{% endif %}
-              </li>
-              {% endfor %}
-            </ul>
-          </div>
-          {% endif %}
-
-          {% if sc.certification_rows %}
-          <div class="sk-panel" id="sk-panel-certs" role="tabpanel" aria-labelledby="sk-tab-certs" tabindex="0"{% if sc.skill_rows %} hidden{% endif %}>
-            <ul class="sk-stickers sk-stickers--certs">
-              {% for row in sc.certification_rows %}
-              <li class="sk-sticker" style="--i:{{ forloop.counter0 }}">
-                <span class="sk-badge" aria-hidden="true">✓</span>
-                <strong>{{ row.name }}</strong>
-                {% if row.detail %}<small>{{ row.detail }}</small>{% endif %}
-                {% if row.link %}<a class="sk-cert-link" href="{{ row.link }}" target="_blank" rel="noopener">View credential <span aria-hidden="true">↗</span></a>{% endif %}
-              </li>
-              {% endfor %}
-            </ul>
-          </div>
-          {% endif %}
-        </div>
-      </div>
-    </section>
-    {% endif %}
-    {% endwith %}
-
     <section class="film-contact" id="portfolio-connect" aria-labelledby="film-contact-heading">
       <h2 id="film-contact-heading" class="film-reveal">LET'S MAKE<br><em>SOMETHING.</em></h2>
       <p>{% if portfolio_content %}{{ portfolio_content.collab_title_prefix }} {{ portfolio_content.collab_title_emphasis }}{% else %}Have a project in mind? Let's create something worth remembering.{% endif %}</p>
@@ -293,7 +218,7 @@
     </section>
   </main>
   <footer class="site-footer">
-    <div class="shell footer-top"><p class="footer-wordmark">Betra Amare</p><div class="footer-nav"><a href="/portfolio.html">Portfolio</a><a href="/media-kit/">Media Kit</a><a href="/about.html">About</a><a href="/contact.html">Contact</a><a href="/inquire.html">Inquire</a><a href="{% if contact_content %}{{ contact_content.instagram_url }}{% else %}https://www.instagram.com/betra_amare{% endif %}" target="_blank" rel="noopener">Instagram</a><a href="{% if contact_content %}{{ contact_content.tiktok_url }}{% else %}https://www.tiktok.com/@betraamarey{% endif %}" target="_blank" rel="noopener">TikTok</a><a href="{% if contact_content %}{{ contact_content.linkedin_url }}{% else %}https://www.linkedin.com/in/betra-amare-0a6473352{% endif %}" target="_blank" rel="noopener">LinkedIn</a></div></div>
+    <div class="shell footer-top"><p class="footer-wordmark">Betra Amare</p><div class="footer-nav"><a href="/content-creation/">Content Creation</a><a href="/modeling/">Modeling</a><a href="/marketing-portfolio/">Marketing Portfolio</a><a href="/media-kit/">Media Kit</a><a href="/about.html">About</a><a href="/contact.html">Contact</a><a href="/inquire.html">Inquire</a><a href="{% if contact_content %}{{ contact_content.instagram_url }}{% else %}https://www.instagram.com/betra_amare{% endif %}" target="_blank" rel="noopener">Instagram</a><a href="{% if contact_content %}{{ contact_content.tiktok_url }}{% else %}https://www.tiktok.com/@betraamarey{% endif %}" target="_blank" rel="noopener">TikTok</a><a href="{% if contact_content %}{{ contact_content.linkedin_url }}{% else %}https://www.linkedin.com/in/betra-amare-0a6473352{% endif %}" target="_blank" rel="noopener">LinkedIn</a></div></div>
     <div class="shell footer-bottom"><span>© <span data-year></span> Betra Amare. All rights reserved.</span><a href="#">Back to top ↑</a></div>
   </footer>
   <script src="/script.js"></script>
