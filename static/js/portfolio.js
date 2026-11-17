@@ -2,21 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const portfolioItems = Array.from(document.querySelectorAll('.portfolio-item[data-category]'));
   const filterButtons = Array.from(document.querySelectorAll('.filter-btn[data-filter]'));
 
-  if (portfolioItems.length && filterButtons.length) {
-    const counts = portfolioItems.reduce((result, item) => {
-      const category = item.dataset.category;
-      result[category] = (result[category] || 0) + 1;
-      return result;
-    }, {});
-
-    filterButtons.forEach((button) => {
-      const category = button.dataset.filter;
-      if (category !== 'all' && !counts[category]) {
-        button.hidden = true;
-        button.setAttribute('aria-hidden', 'true');
-      }
-    });
-
+  if (filterButtons.length) {
     const applyFilter = (filter) => {
       const chosen = filterButtons.find(
         (button) => button.dataset.filter === filter && !button.hidden
