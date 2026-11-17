@@ -438,7 +438,7 @@ def marketing(request):
         "skills_content": portfolio_content or PortfolioPageContent(),
         "tools": list(Tool.objects.filter(active=True)),
         "skills_photo": next((item.image for item in PortfolioItem.objects.filter(active=True) if item.image), None),
-        "resume_url": getattr(settings, "MARKETING_RESUME_URL", ""),
+        "resume_url": getattr(settings, "MARKETING_RESUME_URL", "") or "/static/documents/Betra-Amare-Resume.pdf",
         "contact_content": contact_content,
     })
     return _finish_page(request, response, title="Marketing Portfolio | Betra Amare",
